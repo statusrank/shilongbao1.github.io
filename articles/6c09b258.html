@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="VGGNet,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="转载来源,再次感谢VGGNet探索了卷积神经网络的深度与其性能之间的关系,成功地构筑了16~19层深的卷积神经网络,证明了增加网络的深度能够在一定程度上影响网络的最终性能,使得错误率大幅下降,同时拓展性又很强,迁移到其他图片数据上的泛化性也非常好。到目前为止,VGG仍然被用来提取图像特征。VGGNet可以看成是加深版本的AlexNet,都是由卷积层、全连接层两大部分组成。">
+<meta name="keywords" content="VGGNet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CNN经典模型----VGGNet">
+<meta property="og:url" content="https://statusrank.xyz/articles/6c09b258.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="转载来源,再次感谢VGGNet探索了卷积神经网络的深度与其性能之间的关系,成功地构筑了16~19层深的卷积神经网络,证明了增加网络的深度能够在一定程度上影响网络的最终性能,使得错误率大幅下降,同时拓展性又很强,迁移到其他图片数据上的泛化性也非常好。到目前为止,VGG仍然被用来提取图像特征。VGGNet可以看成是加深版本的AlexNet,都是由卷积层、全连接层两大部分组成。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/1.jpg">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/6c09b258/9.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CNN经典模型----VGGNet">
+<meta name="twitter:description" content="转载来源,再次感谢VGGNet探索了卷积神经网络的深度与其性能之间的关系,成功地构筑了16~19层深的卷积神经网络,证明了增加网络的深度能够在一定程度上影响网络的最终性能,使得错误率大幅下降,同时拓展性又很强,迁移到其他图片数据上的泛化性也非常好。到目前为止,VGG仍然被用来提取图像特征。VGGNet可以看成是加深版本的AlexNet,都是由卷积层、全连接层两大部分组成。">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/6c09b258/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/6c09b258.html">
+
+
+
+
+  <title>CNN经典模型----VGGNet | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/6c09b258.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CNN经典模型----VGGNet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-15T14:50:57+08:00">
+                2018-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/深度学习/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/6c09b258.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/6c09b258.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/6c09b258.html" class="leancloud_visitors" data-flag-title="CNN经典模型----VGGNet">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://my.oschina.net/u/876354/blog/1634322" target="_blank" rel="noopener">转载来源,再次感谢</a><br>VGGNet探索了卷积神经网络的深度与其性能之间的关系,成功地构筑了16~19层深的卷积神经网络,证明了增加网络的深度能够在一定程度上影响网络的最终性能,使得错误率大幅下降,同时拓展性又很强,迁移到其他图片数据上的泛化性也非常好。到目前为止,VGG仍然被用来提取图像特征。<br>VGGNet可以看成是加深版本的AlexNet,都是由卷积层、全连接层两大部分组成。<br><a id="more"></a><br><img src="/articles/6c09b258/1.png"></p>
+<h2 id="VGG特点"><a href="#VGG特点" class="headerlink" title="VGG特点"></a>VGG特点</h2><p>先看一下VGG的结构图<br><img src="/articles/6c09b258/2.png"></p>
+<h3 id="1-结构简洁"><a href="#1-结构简洁" class="headerlink" title="1.结构简洁"></a><strong>1.结构简洁</strong></h3><p>VGG由5层卷积层、3层全连接层、softmax输出层构成,层与层之间使用最大池化(max-pooling)分开,所有隐层的激活单元都采用ReLu函数。</p>
+<h3 id="2-小卷积核和多卷积子层"><a href="#2-小卷积核和多卷积子层" class="headerlink" title="2.小卷积核和多卷积子层"></a><strong>2.小卷积核和多卷积子层</strong></h3><p>VGG使用多个较小卷积核($ 3 \times 3$)的卷积层代替一个卷积核较大的卷积层,一方面可以减少参数,另一方面相当于进行了更多的非线性映射,可以增加网络的拟合/表达能力。<br><strong>小卷积核</strong>是VGGNet的一个重要特点,虽然VGG是在模仿AlexNet的网络结构,但没有采用AlexNet中的比较大的卷积核尺寸($ 7\times 7$),而是通过降低卷积核的大小($3\times3$),增加卷积子层来达到同样性能(VGG：从1到4卷积子层,ALexNet:1子层)<br><strong>作者认为两个$3\times3$的卷积堆叠获得的感受野大小相当于一个$5\times5$的卷积。三个$3\times3$的卷积堆叠得到的感受野相当于一个$7times7$的卷积。这样可以增加非线性映射,也可以很好的减少参数(一个$7\times7$参数为49,而三个$3\times3$参数为27)</strong><br>如图:<img src="/articles/6c09b258/1.jpg"><br>最下面是一个$5\times5$的卷积核,我们使用$3\times3$的卷积核对这个$5\times5$的卷积核进行操作,得到$3\times3$的图,再使用$3\times3$的卷积核对该图进行卷积最后得到$1\times1$,故感受野和$5\times5$相同,且由于在每一个卷积后都会加上ReLu激活函数,所以也增加了非线性。</p>
+<h3 id="3-小池化核"><a href="#3-小池化核" class="headerlink" title="3.小池化核"></a>3.小池化核</h3><p>相比AlexNet的$3\times3$的池化核mVGG全部采用$2\times2$的池化核</p>
+<h3 id="4-通道数多"><a href="#4-通道数多" class="headerlink" title="4.通道数多"></a>4.通道数多</h3><p>VGG网络第一层的通道数为64,后面每层都进行了翻倍,最多到512个通道,通道数的增加,使得更多的信息可以被提取出来。</p>
+<h3 id="5-层数更深、特征图更宽"><a href="#5-层数更深、特征图更宽" class="headerlink" title="5.层数更深、特征图更宽"></a>5.层数更深、特征图更宽</h3><p>由于卷积核专注于扩大通道数,池化专注于缩小宽和高,使得模型架构上更深更宽的同时,控制了计算量的增加规模。</p>
+<h3 id="6-全连接转卷积-测试阶段"><a href="#6-全连接转卷积-测试阶段" class="headerlink" title="6.全连接转卷积(测试阶段)"></a>6.全连接转卷积(测试阶段)</h3><p>这也是VGG的一个特点,在网络测试阶段将训练阶段的三个全连接层替换为三个卷积,使得测试得到的全卷积网络因为没有全连接的限制,因而可以接受任意宽和高的输入,这在测试阶段很重要。<br>如本节第一个图所示，输入图像是$224\times 224\times 3$，如果后面三个层都是全连接，那么在测试阶段就只能将测试的图像全部都要缩放大小到$224\times 224\times 3$，才能符合后面全连接层的输入数量要求，这样就不便于测试工作的开展。<br>这里全连接和卷积层之间的替换和滑动窗口算法那里的替换是同一个思想:<br><img src="/articles/6c09b258/3.png"><br>例如$7\times 7\times 512$的层要跟4096个神经元的层做全连接，则替换为对$7\times 7\times 512$的层作通道数为4096、卷积核为$1\times 1$的卷积。<br>这个“全连接转卷积”的思路是VGG作者参考了OverFeat的工作思路，例如下图是OverFeat将全连接换成卷积后，则可以来处理任意分辨率（在整张图）上计算卷积，这就是无需对原图做重新缩放处理的优势。<img src="/articles/6c09b258/4.png"></p>
+<h2 id="VGG的网络结构"><a href="#VGG的网络结构" class="headerlink" title="VGG的网络结构"></a>VGG的网络结构</h2><p>如下图:<br><img src="/articles/6c09b258/5.png"><br>在这篇论文中分别使用了A、A-LRN、B、C、D、E这6种网络结构进行测试，这6种网络结构相似，<strong>都是由5层卷积层、3层全连接层组成</strong>，其中区别在于每个卷积层的子层数量不同，从A至E依次增加（子层数量从1到4），总的网络深度从11层到19层（添加的层以粗体显示），表格中的卷积层参数表示为“conv⟨感受野大小⟩-通道数⟩”，例如con3-128，表示使用$3\times3$的卷积核，通道数为128。为了简洁起见，在表格中不显示ReLU激活功能。<br>其中，网络结构D就是著名的VGG16，网络结构E就是著名的VGG19。</p>
+<p>以网络结构D（VGG16）为例，介绍其处理过程如下，请对比上面的表格和下方这张图，留意图中的数字变化，有助于理解VGG16的处理过程：<img src="/articles/6c09b258/6.png"><br>1.输入$224\times224\times3$的图片,经64个$3\times3$的卷积核做<strong>两次</strong>卷积+ReLu,卷积后尺寸变为$224\times224\times64$<br>2.做max-pooling,池化但愿尺寸为$2\times2$使得图像尺寸减半,池化后的尺寸变为$112\times112\times64$<br>3.经过128个$3\times3$的卷积核做<strong>三次</strong>卷积+ReLu，尺寸变为$112\times112\times128$<br>4.做$2\times2$的最大池化,尺寸变为$56\times56\times128$<br>5.经过256个$3\times3$的卷积核作<strong>三次</strong>卷积+ReLu,尺寸变为$56\times56\times256$<br>6.做$2\times2$的最大池化,尺寸变为$28\times28\times256$<br>7.经过512个$3\times3$的卷积核作<strong>三次</strong>卷积+ReLu,尺寸变为$28\times28\times512$<br>8.做$2\times2$的最大池化,尺寸变为$14\times14\times512$<br>9.经过512个$3\times3$的卷积核作<strong>三次</strong>卷积+ReLu,尺寸变为$14\times14\times512$<br>10.做$2\times2$的最大池化,尺寸变为$7\times7\times512$<br>11.与两层$1\times1\times4096$，一层$1\times1\times1000$进行全连接+ReLu(共三层)<br>12.通过softmax预测出1000个输出结果<br>从上面的过程可以看出<strong>VGG网络结构还是挺简洁的，都是由小卷积核、小池化核、ReLU组合而成</strong>。其简化图如下（以VGG16为例）：<br><img src="/articles/6c09b258/7.png"><br>A、A-LRN、B、C、D、E这6种网络结构的深度虽然从11层增加至19层，但参数量变化不大，这是由于基本上都是采用了小卷积核（3x3，只有9个参数），这6种结构的参数数量（百万级）并未发生太大变化，这是因为在网络中，参数主要集中在全连接层。<img src="/articles/6c09b258/8.png">经作者对A、A-LRN、B、C、D、E这6种网络结构进行单尺度的评估，错误率结果如下：<img src="/articles/6c09b258/9.png"><br>从上表可以看出：<br>1、LRN层无性能增益（A-LRN）<br>VGG作者通过网络A-LRN发现，AlexNet曾经用到的LRN层（local response normalization，局部响应归一化）并没有带来性能的提升，因此在其它组的网络中均没再出现LRN层。<br>2、随着深度增加，分类性能逐渐提高（A、B、C、D、E）<br>从11层的A到19层的E，网络深度增加对top1和top5的错误率下降很明显。<br>3、多个小卷积核比单个大卷积核性能好（B）<br>VGG作者做了实验用B和自己一个不在实验组里的较浅网络比较，较浅网络用conv5x5来代替B的两个conv3x3，结果显示多个小卷积核比单个大卷积核效果要好。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>1.通过增加深度能有效的提升性能<br>2.最佳模型:VGG16,从头到尾只有$3\times3$的卷积核$2\times2$的池化,简洁优美<br>3.卷积可以代替全连接,可适应各种尺寸的图片</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/6c09b258.html">CNN经典模型----VGGNet</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年10月15日 - 14:10</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/6c09b258.html" title="CNN经典模型----VGGNet">https://statusrank.xyz/articles/6c09b258.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/6c09b258.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/VGGNet/" rel="tag"><i class="fa fa-tag"></i> VGGNet</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/4859fe41.html" rel="next" title="YOLO(You Look Only Once)详解">
+                <i class="fa fa-chevron-left"></i> YOLO(You Look Only Once)详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/26274136.html" rel="prev" title="深度学习----人脸识别(FaceRecognition)">
+                深度学习----人脸识别(FaceRecognition) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#VGG特点"><span class="nav-text">VGG特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-结构简洁"><span class="nav-text">1.结构简洁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-小卷积核和多卷积子层"><span class="nav-text">2.小卷积核和多卷积子层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-小池化核"><span class="nav-text">3.小池化核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-通道数多"><span class="nav-text">4.通道数多</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-层数更深、特征图更宽"><span class="nav-text">5.层数更深、特征图更宽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-全连接转卷积-测试阶段"><span class="nav-text">6.全连接转卷积(测试阶段)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VGG的网络结构"><span class="nav-text">VGG的网络结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

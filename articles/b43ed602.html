@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="nlp,word2vec,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是word2vec关于word2vec，首先需要弄清楚它并不是一个模型或者DL算法，而是描述从自然语言到词向量转换的技术。Word2Vec本质上就是一个只有一个hidden layer的全连接神经网络,它可以将所有的词向量化,这样词与词就可以定量的去度量他们之间的关系.">
+<meta name="keywords" content="nlp,word2vec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Word2Vec的一些总结">
+<meta property="og:url" content="https://statusrank.xyz/articles/b43ed602.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="什么是word2vec关于word2vec，首先需要弄清楚它并不是一个模型或者DL算法，而是描述从自然语言到词向量转换的技术。Word2Vec本质上就是一个只有一个hidden layer的全连接神经网络,它可以将所有的词向量化,这样词与词就可以定量的去度量他们之间的关系.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/12.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/13.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/11.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/b43ed602/14.png">
+<meta property="og:updated_time" content="2019-01-14T03:15:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Word2Vec的一些总结">
+<meta name="twitter:description" content="什么是word2vec关于word2vec，首先需要弄清楚它并不是一个模型或者DL算法，而是描述从自然语言到词向量转换的技术。Word2Vec本质上就是一个只有一个hidden layer的全连接神经网络,它可以将所有的词向量化,这样词与词就可以定量的去度量他们之间的关系.">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/b43ed602/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/b43ed602.html">
+
+
+
+
+  <title>关于Word2Vec的一些总结 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/b43ed602.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于Word2Vec的一些总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-13T13:52:30+08:00">
+                2019-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-01-14T11:15:12+08:00" content="2019-01-14">
+      2019-01-14
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/b43ed602.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/b43ed602.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/b43ed602.html" class="leancloud_visitors" data-flag-title="关于Word2Vec的一些总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是word2vec"><a href="#什么是word2vec" class="headerlink" title="什么是word2vec"></a>什么是word2vec</h2><p>关于word2vec，<strong>首先需要弄清楚它并不是一个模型或者DL算法，而是描述从自然语言到词向量转换的技术。</strong><br>Word2Vec本质上就是一个只有一个hidden layer的全连接神经网络,它可以将所有的词向量化,这样词与词就可以定量的去度量他们之间的关系.<br><a id="more"></a><br>在NLP中,把x看做一个句子里的一个词语,y是这个词语的上下文词语,那么这里的$f$便是nlp中经常出现的语言模型,这个模型的目的就是判断样本$(x,y)$是否符合自然语言语法规则.<br>word2vec并不在乎$f$训练的有多完美,而是只关心模型训练结束后<strong>模型参数(这里就是神经网络的参数)</strong>,并将这些参数作为输入x的向量化表示,也就是词向量.<br>后面会介绍为什么是这样.</p>
+<h2 id="词向量"><a href="#词向量" class="headerlink" title="词向量"></a>词向量</h2><p>自然语言处理系统通常将词汇作为离散的单一符号,例如”cat”一词也可以表示为ID666,而”dog”一词表示为ID888.但是我们可以发现这些符号编码毫无规律,无法提供不同词汇之间可能存在的关联信息.也就是”dog”和”cat”都是动物,四条腿啊..等等,但是通过我们的单一符号却根本无法体现出他们之间的关系.可见，将词汇表达为上述的独立离散符号将进一步导致数据稀疏，使我们在训练统计模型时不得不寻求更多的数据。而词汇的向量表示将克服上述的难题。<br>在word2vec出现之前,最简单常用的词向量技术就是one-hot encoder,它使用的词向量维度为整个词汇表大小,将所有的词按照特定顺序固定,对于每个词汇表中的单词,其对应位置为1其余为0.如图:<br><img src="/articles/b43ed602/1.png"><br>可以发现这种方法是很稀疏的,其次词汇表一般很大,这也导致我们向量的维度很大,带来内存灾难.于是就产生了<strong>连续向量表示</strong>,也就是用实数向量来表示一个单词啥的,比如100维,这就大大降低了维度,同时还能蕴含语义信息,词之间的相似度等等…<br>举个例子，给出一个文档，文档就是一个单词序列比如 “A B A C B F G”, 希望对文档中每个不同的单词都得到一个对应的向量(往往是低维向量)表示。比如，对于这样的“A B A C B F G”的一个序列，也许我们最后能得到：A对应的向量为[0.1 0.6 -0.5]，B对应的向量为[-0.2 0.9 0.7] （此处的数值只用于示意），这个向量就是我们说的word embedding。</p>
+<p><font color="red">这里需要说明下word2vec和word embedding的区别和联系: </font>word embedding是一个将词向量化的概念,而word2vec是谷歌提出的一种基于word embedding的工具或算法集合.</p>
+<h2 id="Word2Vec"><a href="#Word2Vec" class="headerlink" title="Word2Vec"></a>Word2Vec</h2><p>word2vec是基于<strong>分布假设,认为上下文环境相同的词语其语义也相似.</strong>,主要的方法有两种:CBOW和skip-gram.<br>Word2vec能将one-hot Encoder转化为低维度的连续值,也就是<strong>稠密向量</strong>,具有相似语义的单词的向量之间距离会比较小,部分词语之间的关系能够用向量的运算表示.</p>
+<h3 id="Word2Vec的优势"><a href="#Word2Vec的优势" class="headerlink" title="Word2Vec的优势"></a>Word2Vec的优势</h3><p>1.低维稠密<br>一般来说分布式词向量的维度设置成100-500就足够使用,而one-hot的词向量维度与词表的大小成正比,是一种高维稀疏的表示方法,这种表示方法导致其在计算上有比较低的效率.<br><img src="/articles/b43ed602/12.png"><br>2.蕴含语义信息<br>one-hot这种表示方式使得每一个词映射到高维空间都是相互正交的,也就是说one-hot向量空间中词与词之间没有任何联系,或者说我们无法通过词向量来判断出他们之间是否有联系.word2vec利用”分布假设,具有相同上下文信息的词语语义相近”,使得语义相近的词映射在欧式空间后具有较高的余弦相似度.(<strong>至于为什么是余弦相似度,下面你了解一下网络结构就会发现本质是网络中存在向量间的內积</strong>)<br><img src="/articles/b43ed602/13.png"></p>
+<h3 id="Word2Vec的结构"><a href="#Word2Vec的结构" class="headerlink" title="Word2Vec的结构"></a>Word2Vec的结构</h3><p>上面我们提到过word2vec本质上是只有一个隐藏层的全连接神经网络,如图:<br><img src="/articles/b43ed602/2.png"><br>1.输入为One-Hot Encoder<br>2.隐藏层激活函数为线性的<br>3.输出层使用的是softmax</p>
+<h3 id="CBOW-Continuous-Bag-Of-Words"><a href="#CBOW-Continuous-Bag-Of-Words" class="headerlink" title="CBOW(Continuous Bag-Of-Words)"></a>CBOW(Continuous Bag-Of-Words)</h3><p>CBOW模型是通过中心词的上下文来预测该中心词.<br>那么这个模型的输入输出是如何得到的呢?<br>CBOW模型的训练<strong>输入是某一个特征词的上下文相关的词对应的词向量,而输出就是这特定的一个词的词向量.</strong>比如下面这段话,我们上下文大小为4,特定的这个词是”Learning”,也就是我们需要的输出向量.那么上下文词应该有8个,前后4个,这8个词就是我们模型的输入.<br><strong>由于CBOW使用的是词袋模型，因此这8个词都是平等的，也就是不考虑他们和我们关注的词之间的距离大小，只要在我们上下文之内即可</strong><br>如图:<br><img src="/articles/b43ed602/3.png"><br>这样我们就得到了我们模型的输入输出,输入是8个上下文词向量,输出是所有词的softmax概率(我们希望我们的特定中心词的概率最大),<strong>对应的CBOW模型输入层有8个神经元,输出有词汇表大小个神经元</strong>,隐藏层个数我们自己指定.</p>
+<h4 id="CBOW的结构"><a href="#CBOW的结构" class="headerlink" title="CBOW的结构"></a>CBOW的结构</h4><p>假设这里我们将词embedding到n维,设词汇表维度为$|V|$<br>1.输入层: $2c$个节点,上下文共 $2c$个词的n维向量,注意一开始为随机初始化<br>2.隐藏层: n个节点,上下文共$2c$个词的词向量相加后取平均值<br>3.隐藏层到输出层的权重$W_0$: 维度$|V| \times n$<br>4.输出层:|V|个节点.采用softmax回归.<br>对于这里来说输入层的就是输入的词向量，我们看到，输入层每个周围词用n个节点表示，n就是词向量的大小，一开始随机初始化，在之后作为模型参数学习更新，最终得到合适的词向量。在gensim 和 google的 word2vec实现中，也是这样的结构，就是输入层初始化的时候直接为每个词随机生成一个n维的向量，并且把这个n维向量作为模型参数学习，最终得到该词向量。</p>
+<h4 id="另一种结构"><a href="#另一种结构" class="headerlink" title="另一种结构"></a>另一种结构</h4><p>1.输入层: $2c$个词的one-hot 编码,每个的维度为$|V|$<br>输入层到隐藏层的权重$W_0$的维度:$|V| \times n$<br>2.隐藏层: $n$个节点,上下围共$2c$个词的one-hot编码和$W_0$相乘得到的词向量求和再取平均值.<br>隐藏层到输入层的权重$W_1$的维度$|V| \ times n$<br>3.输出层$|V|$个节点,采用softmax.<br><img src="/articles/b43ed602/4.png"><br><strong>然后词向量就是神经网络的权重,生成词向量的过程就是使用训练数据使模型变优的一个参数更新的过程.</strong>某个词的one-hot编码可以看成是$|V| \times 1$的向量与$n \times |V|$的权重矩阵$W_0$相乘,因为one-hot中只有一个1,所以可以看成它只是激活了$W_0$中的特定列,那么该列就可以看成是该词的一个词向量.对于隐藏层到输出层的权重$W_1$同理,所以这里$W_0$和$W_1$我们分别叫做输入向量和输出向量,它们两个本质上没什么区别,我们一般使用输入向量.<br><img src="/articles/b43ed602/5.png"></p>
+<h3 id="skip-gram模型"><a href="#skip-gram模型" class="headerlink" title="skip-gram模型"></a>skip-gram模型</h3><p>skip-gram模型和CBOW的思路是相反的,CBOW是根据上下为来预测中心词,skip-gram模型是根据中心词来预测上下文.即输入是特定词,输出是softmax概率排前8的几个词,对应的skip-gram神经网络模型的输入层有1个神经元,输出层有词汇大小个神经元.隐藏层的个数还是我们自己指定.<br>例如: 句子为“the quick brown fox jumped over the lazy dog”(实际语料库中单词的数量会很非常大),当上下文窗口为1时,skip-gram的任务是从”quick”预测”the”和”brown”,从”brown”预测”quick”和”fox”,从”fox”预测…因此训练skip-gram的输入输出对(input,output)为:(quick,the),(quick,brown),(brown,quick),(brown,fox)…<br>在结构上和CBOW一样,也是两种角度,其中对应CBOW的第二种:<br><img src="/articles/b43ed602/6.png"><br>我们知道，Word2vec 本质上是一个语言模型，它的输出节点数是 V 个，对应了 V 个词语，也是一个多分类问题，但实际当中，词语的个数非常非常多，直接softmax来计算会给计算造成很大困难，所以需要用技巧来加速训练，下面就介绍word2vec对应的两个加速技巧hierarchical softmax和negative sampling。<strong>注意：这两个技巧只是加速训练的技巧</strong></p>
+<h2 id="基于Hierarchical-Softmax的模型概述"><a href="#基于Hierarchical-Softmax的模型概述" class="headerlink" title="基于Hierarchical Softmax的模型概述"></a>基于Hierarchical Softmax的模型概述</h2><p>对于原始的模型来说,里面最大的问题在于从隐藏层到输出的softmax层的计算量很大,因为要计算所有词的softmax概率,再去找概率最大的值.为了避免要计算所有词的softmax概率,word2vec采用了哈夫曼树(关于什么是哈夫曼树,如何构建哈夫曼树,这里不做介绍)来代替从隐藏层到输出softmax层的映射.由于我们把之前所有都要计算的输出层softnax层的概率计算变成了一个二叉哈夫曼树,那么我们的softmax概率计算只需要沿着树形结构进行就可以了,如下图,我们可以沿着哈夫曼树从根节点一直走到我们的叶子节点的词$w_2$.<br><img src="/articles/b43ed602/7.png"><br>和之前的模型相比,我们的哈夫曼树的所有内部节点就类似之前隐藏层神经元,其中根节点的词向量对应我们的投影后的词向量,而所有叶子节点就类似于之前神经网络softmax输出层的神经元,叶子节点的个数就是词汇表的大小.在哈夫曼树中，隐藏层到输出层的softmax映射不是一下子完成的，而是沿着哈夫曼树一步步完成的，因此这种softmax取名为”Hierarchical Softmax”。</p>
+<h3 id="具体过程"><a href="#具体过程" class="headerlink" title="具体过程"></a>具体过程</h3><p>在word2vec中,采用二元逻辑回归的方法,即规定沿着左子树走就是负类(哈夫曼树编码为1),沿着右子树走为正类(哈夫曼树编码为0).判断正负类的方法是sigmoid的函数,即:</p>
+<script type="math/tex; mode=display">
+P(+) = \sigma(x_w^T\theta) = \frac{1}{1+e^{-x_w^T\theta}}</script><p>其中$x_w$是当前内部节点的词向量，而$\theta$则是我们需要从训练样本求出的逻辑回归的模型参数。<br><strong>由于是二叉树,所以计算量由原来的$|V|$变为了$log|V|$,而且使用哈夫曼树使得高频的词靠近词根,这样高频词需要更少的时间会被找到.</strong><br>容易理解，被划分为左子树而成为负类的概率为$P(−)=1−P(+)P(−)=1−P(+)$。在某一个内部节点，要判断是沿左子树还是右子树走的标准就是看$P(−),P(+)P(−),P(+)$谁的概率值大。而控制$P(−),P(+)P(−),P(+)$谁的概率值大的因素一个是当前节点的词向量，另一个是当前节点的模型参数$\theta$。<br>对于上图中的$w_2$，如果它是一个训练样本的输出，那么我们期望对于里面的隐藏节点$n(w_2,1)$的$P(−)$概率大，$n(w_2,2)$的$P(−)$概率大，$n(w_2,3)$的$P(+)$概率大。<br>回到基于Hierarchical Softmax的word2vec本身，我们的<strong>目标就是找到合适的所有节点的词向量和所有内部节点$\theta$</strong>, 使训练样本达到最大似然。那么如何达到最大似然呢？</p>
+<h3 id="梯度计算"><a href="#梯度计算" class="headerlink" title="梯度计算"></a>梯度计算</h3><p>我们使用最大似然法来寻找所有节点的词向量和所有内部节点$\theta$.先拿上面$w_2$的例子来说,我们期望最大化下面的似然函数:</p>
+<script type="math/tex; mode=display">
+\prod_{i=1}^3P(n(w_2),i) = (1- \frac{1}{1+e^{-x_w^T\theta_1}})(1- \frac{1}{1+e^{-x_w^T\theta_2}})\frac{1}{1+e^{-x_w^T\theta_3}}</script><p>对于所有的训练样本，我们期望最大化所有样本的似然函数乘积。<br><img src="/articles/b43ed602/8.png"></p>
+<h4 id="基于Hierarchical-Softmax的CBOW模型"><a href="#基于Hierarchical-Softmax的CBOW模型" class="headerlink" title="基于Hierarchical Softmax的CBOW模型"></a>基于Hierarchical Softmax的CBOW模型</h4><p>首先我们要定义词向量的维度大小$M$,以及CBOW的上下文大小$2c$,这样我们对于训练的每一个词,其前面的$c$个词和后面的$c$个词作为了CBOW模型的输入,该词本身作为了输出,期望softmax概率最大.<br>在做CBOW模型前,我们要先将词汇表建立成一颗哈夫曼树.<br>对于从输出层到隐藏层的投影,这一步比较简单,就是对$w$周围的$2c$个词向量求和平均即可,即:</p>
+<script type="math/tex; mode=display">
+x_w = \frac{1}{2c}\sum\limits_{i=1}^{2c}x_i</script><p>第二步根据梯度下降法来更新参数$\theta_{j-1}^w$和$x_w$,注意这里$x_w$是由$2c$个词向量相加而成,我们做梯度更新完毕后会用梯度直接更新原始的各个$x_i$,即:</p>
+<script type="math/tex; mode=display">
+\theta_{j-1}^w = \theta_{j-1}^w + \eta  (1-d_j^w-\sigma(x_w^T\theta_{j-1}^w))x_w</script><script type="math/tex; mode=display">
+x_w= x_w +\eta  \sum\limits_{j=2}^{l_w}(1-d_j^w-\sigma(x_w^T\theta_{j-1}^w))\theta_{j-1}^w \;(i =1,2..,2c)</script><img src="/articles/b43ed602/9.png">
+<h4 id="基于Hierarchical-Softmax的skip-gram模型"><a href="#基于Hierarchical-Softmax的skip-gram模型" class="headerlink" title="基于Hierarchical Softmax的skip-gram模型"></a>基于Hierarchical Softmax的skip-gram模型</h4><p>这里包括上面不清楚的都可以参考<a href="https://www.cnblogs.com/pinard/p/7243513.html" target="_blank" rel="noopener">刘建平的blog</a></p>
+<h2 id="基于Negative-Sampling的模型"><a href="#基于Negative-Sampling的模型" class="headerlink" title="基于Negative Sampling的模型"></a>基于Negative Sampling的模型</h2><p>上面所说的层级softmax虽然可以将$O(|V|)$的softmax变为$log|V|$的二分类问题,但是当我们的中心词$w$是一个很生僻的词,那么就得在哈夫曼树中辛苦向下走很久了.</p>
+<h3 id="什么是负采样呢"><a href="#什么是负采样呢" class="headerlink" title="什么是负采样呢?"></a>什么是负采样呢?</h3><p>比如我们有一个训练样本,中心词是$w$,它周围有上下文共$2c$个词,记为$context(w)$.由于这个中心词$w$,的确和$context(w)$相关存在,因此它是一个真正的正例.通过negative sampling采样,我们得到neg个和$w$不同的中心词$w_i, i=1,2,..neg$,这样$context(w)$和$w_i$就组成了$neg$个不真实存在的负例.利用这一个正例和$neg$个负例,我们进行二元逻辑回归,得到负采样对应的每个词$w_i$对应的模型参数$\theta_i$和每个词的词向量.</p>
+<h3 id="梯度计算-1"><a href="#梯度计算-1" class="headerlink" title="梯度计算"></a>梯度计算</h3><p>Negative Sampling 也是采用了二元逻辑回归来求解模型参数,通过负采样,我们得到了neg个负例$(context(w),w_i),i = 1,2,3,…neg$ 为了统一描述,我们将正例定义为$w_0$<br>在逻辑回归中我们的正例应该期望满足:</p>
+<script type="math/tex; mode=display">
+P(context(w_0), w_i) = \sigma(x_{w_0}^T\theta^{w_i}) ,y_i=1, i=0</script><p>我们的负例期望满足:</p>
+<script type="math/tex; mode=display">
+P(context(w_0), w_i) =1-  \sigma(x_{w_0}^T\theta^{w_i}), y_i = 0, i=1,2,..neg</script><p>我们期望可以最大化下式:</p>
+<script type="math/tex; mode=display">
+\prod_{i=0}^{neg}P(context(w_0), w_i) = \sigma(x_{w_0}^T\theta^{w_0})\prod_{i=1}^{neg}(1-  \sigma(x_{w_0}^T\theta^{w_i}))</script><p>利用逻辑回归和上一节的知识,我们容易写出此时模型的似然函数为:</p>
+<script type="math/tex; mode=display">
+\prod_{i=0}^{neg} \sigma(x_{w_0}^T\theta^{w_i})^{y_i}(1-  \sigma(x_{w_0}^T\theta^{w_i}))^{1-y_i}</script><p>对应的对数似然函数为:</p>
+<script type="math/tex; mode=display">
+L = \sum\limits_{i=0}^{neg}y_i log(\sigma(x_{w_0}^T\theta^{w_i})) + (1-y_i) log(1-  \sigma(x_{w_0}^T\theta^{w_i}))</script><p>和Hierarchical Softmax类似，我们采用随机梯度上升法，仅仅每次只用一个样本更新梯度，来进行迭代更新得到我们需要的$x_{w_i},\theta^{w_i},i = 0,1,…neg$.<br><img src="/articles/b43ed602/10.png"></p>
+<h3 id="Negative-Sampling-负采样方法"><a href="#Negative-Sampling-负采样方法" class="headerlink" title="Negative Sampling 负采样方法"></a>Negative Sampling 负采样方法</h3><p>现在我们来看看如何进行负采样，得到neg个负例。word2vec采样的方法并不复杂，如果词汇表的大小为V,那么我们就将一段长度为1的线段分成V份，每份对应词汇表中的一个词。当然每个词对应的线段长度是不一样的，高频词对应的线段长，低频词对应的线段短。每个词w的线段长度由下式决定：</p>
+<script type="math/tex; mode=display">
+len(w) = \frac{count(w)}{\sum\limits_{u \in vocab} count(u)}</script><p>在word2vec中，分子和分母都取了3/4次幂如下：</p>
+<script type="math/tex; mode=display">
+len(w) = \frac{count(w)^{3/4}}{\sum\limits_{u \in vocab} count(u)^{3/4}}</script><p>在采样前，我们将这段长度为1的线段划分成$M$等份，这里$M&gt;&gt;V$，这样可以保证每个词对应的线段都会划分成对应的小块。而M份中的每一份都会落在某一个词对应的线段上。在采样的时候，我们只需要从MM个位置中采样出negneg个位置就行，此时采样到的每一个位置对应到的线段所属的词就是我们的负例词。<br><img src="/articles/b43ed602/11.png"><br><strong>在word2vec中,$M$取默认值为$10^8$</strong></p>
+<h4 id="基于Negative-Sampling的CBOW模型和skip-gram"><a href="#基于Negative-Sampling的CBOW模型和skip-gram" class="headerlink" title="基于Negative Sampling的CBOW模型和skip-gram"></a>基于Negative Sampling的CBOW模型和skip-gram</h4><p>具体请参考<a href="http://www.cnblogs.com/pinard/p/7249903.html" target="_blank" rel="noopener">刘建平</a></p>
+<h2 id="word2vec词向量性质观察"><a href="#word2vec词向量性质观察" class="headerlink" title="word2vec词向量性质观察"></a>word2vec词向量性质观察</h2><p>查看某个词在embedding里的最近邻居可以看到单词间的语义接近关系,将vector构成的空间降维,可以高效地查找最近单词,但降维过程中要保持邻居关系(用哪种降维方法?),比如我们可以把学习向量映射到2维中以便我们观察，其中用到的技术可以参考 <a href="http://lvdmaaten.github.io/tsne/" target="_blank" rel="noopener">t-SNE 降纬技术</a>。当我们第一次发现这样的诱导向量空间中，展示了一些特定的语义关系，这是非常有趣的，比如文字中 _male-female_，_gender_ 甚至还有 _country-capital_ 的关系, 如下方的图所示<br><img src="/articles/b43ed602/14.png"><br><strong>另外，我们能得到的不仅是单词的邻接关系，由于将单词向量化，可以对单词进行计算可以通过计算进行语义加减，语法加减。</strong></p>
+<h2 id="好的资料"><a href="#好的资料" class="headerlink" title="好的资料"></a>好的资料</h2><p> <a href="https://bigquant.com/community/t/topic/127068" target="_blank" rel="noopener">全面理解word2vec</a><br> <a href="https://www.bbsmax.com/A/gVdnKZq8zW/" target="_blank" rel="noopener"> 一步一步理解word2Vec</a><br> <a href="https://zhuanlan.zhihu.com/p/53194407" target="_blank" rel="noopener">王喆</a><br> <a href="https://zhuanlan.zhihu.com/p/30302498" target="_blank" rel="noopener">达观数据</a><br> <a href="https://www.cnblogs.com/pinard/p/7243513.html" target="_blank" rel="noopener">刘建平</a><br> 《Efficient estimation of word representations in vector space》</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/b43ed602.html">关于Word2Vec的一些总结</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2019年01月13日 - 13:01</p>
+  <p><span>最后更新:</span>2019年01月14日 - 11:01</p>
+  <p><span>原始链接:</span><a href="/articles/b43ed602.html" title="关于Word2Vec的一些总结">https://statusrank.xyz/articles/b43ed602.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/b43ed602.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nlp/" rel="tag"><i class="fa fa-tag"></i> nlp</a>
+          
+            <a href="/tags/word2vec/" rel="tag"><i class="fa fa-tag"></i> word2vec</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/9ba9f2d4.html" rel="next" title="LeetCode Regular Expression Matching(动态规划)">
+                <i class="fa fa-chevron-left"></i> LeetCode Regular Expression Matching(动态规划)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/52563db7.html" rel="prev" title="LeetCode Longest Common Prefix">
+                LeetCode Longest Common Prefix <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是word2vec"><span class="nav-text">什么是word2vec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#词向量"><span class="nav-text">词向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Word2Vec"><span class="nav-text">Word2Vec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Word2Vec的优势"><span class="nav-text">Word2Vec的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Word2Vec的结构"><span class="nav-text">Word2Vec的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CBOW-Continuous-Bag-Of-Words"><span class="nav-text">CBOW(Continuous Bag-Of-Words)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CBOW的结构"><span class="nav-text">CBOW的结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#另一种结构"><span class="nav-text">另一种结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#skip-gram模型"><span class="nav-text">skip-gram模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Hierarchical-Softmax的模型概述"><span class="nav-text">基于Hierarchical Softmax的模型概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#具体过程"><span class="nav-text">具体过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度计算"><span class="nav-text">梯度计算</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于Hierarchical-Softmax的CBOW模型"><span class="nav-text">基于Hierarchical Softmax的CBOW模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于Hierarchical-Softmax的skip-gram模型"><span class="nav-text">基于Hierarchical Softmax的skip-gram模型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Negative-Sampling的模型"><span class="nav-text">基于Negative Sampling的模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是负采样呢"><span class="nav-text">什么是负采样呢?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度计算-1"><span class="nav-text">梯度计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Negative-Sampling-负采样方法"><span class="nav-text">Negative Sampling 负采样方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基于Negative-Sampling的CBOW模型和skip-gram"><span class="nav-text">基于Negative Sampling的CBOW模型和skip-gram</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#word2vec词向量性质观察"><span class="nav-text">word2vec词向量性质观察</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#好的资料"><span class="nav-text">好的资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

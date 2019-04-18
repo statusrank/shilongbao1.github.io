@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="RS,SVM,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在推荐系统和网页搜索中为数十万的用户执行ranking是很常见的。学习单一的ranking function不可能捕捉所有用户的易变性,然而为每个用户学习一个ranking function 是很耗时的,同时也需要来自每个用户的大量数据。为了解决这个问题,本文作者提出了Factorization RankSVM算法,该算法通过学习k个基础的函数,然后为将这k个ranking function进行线">
+<meta name="keywords" content="RS,SVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Extreme Learning to Rank via Low Rank Assumption论文解读">
+<meta property="og:url" content="https://statusrank.xyz/articles/37cad335.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="在推荐系统和网页搜索中为数十万的用户执行ranking是很常见的。学习单一的ranking function不可能捕捉所有用户的易变性,然而为每个用户学习一个ranking function 是很耗时的,同时也需要来自每个用户的大量数据。为了解决这个问题,本文作者提出了Factorization RankSVM算法,该算法通过学习k个基础的函数,然后为将这k个ranking function进行线">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/18.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/11.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/12.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/13.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/14.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/15.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/16.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/37cad335/17.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Extreme Learning to Rank via Low Rank Assumption论文解读">
+<meta name="twitter:description" content="在推荐系统和网页搜索中为数十万的用户执行ranking是很常见的。学习单一的ranking function不可能捕捉所有用户的易变性,然而为每个用户学习一个ranking function 是很耗时的,同时也需要来自每个用户的大量数据。为了解决这个问题,本文作者提出了Factorization RankSVM算法,该算法通过学习k个基础的函数,然后为将这k个ranking function进行线">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/37cad335/18.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/37cad335.html">
+
+
+
+
+  <title>Extreme Learning to Rank via Low Rank Assumption论文解读 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/37cad335.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Extreme Learning to Rank via Low Rank Assumption论文解读</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-26T15:05:58+08:00">
+                2018-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/37cad335.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/37cad335.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/37cad335.html" class="leancloud_visitors" data-flag-title="Extreme Learning to Rank via Low Rank Assumption论文解读">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在推荐系统和网页搜索中为数十万的用户执行ranking是很常见的。学习单一的ranking function不可能捕捉所有用户的易变性,然而为每个用户学习一个ranking function 是很耗时的,同时也需要来自每个用户的大量数据。<br>为了解决这个问题,本文作者提出了Factorization RankSVM算法,该算法通过学习k个基础的函数,然后为将这k个ranking function进行线性组合,使得每一个用户有一个ranking function.通过利用low-rank结构,开发了一个更快的算法去减少梯度下降的时间复杂度。同时也证明了他们所提出的方法的泛化误差要好于为每个用户单独执行RankSVN训练一个ranking function.<br><a id="more"></a></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><h3 id="LTR-Pairwise-method"><a href="#LTR-Pairwise-method" class="headerlink" title="LTR Pairwise method"></a>LTR Pairwise method</h3><p>给你一个具有$x_1,x_2,…x_n$特征和pairwise 比较的训练实例集合,我们的目标是去找到一个最优的决策函数$f(\cdot)$使得如果i的相对偏好大于j则有$f(x_i) &gt; f(x_j)$.<br>但是在有些情况下,一个单一全局的ranking不足以表示各种各样的用户个人偏好,所以我们考虑<strong>共同学习数十万个ranking function的问题，每个用户一个ranking function</strong>.<br>我们的目标问题和CR还有BPR的不同,因为他们只是从已知的item中回复ranking,并没有使用item feature,而我们的目标是为了获得ranking function(将item feature 作为输入)，所以可以<strong>推广到看不到的item。</strong>我们这里ranking function的数量T很大(100K),但是可以用来学习每个ranking function的data有限。<strong>朴素的LTR算法是不可以的,因为要学习T个ranking function导致他们的训练次数急剧增加,同时由于训练数据不足会造成过拟合的问题。</strong></p>
+<h3 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h3><p>1.提出了Factorization RankSVM模型在不同的数据集上同时学习大量的不同的ranking function. 通过利用低秩结构,使得梯度的计算变得很高效,同时最后的算法可以扩展到具有大量任务的问题上<br>2.我们推导出模型的泛化误差界限，表明通过联合训练所有T任务，样本复杂度比在低秩假设下训练单个rankSVM要好得多。<br>3.我们对现实世界的数据集进行了实验，结果表明，与最先进的方法相比，该算法可以实现更高的准确性和更快的训练时间。<br>4.我们进一步可视化我们的算法学习的基本排名函数，它具有一些有趣且有意义的模式。</p>
+<h2 id="相关工作比较"><a href="#相关工作比较" class="headerlink" title="相关工作比较:"></a>相关工作比较:</h2><img src="/articles/37cad335/18.png">
+<h2 id="Problem-Setting"><a href="#Problem-Setting" class="headerlink" title="Problem Setting"></a>Problem Setting</h2><p><strong> 我们的目标是一起学习多个ranking function,每个用户一个。</strong>假定一共有T个ranking function需要被学习(每个user可以看成一个task),我们有具有$x_1,x_2,…x_n \in R^d$特征的n个items的pairwise 比较.对于每个task i,pairwise 比较表示为$ \Omega_i = \{\{j,k\}\}$，意思是task i比较了item j和k,并且$y_{ijk} \in \{+1,-1\}$ 表示结果。我们用$\Omega$表示所有$\Omega_i$的集合。<br><strong>给定这些pairwise比较,我们的目标是去学习一个线性ranking function集合$w_1,w_2,…w_T \in R^d$</strong>使得:</p>
+<script type="math/tex; mode=display">
+ sign(w_i^T(x_j-x_k)) \approx y_{ijk}</script><script type="math/tex; mode=display">
+\forall (j,k) \in \Omega_i ,\forall i = 1,...T</script><p><strong> 我们对T个task做的唯一假设就是每个task中所有的items $ x_j \in  R^d$共享同一个特征空间.</strong><br>上面这个模型可以很简单的部署到推荐系统上,每个用户i有一个相对应的ranking function并且items可以是电影,音乐等。我们任务的主要目标是学习这个ranking function，当我们得到$w_i$之后,就可以预测用户i对任意一对$x_j,x_k$的偏好关系,即使他们在训练数据中并没有出现。这是许多协同过滤算法(比如矩阵补全)无法解决的。我们可以预测看不到的items对的偏好主要是因为<strong>我们是基于item feature来学习ranking function的，并不是仅仅通过”seen items”去补全整个评分矩阵</strong>.</p>
+<h3 id="naive-method"><a href="#naive-method" class="headerlink" title="naive method"></a>naive method</h3><p>如图:<br><img src="/articles/37cad335/1.png"><br>RankSVM是基于单任务的,当然我们也可以假设所有的用户共用一个$w$,这种方法在此论文中叫做 RANKSVM JOINTLY。<br>(Evgeniou＆Pontil，2004)通过假设每个排名函数为$w_i = w + v_i$来提供变体，其中$w$是集中模型，$v_i$是任务相关方差。这种方法是基于一个很强的假设基础的,Tranking function $\{w_i\}_i^m$都非常接近单一的基础函数$w$,这种假设在实践中并不总是正确的,往往容易造成欠拟合。这种方法在此论文中叫做 RANKSVM JOINTLY。 RankSVM VAR.<br>我们还可以将每个用户分开来看,这意味着我们可以独立的训练每个$w_i$:<br><img src="/articles/37cad335/2.png"><br>这种方法叫做 RANKSVM SEPARATELY.很明显，该模型具有更大的自由度来拟合训练数据。但是受限于每个用户能够观察到的pair $\Omega_i$的数量,会导致每个$w_i$由于过拟合而有很差的预测质量.</p>
+<h2 id="Proposed-Algorithm"><a href="#Proposed-Algorithm" class="headerlink" title="Proposed Algorithm"></a>Proposed Algorithm</h2><p><strong> 我们的低秩个性化ranking猜想就是假设所有T个ranking function都可以近似看成是通过k$(k \lll T)$个基础ranking function线性组合得来的.</strong><br>令$\{u_j\}_{j = 1}^k$是basic linear ranking function,我们可以通过线性组合的权重$v_i$来获得每一个ranking function $w_i = \sum_{j=1}^k v_{ij}u_j，\forall i = 1,…T$.<br>写成矩阵形式就是$W = UV^T$ ，$w_i,u_j$分别是$W,U$的列向量,$V$是系数矩阵,$W \in R^{d \times T}$,$U \in R^{d \times k},V \in R^{T \times k}$.所以$W$是一个秩为k的矩阵,所以我们可以使用核范数来约数矩阵$W$的低秩性:<br><img src="/articles/37cad335/3.png"></p>
+<p><font color="red">PS:<br>对于上面所说的矩阵$rank(W) = k$,个人觉得应该是$rank(W)\leq k$，因为这里T和d都是大于k的数,而k是一个几十或者几百(总之比较小的数),作者通过将$W$进行了分解,进而对矩阵$W$做了低秩假设。而又因为矩阵秩是一个非凸问题（NP-hard）不太好优化,所以进而采用核范数去近似。<br>核范数是矩阵奇异值的和,而矩阵秩就是非0特征值(奇异值)的个数。($R(A^TA) = R(AA^T) = R(A)$,这里就因为$A^TA$一定可以对角化,所以就是非0特征值的个数)
+</font><br><a href="http://sakigami-yang.me/2017/09/09/norm-regularization-02/" target="_blank" rel="noopener">关于核范数不错的文章</a><br>矩阵的核范数其实就是其奇异值的和,而奇异值又是矩阵$X^TX$的特征值开根号。又根据矩阵的特征值有:$\lambda_1+ \lambda_2,…\lambda_n = x_{11} + x_{22} + ..x_{nn}$,所以综上我们可以得到:</p>
+<script type="math/tex; mode=display">
+||X||_* = tr (\sqrt{X^TX})</script><p>到这里我们仍然不能很好的解决问题,因为我们的矩阵$W$为$d\times T$，它包含$dT$个参数。所以我们利用:</p>
+<script type="math/tex; mode=display">
+||W||_* = min_{W = UV^T} \frac{1}{2} (||U||_F^2 + ||V||_F^2)</script><p>所以我们的得到如下公式:<br><img src="/articles/37cad335/4.png"><br>经过上面的变化,因为$U \in R^{d \times k},V \in R^{T \times k}$所以这里我们一共有$(d + T)k$个参数。(注意我们的$k \lll T$)<br>将上述问题转化为无条件限制的问题：<br><img src="/articles/37cad335/5.png"><br>使用<strong> 交替最小</strong>方法。每次迭代固定$V$更新$U$,然后固定$U$更新$V$。<br>当固定$V$更新$U$时:<br><img src="/articles/37cad335/6.png"><br>其梯度可以写成:<br><img src="/articles/37cad335/7.png"><br>我们发现要计算(4)式时间复杂度为$O(|\Omega|kd)$,因为我们需要两个求和遍历整个数据集(这刚好看成$\Omega$,前面我们假设过它是所有的并集),每次都需要计算$(x_j-x_k)v_i^T$.<br>于是作者提出如下算法,可以使得更新$U$的梯度时复杂度变为：$O(T\overline nk + dkn + |\Omega|)$，其中$\overline n$是每个用户的平均打分。<br>算法如下:<br><img src="/articles/37cad335/8.png"><br>其实该算法就是将上述的:<img src="/articles/37cad335/9.png">对每一个$(j,k)$进行展开,可以得到:</p>
+<script type="math/tex; mode=display">-2Cy_{ijk}max(0,1-y_{ijk}(q_j-q_k))x_jv_i^T + 2Cy_{ijk}max(0,1-y_{ijk}(q_j-q_k))x_kv_i^T</script><p>所以我们每次就分开维护一下最后加起来就好了。<br>对于更新$V$：<br><img src="/articles/37cad335/10.png"><br>对其求偏导有:</p>
+<script type="math/tex; mode=display">
+v_i = v_i + \sum_{(j,k) \in \Omega_i}-2Cy_{ijk}max(0,1-y_{ijk}  \overline v_i^TU^T(x_j-x_k))U^T(x_j-x_k)</script><p>优化方法同样借鉴上面的,稍微变下形式就好了,比如把$v_i$换成$U^T$。<br>总结:该算法每一次迭代所需的时间为$O(T\overline nk + dkn + |\Omega|)$，他们相对于$|\Omega|$是很小的,所以该算法近似是线性的,可以扩展到更大的数据集上。</p>
+<h2 id="样本复杂度分析"><a href="#样本复杂度分析" class="headerlink" title="样本复杂度分析"></a>样本复杂度分析</h2><p>这一部分真心没看懂…暂时先放一下。<br>这一部分大体证明的就是,作者这里基于低秩假设的$W$，同时学习T个ranking function所需要的样本数据比将每个task 视为一个RankSVM然后单独去训练(就是我们上文说的RankSVM SEPARATELY)所需要的数据是小的(而且优势较大)。</p>
+<h2 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h2><p>这里训练时使用了两种数据,一种是合成的(随机初始化),一种是真实数据。</p>
+<h3 id="实验配置"><a href="#实验配置" class="headerlink" title="实验配置"></a>实验配置</h3><p>对于每个ranking task,我们随机的将items分为training item或者testing item.<br>在训练阶段,使用训练item中的所有对来训练模型;在测试阶段,我们评估所有testing-testing items pair 和testing-training items pair 的预测精度.<br><strong>准确率定义为:</strong></p>
+<script type="math/tex; mode=display">
+accuracy = \frac{正确的预测}{总的预测对数}</script><p>我们比较了 RankSVM JOINTLY(为所有任务训练一个模型),RankSVM SEPARATELY(为每个任务训练一个模型),RankSVM VAR(the multi-task rankSVM model proposed in (Evgeniou &amp; Pontil, 2004)).</p>
+<h3 id="Synthetic-合成-data"><a href="#Synthetic-合成-data" class="headerlink" title="Synthetic(合成)data"></a>Synthetic(合成)data</h3><p>对于合成数据我们假设有1000个任务,10000个items并且每个item 有64 features.<br><img src="/articles/37cad335/11.png"><br>我们为每个用户采样800对作为训练数据，标签基于$R = (W’)^TX $<br>比较结果如下:<br><img src="/articles/37cad335/12.png"><br><img src="/articles/37cad335/13.png"></p>
+<h3 id="Real-world-datasets"><a href="#Real-world-datasets" class="headerlink" title="Real world datasets"></a>Real world datasets</h3><img src="/articles/37cad335/14.png">
+<p>选取了三个数据集:<br>(1) Yahoo! Movies User Ratings and Descriptive Content Information V1_0<br>(2) HetRec2011-MovieLens-2K (Cantador et al., 2011).<br>(3) MovieLens 20M Dataset (Harper &amp; Konstan, 2016)<br>(1)使用title 和 摘要结合起来作为feature (2)(3)将每个电影的类型作为特征<br>具体信息如下:<br><img src="/articles/37cad335/15.png"><br>结果如下:<br><img src="/articles/37cad335/16.png"><br><strong>可以看出该方法在准确率和速度上都优于其他算法,无论是在密集的feature还是稀疏的feature.尤其是对于(3)数据集,task超过了100000,效率仍然很高.</strong><br>时间精度图像如下:<br><img src="/articles/37cad335/17.png"><br>我们需要注意的是RankSVM JOINTLY(也就是为所有user训练一个ranking function),刚开始很快,但是最后它无法收敛到一个好结果。</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>本文提出可一个基于RankSVM 和 MF相结合的学习多个ranking function 的算法.因为这里做了低秩假设,所以task数可以很多,而将每个任务独立的去RankSVM就受限于task的个数了。<br>另外一个比较有意思的idea就是:文中说的$W$是由$k$个基础线性ranking function组合得来,我们可以想一下能否通过非线性ranking function,比如引入神经网络等。</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/37cad335.html">Extreme Learning to Rank via Low Rank Assumption论文解读</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年11月26日 - 15:11</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/37cad335.html" title="Extreme Learning to Rank via Low Rank Assumption论文解读">https://statusrank.xyz/articles/37cad335.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/37cad335.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RS/" rel="tag"><i class="fa fa-tag"></i> RS</a>
+          
+            <a href="/tags/SVM/" rel="tag"><i class="fa fa-tag"></i> SVM</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/9d4ca24c.html" rel="next" title="浅谈支持向量机(SVM)">
+                <i class="fa fa-chevron-left"></i> 浅谈支持向量机(SVM)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/54e65a77.html" rel="prev" title="Python 装饰器总结">
+                Python 装饰器总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/6a0c1b07.html">贝叶斯个性化排序(BPR)算法小记</a></li><li><a href="/articles/cdf3f0c1.html">Dual Metric Space Learning for Modeling Heterogeneous User Behaviors</a></li><li><a href="/articles/ed2225da.html">Collaborative Metric Learning(CML)论文总结</a></li><li><a href="/articles/33a62389.html">A Scalable Probabilistic Tensor Factorization(SPTF)</a></li><li><a href="/articles/9d4ca24c.html">浅谈支持向量机(SVM)</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LTR-Pairwise-method"><span class="nav-text">LTR Pairwise method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要贡献"><span class="nav-text">主要贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关工作比较"><span class="nav-text">相关工作比较:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem-Setting"><span class="nav-text">Problem Setting</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#naive-method"><span class="nav-text">naive method</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proposed-Algorithm"><span class="nav-text">Proposed Algorithm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#样本复杂度分析"><span class="nav-text">样本复杂度分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiment"><span class="nav-text">Experiment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实验配置"><span class="nav-text">实验配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Synthetic-合成-data"><span class="nav-text">Synthetic(合成)data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Real-world-datasets"><span class="nav-text">Real world datasets</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-text">Conclusion</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

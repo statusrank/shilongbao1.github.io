@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="RS,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一个成功的行为模型应该考虑用户动作的异构类型之间的相互作用而不是在每种动作类型中建模用户的行为。OCCF的传统方法都是以得分学习为基础，如MF,TF。他们的目标都是去近似观察到的矩阵(张量)每一项的得分来进行预测。得分学习存在固有的限制,那就是在他们的潜在空间无法正确捕获user-user,item-item之间的相似度关系,因为他们只学到了user-item交互的得分。为了克服这些限制,最近的相">
+<meta name="keywords" content="RS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dual Metric Space Learning for Modeling Heterogeneous User Behaviors">
+<meta property="og:url" content="https://statusrank.xyz/articles/cdf3f0c1.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="一个成功的行为模型应该考虑用户动作的异构类型之间的相互作用而不是在每种动作类型中建模用户的行为。OCCF的传统方法都是以得分学习为基础，如MF,TF。他们的目标都是去近似观察到的矩阵(张量)每一项的得分来进行预测。得分学习存在固有的限制,那就是在他们的潜在空间无法正确捕获user-user,item-item之间的相似度关系,因为他们只学到了user-item交互的得分。为了克服这些限制,最近的相">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/cdf3f0c1/11.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dual Metric Space Learning for Modeling Heterogeneous User Behaviors">
+<meta name="twitter:description" content="一个成功的行为模型应该考虑用户动作的异构类型之间的相互作用而不是在每种动作类型中建模用户的行为。OCCF的传统方法都是以得分学习为基础，如MF,TF。他们的目标都是去近似观察到的矩阵(张量)每一项的得分来进行预测。得分学习存在固有的限制,那就是在他们的潜在空间无法正确捕获user-user,item-item之间的相似度关系,因为他们只学到了user-item交互的得分。为了克服这些限制,最近的相">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/cdf3f0c1/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/cdf3f0c1.html">
+
+
+
+
+  <title>Dual Metric Space Learning for Modeling Heterogeneous User Behaviors | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/cdf3f0c1.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Dual Metric Space Learning for Modeling Heterogeneous User Behaviors</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-13T20:55:17+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/cdf3f0c1.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/cdf3f0c1.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/cdf3f0c1.html" class="leancloud_visitors" data-flag-title="Dual Metric Space Learning for Modeling Heterogeneous User Behaviors">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一个成功的行为模型应该考虑用户动作的异构类型之间的相互作用而不是在每种动作类型中建模用户的行为。<br>OCCF的传统方法都是以得分学习为基础，如MF,TF。他们的目标都是去近似观察到的矩阵(张量)每一项的得分来进行预测。得分学习存在固有的限制,那就是在他们的潜在空间无法正确捕获user-user,item-item之间的相似度关系,因为他们只学到了user-item交互的得分。<br>为了克服这些限制,最近的相关工作开始学习一个满足三角不等式的度量空间,并且他们尝试去学习距离而不是得分。CML等<br><a id="more"></a></p>
+<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><p>这里我们简单回顾下OCCF的两种用户行为建模的不同方法。一种是score learning,从一个得分函数学习实体间的交互。另一种是Metric Learning方法,从一个距离函数学习。</p>
+<h3 id="隐式张量分解"><a href="#隐式张量分解" class="headerlink" title="隐式张量分解"></a>隐式张量分解</h3><p>TF在多方面数据中被广泛的用来分析实体之间的潜在关系,其自然的表为高阶张量。对于异构用户行为建模,它分解为一个用户历史行为的第三阶张量,由三方面组成:users,items,action types.<br>在早期工作中，RTF（Rendle等人，2009a）使用优化标准来最大化TF的排名AUC，并且BPR-PITF（Rendle等人2009b; Rendle和SchmidtThieme 2010）将BPR概念结合到TF中，其学习了 成对排名使得观察到的条目具有比未观察到的条目更大的分数.BPR-PITF通过将得分函数公式话,引入PIF:<br><img src="/articles/cdf3f0c1/1.png"><br>SPTF 是目前OCCF中最好的张量分解方法。<br>SPTF也使用PIF计算了每个条目的得分,但是它的损失韩式是基于概率生成模型而不是BPR框架。通过在SGD中很好的采样策略的帮助,它在为异构用户行为建模开发的所有score learning方法中实现了最佳性能。</p>
+<h3 id="CML"><a href="#CML" class="headerlink" title="CML"></a>CML</h3><p><a href="https://statusrank.xyz/2018/11/13/CML/">关于CML可以看这里</a><br>CML的整个过程可以看上面我的这篇博客。<br>然而,CML只是关注仅仅包含了单一用户动作类型的用户历史数据,所以它学习到的user和item的距离是忽略了交互类型。因此,它不能共同建模多种类型的用户动作之间的相互作用。另外,user-user和item-item相似度只是通过user-item的交互来捕获的,这很naive。这使得度量空间无法学习user-user和item-item的高阶相似度。例如,两个有完全不同行为模式的用户在度量空间中有可能被放置的很近,因为两个用户通常都会在一些物品上执行操作。这是CML直接使用欧几里得距离去测量user-item交互对的相似度。为了克服CML的这些局限性,我们需要<strong>同时考虑异构动作类型和实体之间的非线性关系来设计新的距离函数。</strong></p>
+<h2 id="双度量空间学习"><a href="#双度量空间学习" class="headerlink" title="双度量空间学习"></a>双度量空间学习</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>我们专注于<strong>给定隐式的用户历史数据我们预测用户未来的行为。</strong><br>User set $ U = \{u_1 ,u_2 ,…,u_I \}$<br>Item set $ V = \{v_1 ,v_2 ,…,v_J \}$<br>action type set $ T = \{t_1 ,t_2 ,…,t_K \}$<br>他们三个是每个动作的组成部分,我们称它们为实体。一个单一的动作通过三元组来表示$(user_{index},item_{index},action_{index})$,它要么是能观察到的要么不是。<strong>需要注意的是所有可能的动作是非常大的($I \times J \times K$),可以观察到的动作只占他们其中的一小部分</strong>。包含所有观察到的动作的整个数据集由$X$表示，基于异构用户行为数据集$X$,我们的问题定义为:(异构行为预测)<br><strong>给定一个目标用户$u_i$和一个动作类型$t_k$,我们的目标是去预测$u_i$执行动作$t_k$时的Top-n items。</strong></p>
+<h3 id="行为预测的度量学习"><a href="#行为预测的度量学习" class="headerlink" title="行为预测的度量学习"></a>行为预测的度量学习</h3><p>为了加入异构用户动作类型到模型中来我们提出了双度量空间。如图<img src="/articles/cdf3f0c1/2.png"><br>我们的双度量空间与其他的已经存在的空间的最大不同之处在于捕获实体之间相互作用的空间与实体之间相似性空间的解耦。这种双重结构有利于DualMet学习更准确的空间,它们都为自己的目的学习相互作用或者相似性,并且还对两个空间的关系也进行了额外的训练。<br><strong>entities space:</strong>所有的实体embedded,实体之间的相似度被表示为实体之间的距离。<br><strong>Behavior space:</strong>embed所有可能的动作(observe or unobserve)和所有用户的行为模型。$a(i,j,k)$表示 单个动作向量(i,j,k),$b(i,k)$表示对于行为类型k,用户i的行为模型向量。<br>每个$b(i,k)$可以表示为其所有相关动作的表示向量  $\{a(i,j,k) |j = 1,…,J\}$<br>从某种意义上来说,所有观察到的动作围绕其相应的行为模型聚集在一起,而所有未观察的动作都被推离其行为模型。最后目标动作$a(i,j,k)$与其在空间中的行为模型$b(i,k)$之间的欧式距离意味着<strong>用户i对item j进行动作k的可能性,它们的距离越近,动作就越有可能发生。</strong><br>一个主要挑战是如何获得$a(i,j,k)$和$b(i,k)$以便他们能反映实体之间的相互作用。所以这里我们<strong>将动作向量和行为模型向量定义为相应实体向量的线性变换</strong>。<br>使用了两个非线性映射函数$f$和$g$使得所有可能的动作和用户的行为模式嵌入到行为空间。<br>$f(u_i,v_j,t_k)$计算动作向量$(i,j,k)$ ,$g(u_i,t_k)$计算用户i的第k类动作类型的代表向量。 $u_i,v_j,t_k$分别对应与实体空间中的user,item,action type.</p>
+<p><strong>我们定义如下距离函数，即计算目标动作和其对应的行为模型之间的欧式距离</strong>:<br><img src="/articles/cdf3f0c1/3.png"><br>为了使这个距离能够反映行动执行的可能性,我们学习了双重度量空间使得观察到的动作比未观察到的动作更接近行为模型。我们建立一个三元组如下:<br><img src="/articles/cdf3f0c1/4.png"><br><img src="/articles/cdf3f0c1/5.png"><br>和CML一样$f,g$由MLP+dropout学习的来,因为他能够有效的学习输入特征之间的非线性相互作用,并且结构简单。</p>
+<h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><p>pull regularizer:有助于观察到的动作接近于其行为模型。上面的损失函数只保证了 observed-unobserved 之间的关系,并没有保证observed和其行为模型之间的距离。函数如下:<br><img src="/articles/cdf3f0c1/6.png"><br>同样的执行和CML中一样的操作,将所有的实体进行标准化。<img src="/articles/cdf3f0c1/7.png"><br>最后我们得到的目标函数如下:<br><img src="/articles/cdf3f0c1/8.png"><br>算法流程:<img src="/articles/cdf3f0c1/9.png"></p>
+<h3 id="三元组的选择"><a href="#三元组的选择" class="headerlink" title="三元组的选择"></a>三元组的选择</h3><p>随着模型逐渐收敛,减少Eq(4)的损失函数的损失变得很困难,因为大量的已经满足边界margin条件的observed-unobserved pair再增加。<br>边界条件:</p>
+<script type="math/tex; mode=display">
+d(i,j,k) + \alpha <= d(i,j',k) \tag7</script><p>简单的随机选择pair肯定是不行的.<br>所以这里作者提出了一种优化方法可以高效的找到满足条件的三元组(非0梯度的)。<br>如图:<br><img src="/articles/cdf3f0c1/10.png"><br>具体流程如下:<br>给定用户和动作类型,我们通过对用户未执行动作的一小部分负item进行采样来构造1）观察到的动作集合$V^+$2)未观察到的动作集合$V^-$，对于两个集合中所有的动作按照其$d(i,j,k)$降序排序.<br>然后分别从两个集合的第一个元素开始找,因为降序排序,所以第一个不满足不等式的pair,后面的全都不满足了。<br>算法2流程如下:<img src="/articles/cdf3f0c1/11.png"></p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/cdf3f0c1.html">Dual Metric Space Learning for Modeling Heterogeneous User Behaviors</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年11月13日 - 20:11</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/cdf3f0c1.html" title="Dual Metric Space Learning for Modeling Heterogeneous User Behaviors">https://statusrank.xyz/articles/cdf3f0c1.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/cdf3f0c1.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RS/" rel="tag"><i class="fa fa-tag"></i> RS</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/ed2225da.html" rel="next" title="Collaborative Metric Learning(CML)论文总结">
+                <i class="fa fa-chevron-left"></i> Collaborative Metric Learning(CML)论文总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/33a62389.html" rel="prev" title="A Scalable Probabilistic Tensor Factorization(SPTF)">
+                A Scalable Probabilistic Tensor Factorization(SPTF) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/6a0c1b07.html">贝叶斯个性化排序(BPR)算法小记</a></li><li><a href="/articles/ed2225da.html">Collaborative Metric Learning(CML)论文总结</a></li><li><a href="/articles/37cad335.html">Extreme Learning to Rank via Low Rank Assumption论文解读</a></li><li><a href="/articles/33a62389.html">A Scalable Probabilistic Tensor Factorization(SPTF)</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关工作"><span class="nav-text">相关工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#隐式张量分解"><span class="nav-text">隐式张量分解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CML"><span class="nav-text">CML</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#双度量空间学习"><span class="nav-text">双度量空间学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为预测的度量学习"><span class="nav-text">行为预测的度量学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则化"><span class="nav-text">正则化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三元组的选择"><span class="nav-text">三元组的选择</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

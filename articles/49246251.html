@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="论文,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文链接open source本文主要对度量分解这篇论文做一个翻译+总结. Abstract被我们熟知的基于矩阵分解(MF)的推荐系统得到了广泛的研究,并已成为最受欢迎的个性化推荐技术之一.然而基于內积的矩阵分解不满足不等式属性(CML中我们提到过的三角不等式),这可能限制了midel的表达并且可能导致次优解.本文中作者提出了度量分解,假定所有的users和items被embedding到了一个低">
+<meta name="keywords" content="论文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Metric-Factorization Recommendation beyond Matrix Factorization">
+<meta property="og:url" content="https://statusrank.xyz/articles/49246251.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="原文链接open source本文主要对度量分解这篇论文做一个翻译+总结. Abstract被我们熟知的基于矩阵分解(MF)的推荐系统得到了广泛的研究,并已成为最受欢迎的个性化推荐技术之一.然而基于內积的矩阵分解不满足不等式属性(CML中我们提到过的三角不等式),这可能限制了midel的表达并且可能导致次优解.本文中作者提出了度量分解,假定所有的users和items被embedding到了一个低">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/11.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/12.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/13.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/14.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/15.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/49246251/16.png">
+<meta property="og:updated_time" content="2019-01-03T07:28:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Metric-Factorization Recommendation beyond Matrix Factorization">
+<meta name="twitter:description" content="原文链接open source本文主要对度量分解这篇论文做一个翻译+总结. Abstract被我们熟知的基于矩阵分解(MF)的推荐系统得到了广泛的研究,并已成为最受欢迎的个性化推荐技术之一.然而基于內积的矩阵分解不满足不等式属性(CML中我们提到过的三角不等式),这可能限制了midel的表达并且可能导致次优解.本文中作者提出了度量分解,假定所有的users和items被embedding到了一个低">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/49246251/3.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/49246251.html">
+
+
+
+
+  <title>Metric-Factorization Recommendation beyond Matrix Factorization | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/49246251.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Metric-Factorization Recommendation beyond Matrix Factorization</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T16:56:58+08:00">
+                2018-12-25
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-01-03T15:28:16+08:00" content="2019-01-03">
+      2019-01-03
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/49246251.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/49246251.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/49246251.html" class="leancloud_visitors" data-flag-title="Metric-Factorization Recommendation beyond Matrix Factorization">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://arxiv.org/abs/1802.04606" target="_blank" rel="noopener">原文链接</a><br><a href="https://github.com/cheungdaven/metricfactorization" target="_blank" rel="noopener">open source</a><br>本文主要对度量分解这篇论文做一个翻译+总结.</p>
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>被我们熟知的基于矩阵分解(MF)的推荐系统得到了广泛的研究,并已成为最受欢迎的个性化推荐技术之一.然而基于內积的矩阵分解不满足不等式属性(CML中我们提到过的三角不等式),这可能限制了midel的表达并且可能导致次优解.<br>本文中作者提出了度量分解,假定所有的users和items被embedding到了一个低维的空间并采用满足不等式属性的欧几里得距离来衡量他们之间的相似性.设计了两种方法,将Metric Fac分别用在了rating predict 以及个性化推荐中.<br><a id="more"></a></p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>推荐系统RS基于用户的历史交互,例如评分,以前的购买和点击浏览记录,预测用户对item的偏好.主要存在两种类型的推荐任务:rating prediction 和 item ranking.<br>rating prediction主要目标是通过用户显示的评分去估计未评分物品的真实值,从而找到用户可能还对哪些物品感兴趣.<br>在很多场合下因为显示评级的匮乏,通过隐式反馈(purchase,log,click,etc.)的rank-based的RS模型更加可取和实用的用来产生个性化推荐列表去实现我们的推荐目标.</p>
+<h3 id="Metric-Fac"><a href="#Metric-Fac" class="headerlink" title="Metric Fac"></a>Metric Fac</h3><p>度量分解适用于Rating prediction和items ranking.主要原理是使用欧式距离代替MF的点积,从位置和距离的角度来考虑推荐问题.<strong>它将交互矩阵分解为user和item的密集嵌入,并根据他们的估计距离来进行推荐</strong>.<br><strong>主要贡献:</strong><br>1.提出了Metric Factorization,将users和items表示为多维坐标系中的点(嵌入).他们之间的距离通过欧几里得距离来衡量,基于user-item之间的相似性来进行推荐<br>2.提出了两种度量分解的变体来解决两种经典的推荐任务: rating prediction 和 item ranking</p>
+<h3 id="矩阵分解-MF-的局限性"><a href="#矩阵分解-MF-的局限性" class="headerlink" title="矩阵分解(MF)的局限性"></a>矩阵分解(MF)的局限性</h3><p>前面我们说到基于矩阵分解的推荐或者说基于內积的(主要是內积)的推荐,它的表达存在限制,因为他不满足三角不等式(不等式限制),这可能导致我们的模型是次优解.<br>我们知道內积$a\cdot b = |a||b|cos \theta$,也就是它只关注两个向量的大小和角度,也就是说它在大小和角度的方面来考虑两个向量之间的相似性而不是距离.<br>下面我们给出一个例子,假设用户的潜在因子是($P_1,P_2,P_3,P_4$),我们通过计算交互矩阵$R$的Jaccard相似度来衡量用户之间的相似度.<br><img src="/articles/49246251/3.png"><br>假定一开始我们有3个users,$u_1,u_2,u_3$那么基于交互矩阵$R$的用户之间的相似度为:$S_{23} &gt; S_{12} &gt; S_{13}$,然后我们的$u_1,u_2,u_3$潜在因子$P_1,P_2,P_3$位置可以是如上图中间.现在我们拥有了一个新的user $u_4$,并且可以得到如下jaccard相似度$S_{41} &gt; S_{43} &gt; S_{42}$,那么<strong>如果我们让$P_4$和$P_1$相似,那么无论我们怎么定义$P_4$的位置$S_{43} &gt; S_{42}$都无法满足.</strong>然而如果我们将users看成空间中的点,并且让相似的user之间的距离更近(也就是有$D_{23} &lt; D_{12} &lt; D_{13}$和$D_{41} &lt; D_{43} &lt; D_{42}$,D代表距离),我们很容易满足条件.</p>
+<h2 id="Problem-Formulation"><a href="#Problem-Formulation" class="headerlink" title="Problem Formulation"></a>Problem Formulation</h2><p>假设我们有M个users和N个items,rating/interaction 矩阵表示为$R \in  R^{M \times N}$,$u$和$i$ 分别表示user和item.$R_{ui}$表示$u$对$i$的偏好.在大多数情况下关于矩阵R很多我们是未知的,我们推荐系统的目标就是去预测这些未观察到的的偏好得分.<br>矩阵$R$的值可以是显示评分[1-5]也可以是隐式反馈.显示评分可以用来对未知评分进行估计,而隐式反馈则可以用来产生个性化排序的推荐列表(OCCF,Top-N).<br>隐式反馈的定义如下:<br><img src="/articles/49246251/1.png"><br>$u$和$i$之间的交互方式可能有很多,1表示user-item pair $(u,i)$被观察到了,<strong>0 并不一定意味着用户不喜欢item,它也可能意味着用户并没有意识到该item的存在</strong>.<br>如果$R_{ui} = 1$ 我们称之为positive sample,0 为negative sample<br><img src="/articles/49246251/2.png"></p>
+<h3 id="Metric-Factorization"><a href="#Metric-Factorization" class="headerlink" title="Metric Factorization"></a>Metric Factorization</h3><p>为了解决上面所说的MF存在的问题,提出了度量分解.矩阵分解将users和items看成是新空间中的向量,metric fac将users和items看成是低维坐标系中的点并且通过欧几里得距离表示他们之间的关系.度量分解将距离分解为users和items的位置.<br>矩阵分解通过分解表示了user和item之间相似度的交互矩阵来学习users和items的潜在因子.但是学习user和item的位置,我们无法直接利用rating/interaction矩阵$R$,因为距离和相似度是两个相反的概念.对于相似度来说值越大我们说相似度越高,而对于距离值越大代表二者相似度越小,是反的.<strong>因此我们首先将$R$转化为距离矩阵$Y$</strong>,如下:<br><img src="/articles/49246251/4.png"><br>根据上面的等式,更高的相似度距离为0,这很好的满足了我们上述所说的条件.这个转化可以用在显式评分也可以用在隐式反馈上.<br>在欧式空间$R^k$中,我们通过欧式距离来表示两个点之间的距离:<br><img src="/articles/49246251/5.png"><br>在度量分解中我们使用欧几里得距离来测量user-item之间的距离.对于每个user和item,我们分配给他们一个向量$P_u \in R^k$,$Q_i \in R^k$来表示他们在多维空间中的位置.所以有:</p>
+<script type="math/tex; mode=display">
+D(u,i) = ||P_u - Q_i||_2^2</script><p>在真实世界中只有很少的一些距离矩阵项是已知的,<strong>度量学习的目标是给定部分观察到的距离矩阵求学习users和items在低维坐标系中的位置:</strong></p>
+<script type="math/tex; mode=display">
+f(P_u,Q_i|Y)</script><p>对于不同的学习任务(rating prediction,item ranking)$f$是不同的.<br>目前我们可以看的除度量分解和矩阵分解很相似,他们都是从一个大的稀疏的矩阵去学习,但是他们的解释是不同的.<br>下图展示了metric factorization的整个过程:<br><img src="/articles/49246251/6.png"></p>
+<h2 id="基于不同推荐任务的度量分解"><a href="#基于不同推荐任务的度量分解" class="headerlink" title="基于不同推荐任务的度量分解"></a>基于不同推荐任务的度量分解</h2><p>这一部分将对度量分解应用于rating prediction和item ranking进行详细的解释</p>
+<h3 id="Metric-Fac-for-Rating-Prediction"><a href="#Metric-Fac-for-Rating-Prediction" class="headerlink" title="Metric Fac for Rating Prediction"></a>Metric Fac for Rating Prediction</h3><h4 id="Basic-Model"><a href="#Basic-Model" class="headerlink" title="Basic Model"></a>Basic Model</h4><p>假设$S$表示可观察的rating数据的集合,首先我们使用下面的公式将评分矩阵$R$转化为距离矩阵:</p>
+<script type="math/tex; mode=display">
+Y_{ui} = R_{max} - R{ui}</script><p>$R_{max}$表示评分矩阵可能的最大值.<br>我们使用均方损失函数来学习我们的users和items的位置:<br><img src="/articles/49246251/7.png"></p>
+<h4 id="偏差和置信度"><a href="#偏差和置信度" class="headerlink" title="偏差和置信度"></a>偏差和置信度</h4><p>上面的模型只考虑了user和item之间的交互,但是个人的影响对user和item来说也很重要.例如许多item趋向于收到高评分,一些用户倾向于给低评分.这里我们也引入了全局偏差,users偏差和items偏差.因此,user和item之间的距离表示如下:</p>
+<script type="math/tex; mode=display">
+\hat Y= ||P_u - Q_i||_2^2 + b_u + b_i + \mu</script><p>通常，我们可以添加超参数$\tau$来缩放$\mu$，因为平均距离不能总是反映真实的全局偏差.<br>另一个重要的方面是我们需要考虑rating data的可靠性和稳定性.大部分rating prediction算法忽视了ratings的噪声并且将所有的ratings看成真值.并非所有的观察到的ratings都应该有相同的权重,例如一些用户可能会给同一item不同的评分,如果你在不同的时间要求他们去评分的话.有研究表明极端的评分(如1分,5分)比中间的评分(2,3,4分)更可靠.所以我们引入了置信度$c_{ui}$,因此我们的损失函数如下:<br><img src="/articles/49246251/8.png"><br>$c_{ui}$取值如下:</p>
+<script type="math/tex; mode=display">
+c_{ui} = 1 + \alpha \cdot g(R_{ui} - \frac{R_{max}}{2})</script><p>$g(\cdot)$可以是绝对值,平方,甚至是log函数,$\alpha$是一个超参数,来控制置信度的大小.我们保证了极端的评分获得更高的置信度.</p>
+<h4 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h4><h5 id="Norm"><a href="#Norm" class="headerlink" title="Norm"></a>Norm</h5><p>对于users和items偏差(bias)我们使用L2正则化,由于对于users和items的向量使用L2正则化会使得users和items靠近原点,所以这里我们不采用L2正则化改为Norm.</p>
+<script type="math/tex; mode=display">
+||P_u||_2^2 \leq l,||Q_i||_2^2 \leq l</script><h5 id="Dropout"><a href="#Dropout" class="headerlink" title="Dropout"></a>Dropout</h5><p>比较新颖的一个地方,这里将Dropout的思想迁移到users和items坐标的各个维度之间,去减少他们之间的相关性和适应性.所以这里我们也随机丢弃一些坐标维度,然后计算剩余维度之间的距离.<br><img src="/articles/49246251/9.png"></p>
+<h3 id="Metric-Factorization-for-Item-Ranking"><a href="#Metric-Factorization-for-Item-Ranking" class="headerlink" title="Metric Factorization for Item Ranking"></a>Metric Factorization for Item Ranking</h3><p>对于Item Ranking 我们依然需要先将相似度转化为距离.转化公式如下:</p>
+<script type="math/tex; mode=display">
+Y_{ui} = a \cdot (1 - R_{ui}) + z \cdot R_{ui}</script><p>通过上式我们可以得到<br>1.$Y_{ui} = a,R_{ui} = 0$<br>2.$Y_{ui} = z,R_{ui} = 1$<br>$a,z$两个超参数用来控制user和item之间的距离.但是需要注意的是我们设置超参数时必须保证$a &gt;=z$<strong>保证user和未交互的item之间的距离大于交互过的item.</strong>通常设$z= 0$已经足够了.<strong>因为$R_{ui}$要么为0要么为1,所以所有(user,positive item)和(user,negative item)之间的距离是分别相等的,而不是像rating prediction那样距离取决于评分</strong>.<br>为了学习users和items在低维坐标系中的位置我们采用pointwise的方法并最小化如下权重均方损失函数:<br><img src="/articles/49246251/10.png"><br>这里我们考虑了所有的未观察到的交互,并且去掉了bias.<br>$c_{ui}$依然表示的是置信度,定于如下:</p>
+<script type="math/tex; mode=display">
+c_{ui} = 1 + \alpha w_{ui}</script><p>$w_{ui}$可以看成是隐式动作的计数,例如user浏览了item 3次那么$w_{ui} = 3$.因为数据的原因这里w = 0 or 1.$\alpha$和上面的意义相同,<br>关于正则化配置与上面相同.<br>下图展示了整个该方法的过程:<br><img src="/articles/49246251/11.png"><br>可以看到该模型不仅使user和偏好的item更近,也使得不感兴趣的更远.<strong>不像大多数metric learning基础模型,他们强制imposters远离users的领地至少margin的距离,这个方法中的置信度给负items入侵用户的区域提供了可能性,这对推荐任务来说是有利的,因为它可以作为过滤器来选择否定项目进行推荐.</strong>我们模型的另一个重要特征是它可以间接地将共享大量项目的用户聚集在一起。</p>
+<h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><h3 id="Evalutation-for-rating-prediction"><a href="#Evalutation-for-rating-prediction" class="headerlink" title="Evalutation for rating prediction"></a>Evalutation for rating prediction</h3><h4 id="Dataset"><a href="#Dataset" class="headerlink" title="Dataset"></a>Dataset</h4><p>主要使用了4种数据集:<br><a href="http://fastml.com/goodbooks-10k" target="_blank" rel="noopener">传送门</a><br><img src="/articles/49246251/12.png"><br>这里采用两种评估指标:RMSE(Root Mean Square Error)和MAE(Mean absolute Error)</p>
+<h4 id="Baselines"><a href="#Baselines" class="headerlink" title="Baselines"></a>Baselines</h4><img src="/articles/49246251/13.png">
+<p>结果如下:<br><img src="/articles/49246251/14.png"></p>
+<h3 id="Evaluation-for-Item-Ranking"><a href="#Evaluation-for-Item-Ranking" class="headerlink" title="Evaluation for Item Ranking"></a>Evaluation for Item Ranking</h3><h4 id="Dataset-1"><a href="#Dataset-1" class="headerlink" title="Dataset"></a>Dataset</h4><img src="/articles/49246251/15.png">
+<p>对于Item Ranking 采用了五个评估标准,<a href="https://statusrank.xyz/2018/12/25/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/">Recall,Precision,MAP,MRR,NDCG</a><br><img src="/articles/49246251/16.png"></p>
+<h2 id="模型参数分析"><a href="#模型参数分析" class="headerlink" title="模型参数分析"></a>模型参数分析</h2><p>这一部分主要讨论了维度大小k对两种推荐任务的影响,Clip Value $l$的影响,置信度等级$\alpha$的影响,以及Dropout  rate的影响(这里发现了Dropout对item ranking无太大作用).<br>详细分析见paper.</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/49246251.html">Metric-Factorization Recommendation beyond Matrix Factorization</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年12月25日 - 16:12</p>
+  <p><span>最后更新:</span>2019年01月03日 - 15:01</p>
+  <p><span>原始链接:</span><a href="/articles/49246251.html" title="Metric-Factorization Recommendation beyond Matrix Factorization">https://statusrank.xyz/articles/49246251.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/49246251.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/论文/" rel="tag"><i class="fa fa-tag"></i> 论文</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/639f7364.html" rel="next" title="推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)">
+                <i class="fa fa-chevron-left"></i> 推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/63484af.html" rel="prev" title="KL Divergence(KL 散度)">
+                KL Divergence(KL 散度) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Metric-Fac"><span class="nav-text">Metric Fac</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#矩阵分解-MF-的局限性"><span class="nav-text">矩阵分解(MF)的局限性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem-Formulation"><span class="nav-text">Problem Formulation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Metric-Factorization"><span class="nav-text">Metric Factorization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于不同推荐任务的度量分解"><span class="nav-text">基于不同推荐任务的度量分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Metric-Fac-for-Rating-Prediction"><span class="nav-text">Metric Fac for Rating Prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Model"><span class="nav-text">Basic Model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#偏差和置信度"><span class="nav-text">偏差和置信度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则化"><span class="nav-text">正则化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Norm"><span class="nav-text">Norm</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Dropout"><span class="nav-text">Dropout</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metric-Factorization-for-Item-Ranking"><span class="nav-text">Metric Factorization for Item Ranking</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiments"><span class="nav-text">Experiments</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Evalutation-for-rating-prediction"><span class="nav-text">Evalutation for rating prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dataset"><span class="nav-text">Dataset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Baselines"><span class="nav-text">Baselines</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Evaluation-for-Item-Ranking"><span class="nav-text">Evaluation for Item Ranking</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dataset-1"><span class="nav-text">Dataset</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型参数分析"><span class="nav-text">模型参数分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

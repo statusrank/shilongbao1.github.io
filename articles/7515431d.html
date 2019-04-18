@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="Tucker,CP,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简单的说张量就是多维数组。我们知道一维数组叫向量,二维的叫矩阵,三维及三维以上的就是张量了。如图:">
+<meta name="keywords" content="Tucker,CP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="张量分解——张量分解的基础知识">
+<meta property="og:url" content="https://statusrank.xyz/articles/7515431d.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="简单的说张量就是多维数组。我们知道一维数组叫向量,二维的叫矩阵,三维及三维以上的就是张量了。如图:">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/7515431d/10.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="张量分解——张量分解的基础知识">
+<meta name="twitter:description" content="简单的说张量就是多维数组。我们知道一维数组叫向量,二维的叫矩阵,三维及三维以上的就是张量了。如图:">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/7515431d/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/7515431d.html">
+
+
+
+
+  <title>张量分解——张量分解的基础知识 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/7515431d.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">张量分解——张量分解的基础知识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-06T21:56:27+08:00">
+                2018-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/7515431d.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/7515431d.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/7515431d.html" class="leancloud_visitors" data-flag-title="张量分解——张量分解的基础知识">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>简单的说张量就是多维数组。我们知道一维数组叫向量,二维的叫矩阵,三维及三维以上的就是张量了。<br>如图:<br><img src="/articles/7515431d/1.png"><br><a id="more"></a></p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p><strong>矩阵补全(Matrix Completion)</strong>目的是为了估计矩阵中缺失的部分(不可观察的部分),可以看做是用矩阵X近似矩阵M,然后用X中的元素作为矩阵M中不可观察部分的元素估计。<br><strong>矩阵分解(Matrix Factorization)</strong>是指用$A \times B$来近似矩阵M,那么$A \times B$的元素就可以用来估计M中对应不可见位置的元素,而$A \times B$可以看成是矩阵M的分解<br>这是因为协同过滤本质上是<strong>考虑大量用户的偏好信息(协同)</strong>,来对某一用户的偏好做出预测(过滤),那么当我们把这样的偏好用评分矩阵表达后,正等价于用M其他行已知的值(每一行包含一个用户对所有商品的已知评分),来估计并填充某一行的缺失值。若要对所有用户进行预测,便是填充整个矩阵,这是所谓的”<strong>协同过滤的本质是矩阵填充</strong>“。<br>矩阵分解是一种主流方法。因为协同过滤有一个隐含的重要假设,“如果用户A和用户B同时偏好商品X，那么用户A和用户B对其他商品的偏好性有更大的几率相似”。这个假设反应在矩阵M上即使矩阵的低秩。<br>极端情况之一是若所有用户对不同商品的偏好保持一致，那么填充完的M每行应两两相等，即秩为1。</p>
+<h2 id="矩阵分解的几种形式"><a href="#矩阵分解的几种形式" class="headerlink" title="矩阵分解的几种形式"></a>矩阵分解的几种形式</h2><p><a href="https://statusrank.xyz/2018/10/28/%E7%9F%A9%E9%98%B5%E5%88%86%E8%A7%A3/">看我这篇博客</a></p>
+<h2 id="张量相关基础知识"><a href="#张量相关基础知识" class="headerlink" title="张量相关基础知识"></a>张量相关基础知识</h2><p><a href="https://www.sandia.gov/~tgkolda/pubs/pubfiles/TensorReview.pdf" target="_blank" rel="noopener">论文</a><br><a href="https://zhuanlan.zhihu.com/p/24824550" target="_blank" rel="noopener">总结的比较好的文章</a></p>
+<h3 id="张量范数"><a href="#张量范数" class="headerlink" title="张量范数"></a>张量范数</h3><p>张量范数:即所有元素的平法和的平方根<br><img src="/articles/7515431d/2.png"></p>
+<h3 id="张量内积"><a href="#张量内积" class="headerlink" title="张量内积"></a>张量内积</h3><p>两个相同大小张量的内积就是他们对应元素乘积的和<br><img src="/articles/7515431d/3.png"></p>
+<h3 id="张量外积"><a href="#张量外积" class="headerlink" title="张量外积"></a>张量外积</h3><p>给定向量$\vec a=\left( 1,2 \right) ^{T}$ ，向量$\vec b=\left( 3,4 \right) ^{T}$ ，则$\vec a\circ \vec b=\vec a\vec b^{T}=\left[ \begin{array}{cc} 3 &amp; 4 \\ 6 &amp; 8 \\ \end{array} \right]$，运算符号“$\circ $”表示外积。另给定向量$\vec c=\left( 5,6,7 \right) ^{T}$ ，若${\mathcal{X}}=\vec a\circ \vec b\circ \vec c$，则</p>
+<script type="math/tex; mode=display">
+{\mathcal{X}}\left( :,:,1\right) =\left[ \begin{array}{cc} 1\times 3\times 5 & 1\times 4\times 5 \\ 2\times 3\times 5 & 2\times 4\times 5 \\ \end{array} \right]=\left[ \begin{array}{cc} 15 & 20 \\ 30 & 40 \\ \end{array} \right]，</script><script type="math/tex; mode=display">
+{\mathcal{X}}\left( :,:,2\right) =\left[ \begin{array}{cc} 1\times 3\times 6 & 1\times 4\times 6 \\ 2\times 3\times 6 & 2\times 4\times 6 \\ \end{array} \right]=\left[ \begin{array}{cc} 18 & 24 \\ 36 & 48 \\ \end{array} \right]，</script><script type="math/tex; mode=display">
+{\mathcal{X}}\left( :,:,3\right) =\left[ \begin{array}{cc} 1\times 3\times 7 & 1\times 4\times 7 \\ 2\times 3\times 7 & 2\times 4\times 7 \\ \end{array} \right]=\left[ \begin{array}{cc} 21 & 28 \\ 42 & 56 \\ \end{array} \right]，</script><p>其中，${\mathcal{X}}$是一个三维数组（有三个索引），对于任意索引$\left( i,j,k \right)$ 上的值为$x_{ijk}=a_i\cdot  b_j\cdot c_k,i=1,2,j=1,2,k=1,2,3，$在这里，向量$\vec a, \vec b, \vec c$的外积即可得到一个第三阶张量（third-order tensor），如图<br><img src="/articles/7515431d/10.png"><br>向量$\vec a, \vec b, \vec c$的外积</p>
+<p>在大量的文献中，Kronecker积的符号“$\otimes $”有时也用来表示向量的外积。</p>
+<h3 id="Rank-one张量"><a href="#Rank-one张量" class="headerlink" title="Rank-one张量"></a>Rank-one张量</h3><p>Rank-one Tensor是一种特殊的张量,如果一个N阶的张量能以N个张量的外积来表示,这就是个Rank-one张量。<br><img src="/articles/7515431d/4.png"><br><img src="/articles/7515431d/5.png"></p>
+<h3 id="张量展开"><a href="#张量展开" class="headerlink" title="张量展开"></a>张量展开</h3><p>在实际应用中，由于高阶张量比向量、矩阵都抽象，最简单地，向量和矩阵可以很轻松地书写出来并进行运算，而高阶张量则不那么直观，如何将高阶张量转换成二维空间的矩阵呢？这就是张量的展开，有时，也将张量的展开称为张量的矩阵化（Matricization: transforming a tensor into a matrix）。<br>给定大小为$4\times 3\times 2$的张量${\mathcal{ X}}$，其中，矩阵${\mathcal{ X}}\left( :,:,1 \right)= \left[ \begin{array}{ccc} x_{111} &amp; x_{121} &amp; x_{131} \\ x_{211} &amp; x_{221} &amp; x_{231} \\ x_{311} &amp; x_{321} &amp; x_{331} \\ x_{411} &amp; x_{421} &amp; x_{431} \\ \end{array} \right]$，矩阵${\mathcal{ X}}\left( :,:,2 \right)= \left[ \begin{array}{ccc} x_{112} &amp; x_{122} &amp; x_{132} \\ x_{212} &amp; x_{222} &amp; x_{232} \\ x_{312} &amp; x_{322} &amp; x_{332} \\ x_{412} &amp; x_{422} &amp; x_{432} \\ \end{array} \right]$，按照模态1（mode-1, 即对应着张量的第一阶）展开可以得到，</p>
+<script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 1 \right) }=\left[ \begin{array}{cccccc} x_{111} & x_{121} & x_{131} & x_{112} & x_{122} & x_{132} \\ x_{211} & x_{221} & x_{231} & x_{212} & x_{222} & x_{232} \\ x_{311} & x_{321} & x_{331} & x_{312} & x_{322} & x_{332} \\ x_{411} & x_{421} & x_{431} & x_{412} & x_{422} & x_{432} \\ \end{array} \right]</script><p>即矩阵${\mathcal{ X}}_{\left( 1 \right)} =\left[{\mathcal{ X}}\left( :,:,1 \right) ,{\mathcal{ X}}\left( :,:,2 \right) \right]$ ，其大小为$4\times 6$.</p>
+<p>按照模态2（mode-2, 即对应着张量的第二阶）展开可以得到，</p>
+<script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 2 \right) }=\left[ \begin{array}{ccccccccc} x_{111} & x_{211} & x_{311} & x_{411} & x_{112} & x_{212} & x_{312} & x_{412} \\ x_{121} & x_{221} & x_{321} & x_{421} & x_{122} & x_{222} & x_{322} & x_{422} \\ x_{131} & x_{231} & x_{331} & x_{431} & x_{132} & x_{232} & x_{332} & x_{432} \\ \end{array} \right]</script><p>即矩阵${\mathcal{ X}}_{\left( 2 \right) }=\left[{\mathcal{ X}}\left( :,:,1 \right)^T,{\mathcal{ X}}\left( :,:,2 \right)^T \right]$ ，其大小为$3\times 8$.</p>
+<p>按照模态3（mode-3, 即对应着张量的第三阶）展开可以得到，</p>
+<script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 3 \right) }=\left[ \begin{array}{ccccccccccccc} x_{111} & x_{211} & x_{311} & x_{411} & x_{121} & x_{221} & x_{321} & x_{421} & x_{131} & x_{231} & x_{331} & x_{431} \\ x_{112} & x_{212} & x_{312} & x_{412} & x_{122} & x_{222} & x_{322} & x_{422} & x_{132} & x_{232} & x_{332} & x_{432} \\ \end{array} \right]</script><p>即矩阵${\mathcal {X}}_{\left( 3 \right) }=\left[{\mathcal{ X}}\left( :,1,: \right)^T,{\mathcal{ X}}\left( :,2,: \right)^T,{\mathcal{ X}}\left( :,3,: \right)^T \right]$ ，其大小为$2\times 12$.</p>
+<p>类似地，如果给定一个大小为$2\times 2\times 2\times 2$的第四阶张量${\mathcal{ X}}$，则在各个模态下的展开分别为</p>
+<script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 1 \right) }=\left[{\mathcal{ X}}\left( :,:,1,1 \right),{\mathcal{ X}}\left( :,:,2,1 \right),{\mathcal{ X}}\left( :,:,1,2 \right),{\mathcal{ X}}\left( :,:,2,2 \right) \right] ，</script><script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 2 \right) }=\left[{\mathcal{ X}}\left( :,:,1,1 \right)^T,{\mathcal{ X}}\left( :,:,2,1 \right)^T,{\mathcal{ X}}\left( :,:,1,2 \right)^T,{\mathcal{ X}}\left( :,:,2,2 \right)^T \right] ，</script><script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 3 \right) }=\left[{\mathcal{ X}}\left( :,1,:,1 \right)^T,{\mathcal{ X}}\left( :,2,:,1 \right)^T,{\mathcal{ X}}\left( :,1,:,2 \right)^T,{\mathcal{ X}}\left( :,2,:,2 \right)^T \right] ，</script><script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 4 \right) }=\left[{\mathcal{ X}}\left( :,1,1,: \right)^T,{\mathcal{ X}}\left( :,2,1,: \right)^T,{\mathcal{ X}}\left( :,1,2,: \right)^T,{\mathcal{ X}}\left( :,2,2,: \right)^T \right] .</script><p>举一个例子，若${\mathcal{ X}}\left( :,:,1,1 \right) =\left[ \begin{array}{cc} 1 &amp; 2 \\ 3 &amp; 4 \\ \end{array} \right]$，${\mathcal{ X}}\left( :,:,2,1 \right) =\left[ \begin{array}{cc} 5 &amp; 6 \\ 7 &amp; 8 \\ \end{array} \right]$，${\mathcal{ X}}\left( :,:,1,2 \right) =\left[ \begin{array}{cc} 9 &amp; 10 \\ 11 &amp; 12 \\ \end{array} \right]$，${\mathcal{ X}}\left( :,:,2,2 \right) =\left[ \begin{array}{cc} 13 &amp; 14 \\ 15 &amp; 16 \\ \end{array} \right]，$则</p>
+<script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 1 \right) } =\left[ \begin{array}{cccccccc} 1 & 2 & 5 & 6 & 9 & 10 & 13 & 14 \\ 3 & 4 & 7 & 8 & 11 & 12 & 15 & 16 \\ \end{array} \right]，</script><script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 2 \right) } =\left[ \begin{array}{cccccccc} 1 & 3 & 5 & 7 & 9 & 11 & 13 & 15 \\ 2 & 4 & 6 & 8 & 10 & 12 & 14 & 16 \\ \end{array} \right]，</script><script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 3 \right) } =\left[ \begin{array}{cccccccc} 1 & 3 & 2 & 4 & 9 & 11 & 10 & 12 \\ 5 & 7 & 6 & 8 & 13 & 15 & 14 & 16 \\ \end{array} \right]，</script><script type="math/tex; mode=display">
+{\mathcal{ X}}_{\left( 4 \right) } =\left[ \begin{array}{cccccccc} 1 & 3 & 2 & 4 & 5 & 7 & 6 & 8 \\ 9 & 11 & 10 & 12 & 13 & 15 & 14 & 16 \\ \end{array} \right].</script><p>可惜的是，张量的展开虽然有一定的规则，但并没有很强的物理意义，对高阶张量进行展开会方便使用相应的矩阵化运算。除此之外，高阶张量可以展开自然也就可以还原（即将展开后的矩阵还原成高阶张量，这个过程称为folding）。</p>
+<h3 id="DiagonalTensor"><a href="#DiagonalTensor" class="headerlink" title="DiagonalTensor"></a>DiagonalTensor</h3><img src="/articles/7515431d/6.png">
+<h3 id="张量乘法"><a href="#张量乘法" class="headerlink" title="张量乘法"></a>张量乘法</h3><img src="/articles/7515431d/7.png">
+<p>张量与矩阵相乘（又称为模态积）相比矩阵与矩阵之间的相乘更为抽象，如何理解呢？</p>
+<p>假设一个大小为$n_1 \times n_2 \times … \times n_d$的张量${\mathcal{X}}$，同时给定一个大小为$m\times n_k$的矩阵A，则张量${\mathcal{X}}$与矩阵A的k模态积（k-mode product）记为${\mathcal{X}}\times_k A$，其大小为$n_1 \times n_2 \times … \times n_{k-1} \times m \times n_{k+1} \times … \times n_d$，对于每个元素而言，有</p>
+<script type="math/tex; mode=display">
+\left({\mathcal{X}}\times_k A \right) _{i_1i_2...i_{k-1}ji_{k+1}...i_d}=\sum_{i_k=1}^{n_k}{x_{i_1i_2...i_d}a_{ji_k}}</script><p>其中，$1\leq i_1\leq n_1,…,1\leq i_d\leq n_d,1\leq j\leq m$，我们可以看出，模态积是张量、矩阵和模态（mode）的一种“组合”运算。另外，${\mathcal{Y}}={\mathcal{X}}\times_kA与{\mathcal{Y}}_{\left( k \right) }=A{\mathcal{X}}_{\left( k \right) }$是等价的，这在接下来的例子里会展现相应的计算过程。<br>上述给出张量与矩阵相乘的定义，为了方便理解，下面来看一个简单的示例，若给定张量${\mathcal{ X}}为{\mathcal{ X}}\left( :,:,1 \right) =\left[ \begin{array}{cc} 1 &amp; 2 \\ 3 &amp; 4 \\ \end{array} \right]，{\mathcal{ X}}\left( :,:,2 \right) =\left[ \begin{array}{cc} 5 &amp; 6 \\ 7 &amp; 8 \\ \end{array} \right]$，其大小为$2\times 2\times 2$，另外给定矩阵$A=\left[ \begin{array}{cc} 1 &amp; 2 \\ 3 &amp; 4 \\ 5 &amp; 6 \\ \end{array} \right]$，试想一下：张量${\mathcal{ X}}$和矩阵A相乘会得到什么呢？</p>
+<p>假设${\mathcal{ Y}}={\mathcal{ X}}\times _1A$，则对于张量${\mathcal{ Y}}$在任意索引$\left( i,j,k \right) $上的值为$y_{ijk}=\sum_{m=1}^{2}{\left( x_{mjk}\cdot a_{im} \right) }$ ，这一运算规则也不难发现，张量${\mathcal{ Y}}$的大小为$3\times 2\times 2$，以$\left( 1,1,1 \right)$ 位置为例，$y_{111}=\sum_{m=1}^{2}{\left( x_{m11}\cdot a_{1m} \right) } =x_{111}\cdot a_{11}+x_{211}\cdot a_{12}=7$</p>
+<p>再以$\left( 1,1,2 \right)$ 位置为例，$y_{112}=\sum_{m=1}^{2}{\left( x_{m12}\cdot a_{1m} \right) } =x_{112}\cdot a_{11}+x_{212}\cdot a_{12}=19$，这样，可以得到张量${\mathcal{ Y}}$为</p>
+<script type="math/tex; mode=display">
+{\mathcal{ Y}}\left( :,:,1 \right) =\left[ \begin{array}{cc} x_{111} a_{11}+x_{211} a_{12} & x_{121} a_{11}+x_{221} a_{12} \\ x_{111} a_{21}+x_{211} a_{22} & x_{121} a_{21}+x_{221} a_{22} \\ x_{111} a_{31}+x_{211} a_{32} & x_{121} a_{31}+x_{221} a_{32} \\ \end{array} \right]，</script><script type="math/tex; mode=display">
+{\mathcal{ Y}}\left( :,:,2 \right) =\left[ \begin{array}{cc} x_{112} a_{11}+x_{212} a_{12} & x_{122} a_{11}+x_{222} a_{12} \\ x_{112} a_{21}+x_{212} a_{22} & x_{122} a_{21}+x_{222} a_{22} \\ x_{112} a_{31}+x_{212} a_{32} & x_{122} a_{31}+x_{222} a_{32} \\ \end{array} \right]，</script><p>即<br>$<br>{\mathcal{ Y}}\left( :,:,1 \right) =\left[ \begin{array}{cc} 1\times 1+3\times 2 &amp; 2\times 1+4\times 2 \\ 1\times 3+3\times 4 &amp; 2\times 3+4\times 4 \\ 1\times 5+3\times 6 &amp; 2\times 5+4\times 6 \\ \end{array} \right]=\left[ \begin{array}{cc} 7 &amp; 10 \\ 15 &amp; 22 \\ 23 &amp; 34 \\ \end{array} \right]$ ，<br>${\mathcal{ Y}}\left( :,:,2 \right) =\left[ \begin{array}{cc} 5\times 1+7\times 2 &amp; 6\times 1+8\times 2 \\ 5\times 3+7\times 4 &amp; 6\times 3+8\times 4 \\ 5\times 5+7\times 6 &amp; 6\times 5+8\times 6 \\ \end{array} \right]=\left[ \begin{array}{cc} 19 &amp; 22 \\ 43 &amp; 50 \\ 67 &amp; 78 \\ \end{array} \right]$</p>
+<p>其中，由于模态积的运算规则不再像Kronecer积和Khatri-Rao积那么“亲民”，所以有兴趣的读者可以自己动手计算一遍。</p>
+<p>实际上，${\mathcal{ Y}}={\mathcal{ X}}\times _2A$（会得到大小为$2\times 3\times 2$的张量）或${\mathcal{ Y}}={\mathcal{ X}}\times _3A$（会得到大小为$2\times 2\times 3$的张量）也可以用上述同样的运算规则进行计算，这里将不再赘述，有兴趣的读者可以自行推导。需要注意的是，${\mathcal{ Y}}={\mathcal{ X}}\times _1A$有一个恒等的计算公式，即${\mathcal{ Y}}_{\left( 1 \right) }=A{\mathcal{ X}}_{\left( 1 \right) }$，由于${\mathcal{ X}}_{\left( 1 \right) }=\left[{\mathcal{ X}}\left( :,:,1 \right) ,{\mathcal{ X}}\left( :,:,2 \right) \right] =\left[ \begin{array}{cccc} 1 &amp; 2 &amp; 5 &amp; 6 \\ 3 &amp; 4 &amp; 7 &amp; 8 \\ \end{array} \right]$，则</p>
+<script type="math/tex; mode=display">
+{\mathcal{ Y}}_{\left( 1 \right) }=\left[ \begin{array}{cccc} 7 & 10 & 19 & 22 \\ 15 & 22 & 43 & 50 \\ 23 & 34 & 67 & 78 \\ \end{array} \right]</script><p>满足$ {\mathcal{ Y}}_{\left( 1 \right) }=\left[{\mathcal{ Y}}\left( :,:,1 \right),{\mathcal{ Y}}\left( :,:,2 \right) \right]$，即采用张量矩阵化的形式进行运算可以使问题变得更加简单，从这里也可以看出高阶张量进行矩阵化的优点。</p>
+<h3 id="KroneckerProduct"><a href="#KroneckerProduct" class="headerlink" title="KroneckerProduct"></a>KroneckerProduct</h3><img src="/articles/7515431d/8.png">
+<h3 id="Khatri-RaoProduct"><a href="#Khatri-RaoProduct" class="headerlink" title="Khatri-RaoProduct"></a>Khatri-RaoProduct</h3><img src="/articles/7515431d/9.png">
+<h3 id="HadamardPRoduct"><a href="#HadamardPRoduct" class="headerlink" title="HadamardPRoduct"></a>HadamardPRoduct</h3><p>按元素对应相乘,但是两个张量的维度必须相同。<br><img src="/articles/7515431d/10.png"></p>
+<h2 id="推荐系统中常用的矩阵分解"><a href="#推荐系统中常用的矩阵分解" class="headerlink" title="推荐系统中常用的矩阵分解"></a>推荐系统中常用的矩阵分解</h2><p>在我们常见的推荐系统（如商品推荐系统、电影推荐系统等）中，给定一个大小为$ m\times n$的评分矩阵R，元素$r_{ij}$表示用户（user）i对项（item，如电影、商品等）j的评分值，如1~5分不等。<br>当矩阵R的秩为$k=rank\left( R \right) \ll \min {\left(m,n \right)}$，并且能够写成如下形式</p>
+<p>$R=UV^{T}$<br>其中，U是大小为$m\times k$的矩阵（用户因子矩阵，user-factor matrix），V是大小为$n\times k$的矩阵（项因子矩阵，item-factor matrix）。这一过程就是矩阵分解。<br>当$k&lt; rank\left( R \right)$ 时，我们可以将矩阵分解的过程看作是一个低秩逼近问题（low-rank approximation problem），原来的分解过程则变成</p>
+<p>$R\approx UV^{T}$<br>和前面相同，U是大小为$m\times k$的矩阵（用户因子矩阵，user-factor matrix），V是大小为$n\times k$的矩阵（项因子矩阵，item-factor matrix）。在这个低秩逼近问题中，可以很明显得看出整体误差为残差矩阵$R-UV^{T}$中所有元素的平方和，即$|| R-UV^{T} || ^{2}$（这种写法含义是矩阵F-范数的平方，等价于矩阵中所有元素的平方和）。<br>如果简单地使总的误差最小，那么，可以将矩阵分解的逼近问题转化为一个无约束的优化问题，即</p>
+<p>$\min J=\frac{1}{2} || R-UV^{T} || ^{2}$<br>在实际应用中，这里的评分矩阵R往往是一个稀疏矩阵，即很多位置上的元素是空缺的，或者说根本不存在。试想一下，如果有10000个用户，同时存在10000部电影，如果我们需要构造一个评分矩阵，难道每个用户都要把每部电影都看一遍才知道用户的偏好吗？其实不是，我们只需要知道每个用户仅有的一些评分就可以利用矩阵分解来估计用户的偏好，并最终推荐用户可能喜欢的电影。<br>在这里，我们将矩阵R中存在评分的位置记为$\left( i,j \right)$ ，所有观测到的位置索引记作集合S，其中，用户的索引为$i\in \left\{ 1,2,…,m \right\} $，项的索引为$j\in \left\{ 1,2,…,n \right\} $，需要注意的是，推荐系统中的矩阵分解对原矩阵R有一定的要求，即矩阵的每行和每列至少有一个元素。此时，任意位置$\left( i,j \right)$ 所对应的评分估计值为$\hat{r} _{ij}=\left(UV^{T}\right)_{ij}=\sum_{q=1}^{k}{u_{iq}\cdot v_{jq}}$ 。<br>则原来的优化问题等价于</p>
+<script type="math/tex; mode=display">
+\min J=\frac{1}{2} \sum_{\left(i,j\right)\in S}{e_{ij}^{2}}=\frac{1}{2} \sum_{\left( i,j \right)\in S }{\left( r_{ij}-\sum_{q=1}^{k}{u_{iq}\cdot v_{jq}} \right) ^2}</script><p>对目标函数J中的u_{iq}和v_{jq}求偏导数，得</p>
+<script type="math/tex; mode=display">
+\frac{\partial J}{\partial u_{iq}} =\sum_{j:\left( i,j \right)\in S } {\left(r_{ij}-\sum_{q=1}^{k}{u_{iq}v_{jq}}\right)\left( -v_{jq} \right) }；</script><script type="math/tex; mode=display">
+\frac{\partial J}{\partial v_{jq}} =\sum_{i:\left( i,j \right)\in S } {\left(r_{ij}-\sum_{q=1}^{k}{u_{iq}v_{jq}}\right)\left( -u_{iq} \right) }.</script><p>这里，可以将两个偏导数分别简写为$\frac{\partial J}{\partial u_{iq}} =-\sum_{j:\left( i,j \right)\in S } {e_{ij}v_{jq}}和\frac{\partial J}{\partial v_{jq}} =-\sum_{i:(i,j)\in S}{e_{ij}u_{iq}}$，其中，$i\in \left\{ 1,2,…,m \right\} ，j\in \left\{ 1,2,…,n \right\} ，q\in \left\{ 1,2,…,k \right\} 。$</p>
+<p>根据梯度下降（gradient descent）方法，$u_{iq}$和$v_{jq}$在每次迭代过程中的更新公式为</p>
+<script type="math/tex; mode=display">
+u_{iq}\Leftarrow u_{iq}+\alpha \sum_{j:\left( i,j \right)\in S } {e_{ij}v_{jq}}；v_{jq}\Leftarrow v_{jq}+\alpha \sum_{i:(i,j)\in S}{e_{ij}u_{iq}}.</script><p>这里的$\alpha&gt;0$表示梯度下降的步长，又称为学习率（learning rate），另外，更新公式中的求和项下标$j:\left( i,j \right)\in S$ 和$i:\left( i,j \right)\in S$ 分别表示向量$R\left( i,: \right)$ 和$R\left( :,j \right)$ 上所有非零元素的位置索引构成的集合。</p>
+<h2 id="隐性因子模型-LFM"><a href="#隐性因子模型-LFM" class="headerlink" title="隐性因子模型(LFM)"></a>隐性因子模型(LFM)</h2><p>上面已经简单地介绍了矩阵分解的原理，对推荐系统有了解的读者可能对上面这一过程并不陌生，上面的矩阵分解在推荐系统中常常被称为隐性因子模型（latent factor model, LFM），其实张量分解与上述过程非常相似，为了便于读者初步地理解张量分解，这里将会沿用矩阵分解类似的推导过程。<br>定义一个关于用户（user）i在环境（context，如时间，注意：这里将context翻译成“环境”不一定准确，在隐性语义分析中常常理解为“语境”或“上下文”）c下对项（item）j的评分为$r_{ijc}$，评分张量的大小为$m\times n\times d$，所有观测到位置索引仍然记作集合S，其中，用户的索引为$i\in \left\{ 1,2,…,m \right\} $，项的索引为$j\in \left\{ 1,2,…,n \right\} $，环境的索引为$c\in \left\{1,2,…,d \right\}$ 。<br>Charu C. Aggarwal在其著作《Recommender systems》中给出了一个特殊的张量分解结构，即大小为$m\times n\times d$的评分张量${\mathcal{R}}$分解后会得到三个矩阵，这三个矩阵分别是：大小为$m\times k$的用户因子矩阵U（user-factor matrix）、大小为$n\times k$的项因子矩阵V（item-factor matrix）和大小为$d\times k$的环境因子矩阵W（context-factor matrix），这种分解结构是隐性因子模型的一种高阶泛化。<br>此时，第3阶张量${\mathcal{R}}$上任意位置$\left( i,j,c \right)$ 所对应的评分估计值为</p>
+<script type="math/tex; mode=display">
+\hat r_{ijc}=\left(UV^{T}\right)_{ij}+\left(UW^{T}\right)_{ic}+\left(VW^{T}\right)_{jc}</script><p>即$\hat r_{ijc}=\sum_{q=1}^{k}\left(u_{iq}v_{jq}+u_{iq}w_{cq}+v_{jq}w_{cq}\right)$<br>与<strong>矩阵分解中的低秩逼近问题相似</strong>，评分张量分解的逼近问题为</p>
+<script type="math/tex; mode=display">
+\min J=\frac{1}{2} \sum_{(i,j,c)\in S}{e_{ijc}^{2}} =\frac{1}{2} \sum_{\left( i,j,c \right)\in S }{\left( r_{ijc}- \sum_{q=1}^{k}\left(u_{iq}v_{jq}+u_{iq}w_{cq}+v_{jq}w_{cq}\right)\right) ^2}</script><p>对目标函数J中的u_{iq}、v_{jq}和w_{cq}求偏导数，得</p>
+<script type="math/tex; mode=display">
+\frac{\partial J}{\partial u_{iq}}=-\sum_{j,c:(i,j,c)\in S}{e_{ijc}\cdot \left( v_{jq}+w_{cq} \right) }；</script><script type="math/tex; mode=display">
+\frac{\partial J}{\partial v_{jq}}=-\sum_{i,c:(i,j,c)\in S}{e_{ijc}\cdot \left( u_{iq}+w_{cq} \right) }；</script><script type="math/tex; mode=display">
+\frac{\partial J}{\partial w_{cq}}=-\sum_{i,j:(i,j,c)\in S}{e_{ijc}\cdot \left( u_{iq}+v_{jq} \right) }.</script><p>根据梯度下降方法，u_{iq}、v_{jq}和w_{cq}在每次迭代过程中的更新公式为</p>
+<script type="math/tex; mode=display">
+u_{iq}\Leftarrow u_{iq}+\alpha \sum_{j,c:(i,j,c)\in S}{e_{ijc}\cdot \left( v_{jq}+w_{cq} \right) }；</script><script type="math/tex; mode=display">
+v_{jq}\Leftarrow v_{jq}+\alpha \sum_{i,c:(i,j,c)\in S}{e_{ijc}\cdot \left( u_{iq}+w_{cq} \right) }；</script><script type="math/tex; mode=display">
+w_{cq}\Leftarrow w_{cq}+\alpha \sum_{i,j:(i,j,c)\in S}{e_{ijc}\cdot \left( u_{iq}+v_{jq} \right) }.</script><p>需要注意的是，更新公式中的求和项下标$j,c:(i,j,c)\in S、i,c:(i,j,c)\in S$和$i,j:(i,j,c)\in S$分别表示矩阵${\mathcal{R}}\left( i,:,: \right) 、{\mathcal{R}}\left( :,j,: \right) 和{\mathcal{R}}\left( :,:,c \right) $上所有非零元素的位置索引构成的集合</p>
+<h2 id="高阶奇异值分解"><a href="#高阶奇异值分解" class="headerlink" title="高阶奇异值分解"></a>高阶奇异值分解</h2><p>矩阵的奇异值分解(singular value decomposition ，SVD)是线性代数中很重要的内容,通常给定一个大小为$M \times n$的矩阵A,奇异值分解形式为:<br>$ A=U\Sigma V^T $<br>其中矩阵$ U,\Sigma,V$的大分别为$m\times m,m\times n,n\times n$矩阵U是由左奇异向量（left singular vector）构成的，矩阵V是由右奇异向量（right singular vector）构成的，矩阵\Sigma对角线上的元素称为奇异值（singular value），这一分解过程很简单，但实际上，关于奇异值分解的应用是非常广泛的。<br>就高阶奇异值分解而言，著名学者Tucker于1966年给出了计算Tucker分解的三种方法，第一种方法就是我们这里要提到的高阶奇异值分解，其整个分解过程也是由矩阵的奇异值分解泛化得到的。<br>对于给定一个大小为$n_1 \times n_2 \times … \times n_d$的张量${\mathcal{X}}$，将k模态下的展开记为${\mathcal{X}}_{\left( k \right) }$，则k模态的矩阵进行奇异值分解，可以写成</p>
+<script type="math/tex; mode=display">
+{\mathcal{X}}_{\left( k \right) }=U_k\Sigma_kV_k^T,k=1,2,...,d</script><p>这里的$U_k,\Sigma_k,V_k$是通过矩阵${\mathcal{X}}_{\left( k \right) }$的奇异值分解得到的，如果取出各个模态下得到的矩阵$U_1,U_2,…,U_d$，则张量${\mathcal{X}}$的高阶奇异值分解可以写成如下形式：</p>
+<script type="math/tex; mode=display">
+{\mathcal{X}}={\mathcal{G}} \times_1U_1 \times_2U_2... \times_dU_d</script><p>其中，${\mathcal{G}}$是核心张量，其计算公式为${\mathcal{G}}={\mathcal{X}} \times_1U_1^T \times_2U_2^T… \times_dU_d^T$，在这里，这条计算公式等价于${\mathcal{G}}_{\left( k \right) }=U_k^T{\mathcal{X}}_{\left( k \right) }\left( U_d \otimes … \otimes U_{k+1} \otimes U_{k-1} \otimes… \otimes U_1 \right)$$ （{\mathcal{X}}_{\left( k \right) }=U_k{\mathcal{G}}_{\left( k \right) }\left( U_d \otimes … \otimes U_{k+1} \otimes U_{k-1} \otimes… \otimes U_1 \right)^T也是恒成立的）$。</p>
+<p>细心的读者可能会发现，根据奇异值分解的定义，这里的核心张量${\mathcal{G}}$的大小为$n_1\times n_2\times\cdots\times n_d$，而矩阵$U_1,U_2,…,U_d$的大小则分别为$n_1\times n_1,n_2\times n_2,…,n_d \times n_d$.<br>我们也知道，对于矩阵的奇异值分解是可以<strong>进行降维（dimension reduction）</strong>处理的，即取前r个最大奇异值以及相应的左奇异向量和右奇异向量，我们可以得到矩阵$U,\Sigma,V$的大小分别为$m\times r,r\times r,n\times r$，这也被称为<strong>截断的奇异值分解（truncated SVD）</strong>，对于高阶奇异值分解是否存在类似的“降维”过程（即truncated HOSVD, 截断的高阶奇异值分解）呢？<br>给定核心张量${\mathcal{G}}$的大小为$r_1 \times r_2 \times … \times r_d$，并且$r_1\leq n_1,r_2\leq n_2,…,r_d\leq n_d$，则对于k模态的矩阵${\mathcal{X}}_{\left( k \right) }$进行奇异值分解取前$r_k$个最大奇异值对应的左奇异向量，则矩阵$U_k$的大小为$n_k\times r_k$，对矩阵${\mathcal{X}}_{\left( k \right) },k=1,2,…,d$进行奇异值分解，知道了$U_1,U_2,…,U_d$后，再计算核心张量${\mathcal{G}}={\mathcal{X}} \times_1U_1^T \times_2U_2^T… \times_dU_d^T$，我们就可以最终得到想要的Tucker分解了。</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/7515431d.html">张量分解——张量分解的基础知识</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年11月06日 - 21:11</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/7515431d.html" title="张量分解——张量分解的基础知识">https://statusrank.xyz/articles/7515431d.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/7515431d.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Tucker/" rel="tag"><i class="fa fa-tag"></i> Tucker</a>
+          
+            <a href="/tags/CP/" rel="tag"><i class="fa fa-tag"></i> CP</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/9cb29377.html" rel="next" title="TF-IDF算法详解">
+                <i class="fa fa-chevron-left"></i> TF-IDF算法详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/9b114ae4.html" rel="prev" title="张量分解——CP分解与Tucker分解详解">
+                张量分解——CP分解与Tucker分解详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵分解的几种形式"><span class="nav-text">矩阵分解的几种形式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#张量相关基础知识"><span class="nav-text">张量相关基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#张量范数"><span class="nav-text">张量范数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#张量内积"><span class="nav-text">张量内积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#张量外积"><span class="nav-text">张量外积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rank-one张量"><span class="nav-text">Rank-one张量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#张量展开"><span class="nav-text">张量展开</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DiagonalTensor"><span class="nav-text">DiagonalTensor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#张量乘法"><span class="nav-text">张量乘法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KroneckerProduct"><span class="nav-text">KroneckerProduct</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Khatri-RaoProduct"><span class="nav-text">Khatri-RaoProduct</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HadamardPRoduct"><span class="nav-text">HadamardPRoduct</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐系统中常用的矩阵分解"><span class="nav-text">推荐系统中常用的矩阵分解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隐性因子模型-LFM"><span class="nav-text">隐性因子模型(LFM)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高阶奇异值分解"><span class="nav-text">高阶奇异值分解</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

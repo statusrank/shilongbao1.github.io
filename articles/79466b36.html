@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="机器学习,最小二乘法,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="学习自,马同学并有一定的修改,再次感谢！ 什么是最小二乘法？最小二乘法（又称最小平方法）是一种数学优化技术。它通过最小化误差的平方和寻找数据的最佳函数匹配。利用最小二乘法可以简便地求得未知的数据，并使得这些求得的数据与实际数据之间误差的平方和为最小。">
+<meta name="keywords" content="机器学习,最小二乘法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习————最小二乘法">
+<meta property="og:url" content="https://statusrank.xyz/articles/79466b36.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="学习自,马同学并有一定的修改,再次感谢！ 什么是最小二乘法？最小二乘法（又称最小平方法）是一种数学优化技术。它通过最小化误差的平方和寻找数据的最佳函数匹配。利用最小二乘法可以简便地求得未知的数据，并使得这些求得的数据与实际数据之间误差的平方和为最小。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/1.jpg">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/2.svg">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/7.svg">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/10.svg">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/11.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/12.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/13.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/14.jpg">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/2.svg">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/15.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/16.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/79466b36/17.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习————最小二乘法">
+<meta name="twitter:description" content="学习自,马同学并有一定的修改,再次感谢！ 什么是最小二乘法？最小二乘法（又称最小平方法）是一种数学优化技术。它通过最小化误差的平方和寻找数据的最佳函数匹配。利用最小二乘法可以简便地求得未知的数据，并使得这些求得的数据与实际数据之间误差的平方和为最小。">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/79466b36/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/79466b36.html">
+
+
+
+
+  <title>机器学习————最小二乘法 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/79466b36.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">机器学习————最小二乘法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-07T18:15:46+08:00">
+                2018-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/79466b36.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/79466b36.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/79466b36.html" class="leancloud_visitors" data-flag-title="机器学习————最小二乘法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>学习自,<a href="https://www.matongxue.com/madocs/818.html" target="_blank" rel="noopener">马同学</a>并有一定的修改,再次感谢！</p>
+<h2 id="什么是最小二乘法？"><a href="#什么是最小二乘法？" class="headerlink" title="什么是最小二乘法？"></a>什么是最小二乘法？</h2><p>最小二乘法（又称最小平方法）是一种数学优化技术。它通过最小化误差的平方和寻找数据的最佳函数匹配。利用最小二乘法可以简便地求得未知的数据，并使得这些求得的数据与实际数据之间误差的平方和为最小。<a id="more"></a></p>
+<h2 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h2><h3 id="日用而不知"><a href="#日用而不知" class="headerlink" title="日用而不知"></a>日用而不知</h3><p>来看一个生活中的例子。比如说，有五把尺子：<img src="/articles/79466b36/1.jpg"><br>用它们来分别测量一线段的长度，得到的数值分别为（颜色指不同的尺子）：<img src="/articles/79466b36/2.svg"><br>之所以出现不同的值可能因为：<br>不同厂家的尺子的生产精度不同<br>尺子材质不同，热胀冷缩不一样<br>测量的时候心情起伏不定….<br>总之就是有误差，这种情况下，一般取平均值来作为线段的长度：$\frac{10.2 + 10.3 + 9.8 + 9.9 + 9.8}{5} = 10$<br>日常中就是这么使用的。可是作为很事’er的数学爱好者，自然要想下：<br>这样做有道理吗？<br>用调和平均数行不行？<br>用中位数行不行？<br>用几何平均数行不行？</p>
+<h3 id="最小二乘法-1"><a href="#最小二乘法-1" class="headerlink" title="最小二乘法"></a>最小二乘法</h3><p>换一种思路来思考刚才的问题。首先，把测试得到的值画在笛卡尔坐标系中，分别记作$y_i$<br><img src="/articles/79466b36/3.png"><br>其次，把要猜测的线段长度的真实值用平行于横轴的直线来表示（因为是猜测的，所以用虚线来画），记作$y$:<br><img src="/articles/79466b36/4.png"><br>每个点都向$y$做垂线,垂线的长度就是$|y-y_i|$,也可以理解为测量值和真实值之间的误差:<br><img src="/articles/79466b36/5.png"><br>因为误差是长度，还要取绝对值，计算起来麻烦，就干脆用平方来代表误差：(平方误差对异常值也很敏感,也即误差大的会加倍大)<br>$|y-y_i| -&gt; (y-y_i)^2$<br>总的误差平方就是: $\epsilon = \sum(y-y_i)^2$因为y是猜测的所以可以不断变换,<br><img src="/articles/79466b36/6.png">自然，总的误差$\epsilon$也是在不断变化的。<br>法国数学家，阿德里安-馬里·勒讓德（1752－1833，这个头像有点抽象）提出让总的误差的平方最小的y就是真值，这是基于，如果误差是随机的，应该围绕真值上下波动.<br>这就是最小二乘法，即：这就是最小二乘法，即：<br>$\epsilon=\sum (y-y_i)^2最小\implies 真值y$<br>这个猜想也蛮符合直觉的，来算一下。<br>这是一个二次函数，对其求导，导数为0的时候取得最小值：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    \frac{d}{dy}\epsilon
+        &=\frac{d}{dy}\sum (y-y_i)^2=2\sum (y-y_i)\\
+        \quad\\
+        &=2((y-y_1)+(y-y_2)+(y-y_3)+(y-y_4)+(y-y_5))=0
+        \quad\\
+\end{aligned}</script><p>进而：</p>
+<p>  $  5y=y_1+y_2+y_3+y_4+y_5\implies y=\frac{y_1+y_2+y_3+y_4+y_5}{5}$<br>正好是算术平均数。<br>原来算术平均数可以让误差最小啊，这下看来选用它显得讲道理了。<br>以下这种方法：</p>
+<p>$\epsilon=\sum (y-y_i)^2最小\implies 真值y$<br>就是最小二乘法，所谓“二乘”就是平方的意思，台湾直接翻译为最小平方法。</p>
+<h2 id="推广"><a href="#推广" class="headerlink" title="推广"></a>推广</h2><p>算术平均数只是最小二乘法的特例，适用范围比较狭窄。而最小二乘法用途就广泛。比如温度与冰淇淋的销量<img src="/articles/79466b36/7.svg">看上去像是某种线性关系：<img src="/articles/79466b36/8.png"><br>可以假设这种线性关系为：<br>$f(x)=ax+b$通过最小二乘法的思想：<img src="/articles/79466b36/9.png"><br>上图的i,x,y分别为：<img src="/articles/79466b36/10.svg"><br>总误差的平方为：<br>$<br>\epsilon=\sum (f(x_i)-y_i)^2=\sum (ax_i+b-y_i)^2$<br>不同的a,b会导致不同的$\epsilon$，根据多元微积分的知识，当：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    \frac{\partial}{\partial a}\epsilon=2\sum (ax_i+b-y_i)x_i=0\\
+    \quad\\
+    \frac{\partial}{\partial b}\epsilon=2\sum (ax_i+b-y_i)=0
+\end{cases}</script><p>这个时候$\epsilon$取最小值。<br>对于a,b而言，上述方程组为线性方程组，用之前的数据解出来：</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+    a\approx 7.2\\
+    \quad\\
+    b\approx -73
+\end{cases}</script><p>也就是这根直线：<img src="/articles/79466b36/11.png"><br>其实，还可以假设：<br>$f(x)=ax^2+bx+c$<br>在这个假设下，可以根据最小二乘法，算出a,b,c，得到下面这根红色的二次曲线：<img src="/articles/79466b36/12.png"><br>同一组数据，选择不同的$f(x)$，通过最小二乘法可以得到不一样的拟合曲线<img src="/articles/79466b36/13.png"><br>不同的数据，更可以选择不同的$f(x)$，通过最小二乘法可以得到不一样的拟合曲线：<img src="/articles/79466b36/14.jpg"></p>
+<h2 id="最小二乘法与正态分布"><a href="#最小二乘法与正态分布" class="headerlink" title="最小二乘法与正态分布"></a>最小二乘法与正态分布</h2><p>数学王子高斯（1777－1855）也像我们一样心存怀疑。<br>高斯换了一个思考框架，通过概率统计那一套来思考。<br>让我们回到最初测量线段长度的问题。高斯想，通过测量得到了这些值：<img src="/articles/79466b36/2.svg"><br>每次的测量值$x_i$都和线段长度的真值x之间存在一个误差：</p>
+<p>$\epsilon_i=x-x_i$<br>这些误差最终会形成一个概率分布，只是现在不知道误差的概率分布是什么。假设概率密度函数为：<br>$p(\epsilon)$<br>再假设一个联合概率密度函数，这样方便把所有的测量数据利用起来：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+    L(x)
+        &=p(\epsilon_1)p(\epsilon_2)\cdots p(\epsilon_5)\\
+        \quad\\
+        &=p(x-x_i)p(x-x_2)\cdots p(x-x_5)
+\end{aligned}</script><p>讲到这里，有些同学可能已经看出来了上面似然函数了（关于似然函数以及马上要讲到的极大似然估计，可以参考“<a href="https://www.matongxue.com/madocs/447.html" target="_blank" rel="noopener">如何理解极大似然估计法？</a>”）。<br>因为$L(x)$是关于x的函数，并且也是一个概率密度函数（下面分布图形是随便画的）：<br><img src="/articles/79466b36/15.png"><br>根据极大似然估计的思想，概率最大的最应该出现（既然都出现了，而我又不是“天选之才”，那么自然不会是发生了小概率事件），也就是应该取到下面这点：<img src="/articles/79466b36/16.png"><br>当下面这个式子成立时，取得最大值：<br>$\frac{d}{dx}L(x)=0 $<br>然后高斯想，最小二乘法给出的答案是：<br>$x=\overline{x}=\frac{x_1+x_2+x_3+x_4+x_5}{5}$<br><img src="/articles/79466b36/17.png"><br>那么误差的分布是正态分布吗？<br>我们相信，误差是由于随机的、无数的、独立的、多个因素造成的，比如之前提到的：<br>不同厂家的尺子的生产精度不同<br>尺子材质不同，热胀冷缩不一样<br>测量的时候心情起伏不定<br>……<br>那么根据中心极限定理（参考“<a href="https://www.matongxue.com/madocs/589.html" target="_blank" rel="noopener">为什么正态分布如此常见？</a>”），误差的分布就应该是正态分布。<br>因为高斯的努力，才真正奠定了最小二乘法的重要地位。</p>
+<h2 id="最小二乘法与梯度下降"><a href="#最小二乘法与梯度下降" class="headerlink" title="最小二乘法与梯度下降"></a>最小二乘法与梯度下降</h2><p>最小二乘法和梯度下降都是通过求导来求损失函数的最小值。</p>
+<h3 id="相同点"><a href="#相同点" class="headerlink" title="相同点"></a>相同点</h3><p>1.本质相同。两种方法都是在给定已知数据的前提下对变量算出一个一般性的估计函数。然后对新给定的数据进行估算<br>2.目标相同。都是在已知数据的框架内使得估算值与实际值的平方差尽量更小。估算值与实际值的总平方差的公式为<br> $\Delta =\frac{1}{2} \sum_{i=1}^{m}{(f_{\beta }(\bar{x_{i}} )-y_{i})^{2} } $</p>
+<h3 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h3><p>1.实现方法和结果不同,最小二乘法是直接对$\Delta$求导找出全局最小,是非迭代法。而梯度下降法是一种迭代法,先给定一个$\beta$然后向$\Delta$下降最快的方向进行调整$\beta$,在若干次后找到局部最小。</p>
+<h3 id="孰好孰坏"><a href="#孰好孰坏" class="headerlink" title="孰好孰坏"></a>孰好孰坏</h3><p>梯度下降法的缺点是到最小点的时候收敛速度变慢,并且对初始点的选择及其敏感,他找到的并不是一个全局最优解,只是一个局部最优的。<br>最小二乘法缺陷在于,有的时候对与平方差损失函数我们并不太好直接求解出偏导数为0的方程，这时候我们就考虑采用梯度下降法进行迭代了.</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/79466b36.html">机器学习————最小二乘法</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年09月07日 - 18:09</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/79466b36.html" title="机器学习————最小二乘法">https://statusrank.xyz/articles/79466b36.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/79466b36.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"><i class="fa fa-tag"></i> 机器学习</a>
+          
+            <a href="/tags/最小二乘法/" rel="tag"><i class="fa fa-tag"></i> 最小二乘法</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/821f6b98.html" rel="next" title="错排公式的几种求法">
+                <i class="fa fa-chevron-left"></i> 错排公式的几种求法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/1a4e1f2.html" rel="prev" title="牛客练习赛26 Xor序列(线性基)">
+                牛客练习赛26 Xor序列(线性基) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/65fc542a.html">机器学习之逻辑回归总结</a></li><li><a href="/articles/55a565c2.html">机器学习中核函数的理解</a></li><li><a href="/articles/9cb29377.html">TF-IDF算法详解</a></li><li><a href="/articles/bc7a8022.html">机器学习中的降维方法——————多维缩放(MDS)&& 等度量映射(IsoMap)</a></li><li><a href="/articles/562e923c.html">线性回归原理总结(模型,损失函数,正则化)</a></li><li><a href="/articles/f5abd121.html">机器学习中的降维方法——局部线性嵌入(Locally Linear Embedding,LLE)</a></li><li><a href="/articles/a927e0fb.html">机器学习中的降维方法——主成分分析(PCA)与核主成分分析(KPCA)原理详解</a></li><li><a href="/articles/9d4ca24c.html">浅谈支持向量机(SVM)</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是最小二乘法？"><span class="nav-text">什么是最小二乘法？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小二乘法"><span class="nav-text">最小二乘法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日用而不知"><span class="nav-text">日用而不知</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最小二乘法-1"><span class="nav-text">最小二乘法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推广"><span class="nav-text">推广</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小二乘法与正态分布"><span class="nav-text">最小二乘法与正态分布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小二乘法与梯度下降"><span class="nav-text">最小二乘法与梯度下降</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相同点"><span class="nav-text">相同点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同点"><span class="nav-text">不同点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#孰好孰坏"><span class="nav-text">孰好孰坏</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="矩阵分解,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="学习自感谢。 1.三角分解(LU分解)矩阵的LU分解是将一个矩阵分解为一个下三角矩阵与上三角矩阵的乘积。本质上,LU分解是高斯消元的一种表达方式。首先,对矩阵A通过初等行变换将其变为一个上三角矩阵。这个将矩阵A变成上三角矩阵的过程对应的操作系数构成一个下三角矩阵。">
+<meta name="keywords" content="矩阵分解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="矩阵分解的几种方式">
+<meta property="og:url" content="https://statusrank.xyz/articles/71b24cf3.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="学习自感谢。 1.三角分解(LU分解)矩阵的LU分解是将一个矩阵分解为一个下三角矩阵与上三角矩阵的乘积。本质上,LU分解是高斯消元的一种表达方式。首先,对矩阵A通过初等行变换将其变为一个上三角矩阵。这个将矩阵A变成上三角矩阵的过程对应的操作系数构成一个下三角矩阵。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/11.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/12.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/13.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/14.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/15.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/16.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/17.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/18.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/19.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/20.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/21.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/22.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/28.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/23.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/24.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/25.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/26.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/27.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/29.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/30.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/31.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/32.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/33.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/34.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/35.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/36.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/37.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/38.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/71b24cf3/39.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="矩阵分解的几种方式">
+<meta name="twitter:description" content="学习自感谢。 1.三角分解(LU分解)矩阵的LU分解是将一个矩阵分解为一个下三角矩阵与上三角矩阵的乘积。本质上,LU分解是高斯消元的一种表达方式。首先,对矩阵A通过初等行变换将其变为一个上三角矩阵。这个将矩阵A变成上三角矩阵的过程对应的操作系数构成一个下三角矩阵。">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/71b24cf3/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/71b24cf3.html">
+
+
+
+
+  <title>矩阵分解的几种方式 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/71b24cf3.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">矩阵分解的几种方式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-28T22:06:37+08:00">
+                2018-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/数学/" itemprop="url" rel="index">
+                    <span itemprop="name">数学</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/71b24cf3.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/71b24cf3.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/71b24cf3.html" class="leancloud_visitors" data-flag-title="矩阵分解的几种方式">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://blog.csdn.net/bitcarmanlee/article/details/52662518" target="_blank" rel="noopener">学习自</a>感谢。</p>
+<h2 id="1-三角分解-LU分解"><a href="#1-三角分解-LU分解" class="headerlink" title="1.三角分解(LU分解)"></a>1.三角分解(LU分解)</h2><p><strong>矩阵的LU分解是将一个矩阵分解为一个下三角矩阵与上三角矩阵的乘积。</strong><br>本质上,LU分解是高斯消元的一种表达方式。首先,对矩阵A通过初等行变换将其变为一个上三角矩阵。这个将矩阵A变成上三角矩阵的过程对应的操作系数构成一个下三角矩阵。<br><a id="more"></a><br>若$Ax = b$是一个非奇异系统,那么高斯消元发将A化简为一个上三角矩阵。若主轴上没有0值，则无需交互行，因此只需进行第3类初等行变换（把第 i 行加上第 j 的 k 倍）即可完成此变换。<br><img src="/articles/71b24cf3/1.png"><br>第3类行变换可以通过左乘相应的初等矩阵image实现，对上例来说进行的3个变换就是相应初等矩阵的乘积。注意最右边是一个下三角矩阵L <img src="/articles/71b24cf3/2.png"><br>从而有$G_1G_2G_3A = U$,$ A = G_1^{-1}G_2^{-1}G_3^{-1}U$.因此$A=LU$,为一个下三角矩阵与一个上三角矩阵的乘积,因此称为LU分解。<br>注意:<br>1)U是高斯消元的结果,且对角线上是主元<br>2)L对角线上是1,对角线下面的元素恰恰是1中用于消除(i,j)位置上元素的乘子<br>LU分解常用来求解线性方程组,求逆矩阵或者计算行列式。例如在计算行列式的时候，$A=LU$，$det(A)=det(L)det(U)$。而对于三角矩阵来说，行列式的值即为对角线上元素的乘积。所以如果对矩阵进行三角分解以后再求行列式，就会变得非常容易。</p>
+<p><strong>在线性代数中已经证明，如果方阵A是非奇异的，即A的行列式不为0，LU分解总是存在的。</strong> </p>
+<h2 id="2-QR分解"><a href="#2-QR分解" class="headerlink" title="2.QR分解"></a>2.QR分解</h2><p><strong>QR分解是将矩阵分解为一个正交矩阵与上三角矩阵的乘积</strong><br>如图:<br><img src="/articles/71b24cf3/3.png"><br>这其中,Q为正交矩阵,$QQ^T = I$，R为上三角矩阵<br>实际中,QR分解经常被用来解线性最小二乘问题<br>在提到矩阵的QR分解之前,必须提到施密特正交化,理论上QR分解是由施密特正交化推出来的。</p>
+<h3 id="施密特正交化"><a href="#施密特正交化" class="headerlink" title="施密特正交化"></a>施密特正交化</h3><p>在三维空间存在直角坐标系,其中任意一点都可以由(x,y,z)坐标唯一确定,在这个坐标系中,X,Y,Z三轴都是相互正交的。那么推广到n维欧式空间,就是n个线性无关的基向量组成的一组基,n维欧式空间的任意位置,都可以由这组基线性表示。<br>那么就引出来另一个问题，怎么得到一组两两相互正交的正交基呢?这一过程就是Gram–Schmidt正交化。下面简单推理一下Gram–Schmidt正交化方法的得出过程。重点是<strong>正交投影</strong>这种思想。<br><img src="/articles/71b24cf3/4.png"></p>
+<h3 id="QR分解"><a href="#QR分解" class="headerlink" title="QR分解"></a>QR分解</h3><p>对于可逆矩阵A的列向量组$\alpha_1,…\alpha_N$进行施密特正交化,可得标准正交向量<br><img src="/articles/71b24cf3/5.png"><br>用矩阵表达:<br><img src="/articles/71b24cf3/6.png"><br><strong> 由此得到QR分解的定义:</strong><br>对于n阶方阵A，若存在正交矩阵Q和上三角矩阵R,使得$A=QR$，则该式称为矩阵A的完全QR分解或者正交三角分解。（对于可逆矩阵A存在完全QR分解）<br>从上面可以看出矩阵QR分解是由施密特正交化推理出来的一种方阵分解形式,矩阵QR分解的计算方法也是以施密特正交化为核心。通过施密特正交化求出正交矩阵Q,在通过$R=Q^TA$得到矩阵R。<br> 这里对于Gram–Schmidt正交化求正交矩阵Q提出一种改进的计算方法(改进的地方是每产生一个单位正交向量后，就用后续的向量减去它，消去其中包含这个正交向量的部分)：<br> <img src="/articles/71b24cf3/7.png"><br>其实对于非方阵的$m\times n$(m≥n)阶矩阵A也可能存在QR分解的，$A = QR$。这时Q为$m\times n$阶的半正交矩阵，R为$n\times n$阶上三角矩阵。这时的QR分解不是完整的(方阵)，因此称为约化QR分解(对于列满秩矩阵A必存在约化$QR$分解)。</p>
+<p>同时也可以通过扩充矩阵A为方阵或者对矩阵R补零，可以得到完全QR分解。</p>
+<h2 id="3-Jordan分解"><a href="#3-Jordan分解" class="headerlink" title="3.Jordan分解"></a>3.Jordan分解</h2><p>我们将下面的$k\times k$阶方阵<img src="/articles/71b24cf3/8.png"></p>
+<h2 id="4-特征值-EVD-分解"><a href="#4-特征值-EVD-分解" class="headerlink" title="4.特征值(EVD)分解"></a>4.特征值(EVD)分解</h2><h3 id="特征值"><a href="#特征值" class="headerlink" title="特征值"></a>特征值</h3><p>如果说一个向量v是方阵A的特征向量,则一定可以表示成下面的形式$Av = \lambda v$<br>这时候$\lambda$被称为特征向量v对应的特征值。<br>我们知道矩阵乘法本质就是线性变换,即对向量进行旋转、压缩、拉伸等,而对于特征向量我们是只对其进行了拉伸或压缩,大小就是特征值。特征值越大拉伸的幅度越大,特征值绝对值小于1压缩。</p>
+<h3 id="正交矩阵"><a href="#正交矩阵" class="headerlink" title="正交矩阵"></a>正交矩阵</h3><p><strong>正交矩阵是在欧几里得空间里的叫法,在酋空间里叫酋矩阵,一个正交矩阵对应的变换叫做正交变换,这个变换的特点是不改变向量的大小</strong><br>如图:<img src="/articles/71b24cf3/9.png"><br>假设二维空间中的向量OA，它在标准坐标系（也就是e1和e2表示的坐标系）中的表示为(a,b)’(‘表示转置)；现在用另一组坐标e1’、e2’表示为(a’,b’)’;那么存在矩阵U使得(a’,b’)’=U(a,b)’,而矩阵U就是正交矩阵。通过上图可知，正交变换只是将变换向量用另一组正交基来表示，在这个过程中并没有对向量作拉伸，也不改变向量的空间位置，对两个向量同时做正交变换，变换的前后两个向量的夹角显然也不会改变。上图是一个旋转的正交变换，可以把e1’、e2’坐标系看做是e1、e2坐标系经过旋转某个θ角度得到，具体的旋转规则如下：<br><img src="/articles/71b24cf3/10.png"><br>a’和b’实际上是x在e1’和e2’轴上投影的大小，所以直接做内积可得：<img src="/articles/71b24cf3/11.png"><br>从图中可以看到： <img src="/articles/71b24cf3/12.png"><br>所以有:<img src="/articles/71b24cf3/13.png"><br>正交矩阵U的行(列)之间都是单位正交向量，它对向量做旋转变换。这里解释一下：旋转是相对的，就那上面的图来说，我们可以说向量的空间位置没有变，标准参考系向左旋转了θ角度，而如果我选择了e1’、e2’作为新的标准坐标系，那么在新坐标系中OA（原标准坐标系的表示）就变成了OA’，这样看来就好像坐标系不动，把OA往顺时针方向旋转了θ角度，这个操作实现起来很简单：将变换后的向量坐标仍然表示在当前坐标系中。<br><img src="/articles/71b24cf3/14.png"></p>
+<p><font color="red">总结：正交矩阵的行（列）向量都是两两正交的单位向量，正交矩阵对应的变换为正交变换，它有两种表现：旋转和反射。正交矩阵将标准正交基映射为标准正交基（即图中从e1、e2到e1’、e2’）</font></p>
+<h3 id="特征值分解"><a href="#特征值分解" class="headerlink" title="特征值分解"></a>特征值分解</h3><p>这里我们讨论对称矩阵。对阵阵总能相似对角化,对称阵不同特征值对应的特征向量两两正交。一个矩阵能相似对角化说明其特征子空间为其列空间,若不能对角化则其特征子空间为列空间的子空间。现在假设存在$m\times m$(特征值分解要求必须为方阵)的满秩对称矩阵A,他有m个不同的特征值$\lambda_i$对应的单位特征向量为$x_i$,则有:<img src="/articles/71b24cf3/15.png"><br>进而:<img src="/articles/71b24cf3/16.png"><br><strong> 所以可以得到A的特征值分解(由于对称矩阵特征向量两两正交,所以U为正交矩阵,$A^T = A^{-1})$</strong><img src="/articles/71b24cf3/17.png"> 这里假设A有m个不同的特征值，实际上，只要A是对称阵其均有如上分解.<br>矩阵A分解了,相应的其对应的映射也分解为三个映射。现在假设有$x$,用A将其变换到A的列空间中,那么首先由$U^T$对x做变换 <img src="/articles/71b24cf3/18.png"><br>U是正交阵U’也是正交阵，所以U’对x的变换是正交变换，它将x用新的坐标系来表示，这个坐标系就是<strong>A的所有正交的特征向量构成的坐标系</strong>。比如将x用A的所有特征向量表示为：<img src="/articles/71b24cf3/19.png"><br>则通过第一个变换就可以把x表示为[a1 a2 … am]’：<img src="/articles/71b24cf3/20.png"><br>紧接着，在新的坐标系表示下，由中间那个对角矩阵对新的向量坐标换，其结果就是将向量往各个轴方向拉伸或压缩：<img src="/articles/71b24cf3/21.png"><br>从上图可以看到，如果A不是满秩的话，那么就是说对角阵的对角线上元素存在0，这时候就会导致维度退化，这样就会使映射后的向量落入m维空间的子空间中。<br>最后一个变换就是U对拉伸或压缩后的向量做变换，由于U和UT是互为逆矩阵，所以U变换是UT变换的逆变换。<br>因此，从对称阵的分解对应的映射分解来分析一个矩阵的变换特点是非常直观的。假设对称阵特征值全为1那么显然它就是单位阵，如果对称阵的特征值有个别是0其他全是1，那么它就是一个正交投影矩阵，它将m维向量投影到它的列空间中。<br>根据对称阵A的特征向量，如果A是$2 \times 2$的，那么就可以在二维平面中找到这样一个矩形，是的这个矩形经过A变换后还是矩形： <img src="/articles/71b24cf3/22.png"><br><strong>这个矩形的选择就是让其边都落在A的特征向量方向上，如果选择其他矩形的话变换后的图形就不是矩形了！</strong></p>
+<h2 id="5-奇异值-SVD-分解"><a href="#5-奇异值-SVD-分解" class="headerlink" title="5.奇异值(SVD)分解"></a>5.奇异值(SVD)分解</h2><h3 id="奇异值"><a href="#奇异值" class="headerlink" title="奇异值"></a>奇异值</h3><p>上面说了特征值分解是提取矩阵特征很不错的方法,但这只是针对方阵而言的,在现实世界中大部分的矩阵并不是方阵,这是描述这些普通矩阵的重要特征就会用到<strong>奇异值分解</strong>，他是可以适应任意矩阵分解的方法:$A = U\sum V^T$<br>假设A是一个$m\times n$的矩阵,那么得到的U是一个$m \times m$的方阵（U里面的向量称为左奇异向量），$\sum$是一个$m \times n$的矩阵（除了对角线外其他元素都为0,对角线上的元素称为奇异值）,$V^T$是一个$n\times n$的矩阵里面的向量也是正交的,（称为右奇异向量）,如图:<br><img src="/articles/71b24cf3/28.png"></p>
+<h3 id="为什么？"><a href="#为什么？" class="headerlink" title="为什么？"></a>为什么？</h3><p>现在我们来分析一下,对于任意$M\times N$的矩阵,能否找到一组正交基使得经过它变换后还是正交基？答案是肯定的，它就是SVD分解的精髓所在。<br>现在假设存在$M\times N$矩阵A,事实上A矩阵将n维空间中的向量映射到k维空间中,$ k = R(A)$<br>现在目标就是在n维空间中找一组正交基,使得经过A变换后还是正交的。假设我们已经找到这样一组正交基: $ v_1,v_2,…v_n$,则A矩阵将这组基映射为: $Av_1,Av_2,..Av_n$。如果要让他们两两正交,即：<img src="/articles/71b24cf3/23.png"><br>根据假设存在:<img src="/articles/71b24cf3/24.png"><br>所以如果正交基v选择为$A^TA$的特征向量的话,由于$A^TA$是对阵矩阵,v之间两两正交,那么<img src="/articles/71b24cf3/25.png"><br><strong>这样就找到正交基使得经过矩阵A线性变化后还是正交基了,现在我们将映射后的正交基单位化</strong><br>因为<br>$ |Av_i|^2 = (Av_i)^TAv_i = v_i^TA^TAv_i = \lambda |v_i|^2 = \lambda_i&gt;= 0$<br>(这里因为$v_i$是单位特征向量,x为特征向量,则kx一定也是；所以这里我们只关注单位特征向量)<br>所以取单位向量:<img src="/articles/71b24cf3/26.png"><br>由此可得 <img src="/articles/71b24cf3/27.png"><br>当k &lt; i &lt;= m时，对$u_1，u_2，…，u_k$进行扩展u(k+1),…,um，使得$u_1，u_2，…，u_m$为m维空间中的一组正交基，即<img src="/articles/71b24cf3/29.png"><br>同样的，对v1，v2，…，vk进行扩展v(k+1),…,vn（这n-k个向量存在于A的零空间中，即Ax=0的解空间的基），使得v1，v2，…，vn为n维空间中的一组正交基，即<img src="/articles/71b24cf3/30.png"><br>则可得到<img src="/articles/71b24cf3/31.png"><br>从而得到A的奇异值分解$A = U \sum V^T$.<br>V是$n\times n$的正交阵,是$A^TA$的特征向量<br>U是$m\times m $的正交阵，$u_i = \frac{1}{\sqrt \lambda_i}Av_i$<br>这里其实可以发现 V 是$ A^TA$的特征向量构成的矩阵,$Av_i$其实是$AA^T$的特征向量,而$A^TA,AA^T$的特征值是相同的!!!!<br>$\sum$是$n \times n$的对角阵,$\sqrt \lambda_i$<br>奇异值跟特征值相似,在矩阵$\sum$也是按照从大到小的方式排列,而且奇异值减少的特别快。在很多的情况下前10%甚至1%的奇异值之和就占了全部奇异值之和的99%以上。也就是说可以用<strong>前r个大的奇异值来近似的描述矩阵</strong>，这里定义奇异值的分解：<br><img src="/articles/71b24cf3/32.png"><br>r是一个远远小于m和n的值，矩阵的乘法看起来是这个样子<img src="/articles/71b24cf3/33.png"></p>
+<p><fong color="red">右边的三个矩阵相乘的结果将会是一个接近于A的矩阵,r越接近n则相乘的结果越接近于A，而这三个矩阵的面积之和(在存储观点来说,矩阵面积越小存储量就越小)要远远小于原始的矩阵A,我们如果想要压缩空间来表示原矩阵A,我们只需要存下$U,\sum,V$这三个矩阵即可&lt;/font&gt;</fong></p>
+<h2 id="6-满秩分解"><a href="#6-满秩分解" class="headerlink" title="6.满秩分解"></a>6.满秩分解</h2><p>对任意$m \times n$的矩阵均存在如下分解: <img src="/articles/71b24cf3/34.png"><br><strong> 这个可以应用在数据降维压缩上！在数据相关性特别大的情况下存储X和Y矩阵比存储A矩阵占用空间更小！</strong></p>
+<h3 id="证明"><a href="#证明" class="headerlink" title="证明"></a>证明</h3><p>这个证明需要用到上面的SVD分解。<img src="/articles/71b24cf3/35.png"><br>利用矩阵分块乘法展开得：<img src="/articles/71b24cf3/36.png"><br>可以看到第二项为0，有<img src="/articles/71b24cf3/37.png"><br>令:<img src="/articles/71b24cf3/38.png"><br><img src="/articles/71b24cf3/39.png"><br>则A=XY即是A的满秩分解。</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/71b24cf3.html">矩阵分解的几种方式</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年10月28日 - 22:10</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/71b24cf3.html" title="矩阵分解的几种方式">https://statusrank.xyz/articles/71b24cf3.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/71b24cf3.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/矩阵分解/" rel="tag"><i class="fa fa-tag"></i> 矩阵分解</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/e5e71180.html" rel="next" title="深度学习----神经风格迁移(neural style transfer)">
+                <i class="fa fa-chevron-left"></i> 深度学习----神经风格迁移(neural style transfer)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/bc7a8022.html" rel="prev" title="机器学习中的降维方法——————多维缩放(MDS)&& 等度量映射(IsoMap)">
+                机器学习中的降维方法——————多维缩放(MDS)&& 等度量映射(IsoMap) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-三角分解-LU分解"><span class="nav-text">1.三角分解(LU分解)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-QR分解"><span class="nav-text">2.QR分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#施密特正交化"><span class="nav-text">施密特正交化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QR分解"><span class="nav-text">QR分解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Jordan分解"><span class="nav-text">3.Jordan分解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-特征值-EVD-分解"><span class="nav-text">4.特征值(EVD)分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特征值"><span class="nav-text">特征值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正交矩阵"><span class="nav-text">正交矩阵</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征值分解"><span class="nav-text">特征值分解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-奇异值-SVD-分解"><span class="nav-text">5.奇异值(SVD)分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#奇异值"><span class="nav-text">奇异值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么？"><span class="nav-text">为什么？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-满秩分解"><span class="nav-text">6.满秩分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#证明"><span class="nav-text">证明</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="机器学习,降维,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="学习自感谢!学习自感谢!PCA是一种常用的数据分析方法。PCA通过线性变换将原始数据变换为一组各维度线性无关的表示,可用于提取数据的主要特征分量,常用于高维数据的降维。这样做的好处是数据的主要信息还能保留下来,同时数据的维度降低了,并且变换后的维度两两不相关。">
+<meta name="keywords" content="机器学习,降维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习中的降维方法——主成分分析(PCA)与核主成分分析(KPCA)原理详解">
+<meta property="og:url" content="https://statusrank.xyz/articles/a927e0fb.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="学习自感谢!学习自感谢!PCA是一种常用的数据分析方法。PCA通过线性变换将原始数据变换为一组各维度线性无关的表示,可用于提取数据的主要特征分量,常用于高维数据的降维。这样做的好处是数据的主要信息还能保留下来,同时数据的维度降低了,并且变换后的维度两两不相关。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/a927e0fb/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/a927e0fb/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/a927e0fb/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/a927e0fb/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/a927e0fb/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/a927e0fb/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/a927e0fb/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/a927e0fb/8.png">
+<meta property="og:updated_time" content="2019-01-14T14:09:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习中的降维方法——主成分分析(PCA)与核主成分分析(KPCA)原理详解">
+<meta name="twitter:description" content="学习自感谢!学习自感谢!PCA是一种常用的数据分析方法。PCA通过线性变换将原始数据变换为一组各维度线性无关的表示,可用于提取数据的主要特征分量,常用于高维数据的降维。这样做的好处是数据的主要信息还能保留下来,同时数据的维度降低了,并且变换后的维度两两不相关。">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/a927e0fb/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/a927e0fb.html">
+
+
+
+
+  <title>机器学习中的降维方法——主成分分析(PCA)与核主成分分析(KPCA)原理详解 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/a927e0fb.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">机器学习中的降维方法——主成分分析(PCA)与核主成分分析(KPCA)原理详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-31T18:07:43+08:00">
+                2018-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-01-14T22:09:30+08:00" content="2019-01-14">
+      2019-01-14
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/a927e0fb.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/a927e0fb.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/a927e0fb.html" class="leancloud_visitors" data-flag-title="机器学习中的降维方法——主成分分析(PCA)与核主成分分析(KPCA)原理详解">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://www.cnblogs.com/pinard/p/6239403.html" target="_blank" rel="noopener">学习自</a>感谢!<br><a href="http://blog.codinglabs.org/articles/pca-tutorial.html" target="_blank" rel="noopener">学习自</a>感谢!<br>PCA是一种常用的数据分析方法。<strong>PCA通过线性变换将原始数据变换为一组各维度线性无关的表示,可用于提取数据的主要特征分量,常用于高维数据的降维。</strong>这样做的好处是数据的主要信息还能保留下来,同时数据的维度降低了,并且变换后的维度两两不相关。<br><a id="more"></a></p>
+<h2 id="为什么需要PCA"><a href="#为什么需要PCA" class="headerlink" title="为什么需要PCA?"></a>为什么需要PCA?</h2><p>我们知道维数越大通常越难处理,在机器学习中,得到的数据维数通常都很高,处理起来比较麻烦,资源消耗很大,因此对数据进行降维处理是很必要的。<br>但是降维就意味着信息丢失吗？多少是有一点的。但是总有一些情况,让我们能够在信息损失相对较少的同时完成降维。比如:<br>1.如果某两个特征之间存在关联。举个比较极端的的例子，一个正方形的边长和它的面积，各属于两个特征，但是知道了边长面积肯定是确定的，那么就可以直接丢掉一列(边长或面积)。<br>2.如果某个维度存在并没有什么价值。这里举个比较经典的例子，就是电视转播球赛，把现场的三维转成平面的二维呈现在你眼前，减少了一维但是对于观众来说，并无太大影响。<br>3….<br>通过减少冗余信息,降低了维度,让数据处理更加容易,而有大部分有价值的信息都保留下来。而到底哪些信息是重要的？哪些可以删去？在这里需要注意,<strong>降维并不是简单的删除某个维度,大部分情况下,降维的同时基也改变了。</strong>那么如何选择新的基就是PCA需要解决的问题。</p>
+<h2 id="理论基础"><a href="#理论基础" class="headerlink" title="理论基础"></a>理论基础</h2><h3 id="向量的表示及基变换"><a href="#向量的表示及基变换" class="headerlink" title="向量的表示及基变换"></a>向量的表示及基变换</h3><h4 id="内积与投影"><a href="#内积与投影" class="headerlink" title="内积与投影"></a>内积与投影</h4><p>两个维数相同的向量的内积被定义为:<br>$(a_1,a_2,…a_n)^T (b_1,b_2,…b_n) = a_1b_1+ a_2b_2 + …a_nb_n$<br>内积运算将两个向量映射为一个实数。下面我们来分析内积的几何意义。<br>假设A和B是两个n维向量,我们知道n维向量等价表示为<strong>n维空间中的一条从原点发射的有向线段</strong>,假设A,B都是2维向量,$A = (x_1,y_1) B = (x_2,y_2)$，则在二维平面上A和B可以用两条发自原点的有向线段表示。<br><img src="/articles/a927e0fb/1.png"><br>现在我们从A点向B所在直线引一条垂线。我们知道垂线与B的交点叫做A在B上的投影,再设AB的夹角为$\alpha$，则投影的矢量长度为 $|A|cos \alpha$ .<br>到这里我们还看不出内积这东西有什么关系,不过我们将内积表示为另一种我们熟悉的形式:<br>$AB = |A||B| cos \alpha$<br>A与B的内积等于A到B的投影长度乘以B的模。再进一步,我们取B的模为1,那么有$AB = |A|cos \alpha$。<br>由此可以得出,<strong>设向量B的模为1,则A与B的内积等于A向B所在直线投影的矢量长度。</strong>这就是内积的集合解释。</p>
+<h3 id="基"><a href="#基" class="headerlink" title="基"></a>基</h3><p>上文说过,一个二维向量可以对应笛卡尔直角坐标系除法的一个有向线段。例如,<img src="/articles/a927e0fb/2.png"><br>在代数表示方面,我们经常用线段终点的点坐标来表示向量,例如上图可以表示为(3,2)。但是仅仅一个（3,2)是无法精确的表示一个向量的。我们仔细看一下，这里的3实际表示的是向量在x轴上的投影值是3，在y轴上的投影值是2。也就是说我们其实隐式引入了一个定义：以x轴和y轴上正方向长度为1的向量为标准。那么一个向量(3,2)实际是说在x轴投影为3而y轴的投影为2。注意投影是一个矢量，所以可以为负。<br>更正式的说，向量(x,y)实际上表示线性组合：$x(1,0)^T + y(0,1)^T$此处(1,0),(0,1)就是二维空间中的基。<img src="/articles/a927e0fb/3.png"><br>所以,要准确描述向量,首先<strong>是要确定一组基,然后给出在基所在的各个直线上的投影。</strong><br>在笛卡尔直角坐标系中,我们通常是默认选择(1,0)和(0,1)的,实际上<strong>任何两个线性无关的二维向量都可以作为基</strong>,所谓的线性无关在二维平面上可以认为是不共线的向量。<br>例如,（1,1）和（-1,1）也可以成为一组基。一般来说我们希望基的模式1,因为从内积的意义可以看到,如果基的模是1,那么可以方便的用向量的点乘而直接获得其在新基上的坐标了!（前面说过当模为1,点乘就代表向量A在向量B上的投影）实际上,对应任何一个向量我们总可以找到其同方向上模为1的向量,只要让两个分量分别除以模就好了。例如，上面的基可以变为<br>$(\frac{1}{\sqrt2},\frac{1}{\sqrt2})$，和$(-\frac{1}{\sqrt2},\frac{1}{\sqrt2})$<br>现在，我们想获得(3,2)在新基上的坐标，即在两个方向上的投影矢量值，那么根据内积的几何意义，我们只要分别计算(3,2)和两个基的内积，不难得到新的坐标为$(\frac{5}{\sqrt2},-\frac{1}{\sqrt2})$。下图给出了新的基以及(3,2)在新基上坐标值的示意图：<br><img src="/articles/a927e0fb/4.png"><br>另外这里要注意的是，我们列举的例子中基是正交的（即内积为0，或直观说相互垂直），但可以成为一组基的唯一要求就是线性无关，非正交的基也是可以的。不过因为正交基有较好的性质，所以一般使用的基都是正交的。</p>
+<h3 id="基变换的矩阵表示"><a href="#基变换的矩阵表示" class="headerlink" title="基变换的矩阵表示"></a>基变换的矩阵表示</h3><p>下面我们找一种简便的方式来表示基变换。还是拿上面的例子，想一下，将(3,2)变换为新基上的坐标，就是用(3,2)与第一个基做内积运算，作为第一个新的坐标分量，然后用(3,2)与第二个基做内积运算，作为第二个新坐标的分量。实际上，我们可以用矩阵相乘的形式简洁的表示这个变换：<img src="/articles/a927e0fb/5.png"><br>其中矩阵的两行分别为两个基，乘以原向量，其结果刚好为新基的坐标。可以稍微推广一下,如果我们有m个二维向量,只要将二维向量按列排列成一个两行m列矩阵,然后用基矩阵乘以这个矩阵,<strong>就得到了所有这些向量在新基下的值</strong>。例如(1,1)，(2,2)，(3,3)，想变换到刚才那组基上，则可以这样表示：<img src="/articles/a927e0fb/6.png"><br><strong>一般的,如果我们有M个N维向量,想将其变换为由R个N维向量表的新空间中,那么首先将R个基按行组成矩阵A,然后将向量按列组成矩阵B,那么两矩阵相乘AB,就是变换结果。其中AB的第m列为B中第m列经新基变换后的结果</strong><br><img src="/articles/a927e0fb/7.png"><br><strong>特别需要注意的是,这里R可以小于N,而R决定了变换后数据的维数。</strong>也就是说我们可以将N维的数据变换到更低维的空间中去,变换后的维度取决于我们使用的基的数量。<strong>因此这就矩阵相乘的也可以表示降维变换</strong><br>最后,上述分析同时给矩阵相乘找到一个物理解释:<strong>两个矩阵相乘的意义是将右边矩阵的每一列列向量变换到左边矩阵的每一个行向量为基所表示的空间中去。</strong>所以我们说一个矩阵可以表示一个线性变换。</p>
+<h3 id="协方差矩阵及优化目标"><a href="#协方差矩阵及优化目标" class="headerlink" title="协方差矩阵及优化目标"></a>协方差矩阵及优化目标</h3><p>上面我们说过选择不同的基可以对同样的数据给出不同的表示,而且如果<strong>基向量的个数小于数据的维数就达到了降维的效果。</strong>那么如何选择才是最优的？或者说我们有一组N维的向量,现在要将其降到K维,如何选择K个基才能最大程度的保留信息？<br>这里存在两个说法:<br>1.最近重构性。样本点到这个超平面的距离都足够近<br>2.最大可分性。样本点在这个超平面的投影尽可能的分开<br>下面我们以一个例子展开。假设我们的数据由五条记录组成,将他们表示成矩阵，</p>
+<script type="math/tex; mode=display">
+  \begin{matrix}
+   1 & 1 & 2 & 4 & 2\\
+   1 & 3 & 3 & 4 & 4
+  \end{matrix}</script><p>其中每列为一个数据记录,而一行为一个字段。我们首先将每个字段内所有值都减去字段均值(也就是行的均值),其结果就是每一维度的均值都变为0(这样是为了求方差变得简单,后面看到便会理解)。<br>我们看到上面数据,第一行均值为2,第二行均值为3,所以得到:</p>
+<script type="math/tex; mode=display">
+  \begin{matrix}
+   -1 & -1 & 0 & 2 & 0\\
+   -2 & 0 & 0 & 1 & 1
+  \end{matrix}</script><p>我们可以看下五条数据在平面直角坐标系内的样子：<img src="/articles/a927e0fb/8.png"><br>现在问题来了：如果我们必须使用一维来表示这些数据，又希望尽量保留原始的信息，你要如何选择？<br>通过上面的基变换的讨论我们知道,这里其实就是要在二维空间中选择一个方向,然后将所有向量都投影到这个基上,我们就得到了降维后的数据。那么如何选择这个方向才能保留更多的保留原始信息呢？<br>以上图为例，可以看出如果向x轴投影，那么最左边的两个点会重叠在一起，中间的两个点也会重叠在一起，于是本身四个各不相同的二维点投影后只剩下两个不同的值了，这是一种严重的信息丢失，同理，如果向y轴投影最上面的两个点和分布在x轴上的两个点也会重叠。所以看来x和y轴都不是最好的投影选择。我们直观目测，如果向通过第一象限和第三象限的斜线投影，则五个点在投影后还是可以区分的。<br>下面，我们用数学方法表述这个问题。</p>
+<h4 id="方差"><a href="#方差" class="headerlink" title="方差"></a>方差</h4><p>现在我们希望投影后投影值尽可能的分散,而这种分散程度可以用数学上的方差来表达。此处一个维度的方差可以看做是每个元素与字段均值的差的平方和的均值。即:<br>$Var(a) = \frac{1}{m} \sum_{i = 1}^m (a_i - u)^2$<br>由于上面我们已经将每个字段的均值都化为0了，因此方差可以直接用每个元素的平方和除以元素个数表示：$Var(a) = \frac{1}{m} \sum_{i = 1}^m a_i^2$<br>于是上面的问题被形式化表述为：<strong>寻找一个一维基，使得所有数据变换为这个基上的坐标表示后，方差值最大。</strong></p>
+<h4 id="协方差"><a href="#协方差" class="headerlink" title="协方差"></a>协方差</h4><p>对于上面二维降到一维我们找到一个使得方差最大的方向就可以了。考虑三维降为二维的问题。与之前相同,首先我们希望找一个方向使得投影后的方差最大,但这只完成了第一个方向的选择,我们还要选择第二个方向。如果我们还是单纯的只选择方差最大的方向,很明显,这个方向与第一个方向“几乎重叠”,这样的维度是无用的,所以我们还需要增加其他约束条件。从直观上说,让两个字段尽可能表示更多的原始信息,我们是不希望他们之间存在线性相关性的,因为<strong>相关性意味着两个字段不完全独立,那么肯定存在重复表示的信息。</strong><br>数学上我们使用两个字段的协方差表示其相关性，由于已经让每个字段均值为0,则:<br>$ Cov(a,b) = \frac{1}{m} \sum_{i = 1}^m a_ib_i$<br>可以看到,在字段均值为0的情况下,两个字段的内积可以简单的表示为内积除以元素数m。<br><strong>当协方差为0时,表示两个字段完全独立。为了让协方差为0我们选择第二个基时只能在与第一个基正交的方向上选择,且方差较大。</strong><br>综上,我们降维问题的<strong>优化目标</strong>为:将一组N维向量降为K维(默认K&lt;=N )，其目标是选择K个单位正交基,使得原数据变换到正交基上后,各个字段相互之间的协方差为0,且字段的方差尽可能大。(在正交约数下取K个最大的方差)</p>
+<h4 id="协方差矩阵"><a href="#协方差矩阵" class="headerlink" title="协方差矩阵"></a>协方差矩阵</h4><p>我们看到，最终要达到的目的与字段内方差及字段间协方差有密切关系。因此我们希望能将两者统一表示，仔细观察发现，两者均可以表示为内积的形式，而内积又与矩阵相乘密切相关。于是我们来了灵感：<br>假设我们只有a和b两个字段，那么我们将它们按行组成矩阵X：</p>
+<script type="math/tex; mode=display">
+X=\begin{pmatrix}
+  a_1 & a_2 & \cdots & a_m \\
+  b_1 & b_2 & \cdots & b_m
+\end{pmatrix}</script><p>然后我们用X乘以X的转置，并乘上系数1/m：</p>
+<script type="math/tex; mode=display">
+\frac{1}{m}XX^\mathsf{T}=\begin{pmatrix}
+  \frac{1}{m}\sum_{i=1}^m{a_i^2}   & \frac{1}{m}\sum_{i=1}^m{a_ib_i} \\
+  \frac{1}{m}\sum_{i=1}^m{a_ib_i} & \frac{1}{m}\sum_{i=1}^m{b_i^2}
+\end{pmatrix}</script><p>这个矩阵对角线上的两个元素分别是两个字段的方差，而其它元素是a和b的协方差。两者被统一到了一个矩阵的。<br>根据矩阵相乘的运算法则，这个结论很容易被推广到一般情况：<br><strong> 设我们有m个n维的数据记录,将其按列排成$n \times m$的矩阵X,设$C = \frac{1}{m}XX^T$,则C是一个对称矩阵。其对角线分别为各个字段的方差,其余的表示字段间的协方差。</strong></p>
+<h3 id="协方差对角化"><a href="#协方差对角化" class="headerlink" title="协方差对角化"></a>协方差对角化</h3><p>根据上面的讨论我们发现,要达到上述的优化目标,<strong>等价于将协方差矩阵对角化</strong>.即除对角线外的其他元素化为0,并且对角线上将元素按从大到小排列,然后取最大的K个就达到了我们的目的。<br>PS：关于为什么要将协方差矩阵对角化,稍后我会有更严谨的数学推导。这里我们可以先分析下,前面我们说过要保证找K个单位正交基,同时要保证方差尽可能大。那么我们对协方差矩阵就行对角化,使得只有对角线不为0,其余为0。根据协方差矩阵的性质,对角线全部为方差,其余都为协方差,此时将其对角化就可以得到每个字段全部正交,并按照从大到小排列就可得到方差最大的K个。<br>我们进一步看一下原矩阵与基变换后矩阵协方差矩阵的关系:<br>设原始数据矩阵X对应的协方差矩阵为C,而P是一组基按行组成的矩阵。设$ Y = PX$,则Y为X对P做基变换后的数据。设Y的协方差矩阵为D,我们推导下D和C的关系:</p>
+<script type="math/tex; mode=display">
+\begin{array}{l l l}
+  D & = & \frac{1}{m}YY^\mathsf{T} \\
+    & = & \frac{1}{m}(PX)(PX)^\mathsf{T} \\
+    & = & \frac{1}{m}PXX^\mathsf{T}P^\mathsf{T} \\
+    & = & P(\frac{1}{m}XX^\mathsf{T})P^\mathsf{T} \\
+    & = & PCP^\mathsf{T}
+\end{array}</script><p><font color="red">所以这里我们要找的P不是别的,而是能让原始协方差矩阵对角化的P。换句话说优化目标变为<strong>寻找一个矩阵P,满足$PCP^T$是一个对角矩阵,并且对角元素按照从大到小排列,那么P的前K行就是要寻找的基,用p的前K行组成的矩阵乘以X就使得X从N维降到了K维并满足上述的条件</strong></font><br>现在所有问题都变成了协方差矩阵的对角化问题,由上文我们知道协方差矩阵是一个对称矩阵,实对称矩阵有一些性质:<br>1）实对称矩阵不同特征值对应的特征向量必然正交。<br>2）设特征向量λ重数为r，则必然存在r个线性无关的特征向量对应于λ，因此可以将这r个特征向量单位正交化。<br>也就是说,<strong>实对称矩阵一定可以找到n个单位正交向量,设这n个特征向量为$e_1,e_2,\cdots,e_n$</strong>,我们将其按列组成矩阵：</p>
+<script type="math/tex; mode=display">
+E=\begin{pmatrix}
+  e_1 & e_2 & \cdots & e_n
+\end{pmatrix}</script><p>则对协方差矩阵C有如下结论:</p>
+<script type="math/tex; mode=display">
+E^\mathsf{T}CE=\Lambda=\begin{pmatrix}
+  \lambda_1 &             &         & \\
+              & \lambda_2 &         & \\
+              &             & \ddots & \\
+              &             &         & \lambda_n
+\end{pmatrix}</script><p>其中$\Lambda$为对角矩阵，其对角元素为各特征向量对应的特征值（可能有重复）。<br>到这里，我们发现我们已经找到了需要的矩阵P：$P=E^\mathsf{T}$<br>P是协方差矩阵的特征向量单位化后按行排列出的矩阵，其中每一行都是C的一个特征向量。如果设P按照$\Lambda$中特征值的从大到小，将特征向量从上到下排列，则用P的前K行组成的矩阵乘以原始数据矩阵X，就得到了我们需要的降维后的数据矩阵Y。</p>
+<h2 id="严谨的数学推导"><a href="#严谨的数学推导" class="headerlink" title="严谨的数学推导"></a>严谨的数学推导</h2><p>不知道大家是否还记得我们上面所说的降维时超平面应该具备的两个性质:<br>1.最近重构性。样本点到这个超平面的距离都足够近,最小投影距离。<br>2.最大可分性:样本点在这个超平面上的投影尽可能的分开。<br>比较有意思的是无论是基于最近重构性还是最大可分性我们最后得到的是一个等价推导。</p>
+<h3 id="最近重构性"><a href="#最近重构性" class="headerlink" title="最近重构性"></a>最近重构性</h3><p>我们先看第一种推导,即样本点到超平面的距离足够近。<br>假设m个n维数据$(x^{(1)}, x^{(2)},…,x^{(m)})$已经进行了中心化, $\sum\limits_{i=1}^{m}x^{(i)}=0$.经过投影变换后的新坐标系为$ \{w_1,w_2,…,w_n\}$，其中w是标准正交基,即$ ||w||_2=1, w_i^Tw_j=0$<br>若丢弃新坐标系中的部分坐标,将其降维n’维,则设新的坐标系为$\{w_1,w_2,…,w_{n’}\} $,样本点在n’维坐标系中的投影为$ z^{(i)} = (z_1^{(i)},z_2^{(i)},…,z_{n’}^{(i)})$，其中$ z_j^{(i)} = w_j^Tx^{(i)}$是$x^{(i)}$在低位坐标系里的第j维坐标。<br>如果我们用$z^{(i)}$来恢复原始数据$x^{(i)}$,则可以得到恢复数据$\overline{x}^{(i)} = \sum\limits_{j=1}^{n’}w_jz_j^{(i)} = Wz^{(i)}$其中，W为标准正交基组成的矩阵。<br>现在我们考虑整个样本集,我们希望所有的样本到这个超平面的距离足够近,即最小化：</p>
+<script type="math/tex; mode=display">
+\sum\limits_{i=1}^{m}||\overline{x}^{(i)} - x^{(i)}||_2^2</script><p>将这个式子整理得到:</p>
+<script type="math/tex; mode=display">
+\begin{align} \sum\limits_{i=1}^{m}||\overline{x}^{(i)} - x^{(i)}||_2^2 & = \sum\limits_{i=1}^{m}|| Wz^{(i)} - x^{(i)}||_2^2 \\& = \sum\limits_{i=1}^{m}(Wz^{(i)})^T(Wz^{(i)}) - 2\sum\limits_{i=1}^{m}(Wz^{(i)})^Tx^{(i)} + \sum\limits_{i=1}^{m} x^{(i)T}x^{(i)} \\& = \sum\limits_{i=1}^{m}z^{(i)T}z^{(i)} - 2\sum\limits_{i=1}^{m}z^{(i)T}W^Tx^{(i)} +\sum\limits_{i=1}^{m} x^{(i)T}x^{(i)} \\& = \sum\limits_{i=1}^{m}z^{(i)T}z^{(i)} - 2\sum\limits_{i=1}^{m}z^{(i)T}z^{(i)}+\sum\limits_{i=1}^{m} x^{(i)T}x^{(i)}  \\& = - \sum\limits_{i=1}^{m}z^{(i)T}z^{(i)} + \sum\limits_{i=1}^{m} x^{(i)T}x^{(i)}  \\& =   -tr( W^T（\sum\limits_{i=1}^{m}x^{(i)}x^{(i)T})W)  + \sum\limits_{i=1}^{m} x^{(i)T}x^{(i)} \\& =  -tr( W^TXX^TW)  + \sum\limits_{i=1}^{m} x^{(i)T}x^{(i)}  \end{align}</script><p>其中第(1)步用到了$ \overline{x}^{(i)}=Wz^{(i)}$，第(2)步用到了平方和展开,第(3)步用到了矩阵转置公式$(AB)^T =B^TA^T $和$ W^TW=I$,第(4)步用到了$ z^{(i)}=W^Tx^{(i)}$,第(5)步就是合并同类项,第(6)步用到了$ z^{(i)}=W^Tx^{(i)}$和矩阵的迹，第(7)步将代数和表达为矩阵形式。<br>要最小化上式,注意到$ \sum\limits_{i=1}^{m}x^{(i)}x^{(i)T}$就是我们上述说的协方差矩阵,给定数据$x^{(i)}$它就是一个常数,W的每一个向量$w_j$是标准正交基。所以等价于最小化</p>
+<script type="math/tex; mode=display">
+\underbrace{arg\;min}_{W}\;-tr( W^TXX^TW) \;\;s.t. W^TW=I</script><p><strong>  这个最小化比较简单，这是个有等式约束条件的最小值,这里可以采用拉格朗日乘子法</strong>得到:</p>
+<script type="math/tex; mode=display">
+J(W) = -tr( W^TXX^TW + \lambda(W^TW-I))</script><p>对W求导有$ -XX^TW+\lambda W=0$，整理得到: </p>
+<script type="math/tex; mode=display">
+XX^TW=\lambda W</script><p>通过上面可以看出,W为$XX^T$的n’个特征向量组成的矩阵.而$\lambda$为$XX^T$的对应特征值组成的矩阵,特征值在主对角线,其余为0。</p>
+<h3 id="最大可分性"><a href="#最大可分性" class="headerlink" title="最大可分性"></a>最大可分性</h3><p>现在我们来看看基于最大投影方差的推导。<br>对于任意一个样本$x^{(i)}$,其在新的坐标系中的投影为$W^Tx^{(i)}$,在新的坐标系中样本点的方差为$ W^Tx^{(i)}x^{(i)T}W$，要使所有的<strong>样本的投影方差最大</strong>,也就是最大化$\sum\limits_{i=1}^{m}W^Tx^{(i)}x^{(i)T}W$的迹,即:</p>
+<script type="math/tex; mode=display">
+\underbrace{arg\;max}_{W}\;tr( W^TXX^TW) \;\;s.t. W^TW=I</script><p>到这里我们可以发现上式与基于最近重构性的推导是完全等价的了。</p>
+<h2 id="PCA算法流程"><a href="#PCA算法流程" class="headerlink" title="PCA算法流程"></a>PCA算法流程</h2><p>设有m条n维数据<br>(1)将原始数据排成n行m列矩阵X<br>(2)将X的每一行(代表一个维度)进行零均值化,即减去这一行的均值利于计算方差和协方差<br>(3)求出协方差矩阵$C=\frac{1}{m}XX^\mathsf{T}$<br>(4)求出协方差矩阵的特征值及对应的特征向量<br>(5)将特征值按对应特征值大小从上到下按行排列成矩阵,取前k行组成矩阵P<br>(6)$Y = PX$即为降维到k维后的数据</p>
+<h2 id="核化线性降维-KPCA"><a href="#核化线性降维-KPCA" class="headerlink" title="核化线性降维(KPCA)"></a>核化线性降维(KPCA)</h2><p>线性降维方法假设从高维空间到低维空间的函数映射是线性的,然而在不少现实任务中可能需要非线性映射才能找到恰当的低维嵌入。<br>PCA是线性的,其对于非线性数据往往显得无能为力,而KPCA能够挖掘到数据中蕴含的非线性信息。<br>核主成分分析是基于核技巧对线性降维方法进行“核化”。这里就要用到核函数了,<a href="https://statusrank.xyz/articles/55a565c2.html">请看我的这片博客</a><br>KPCA的主要过程是:<br>1.首先将原始数据非线性映射到高维空间<br>2.再把第一步的数据从高维空间投影降维到需要的维数d’<br>可以看到KPCA只比PCA多了一步<strong>低维到高维的映射</strong>,降维的操作是一样的。所以最终KPCA最终投影到高维空间的超平面也应满足PCA中的最近重构性和最大可分性。<br>家丁我们将在高维特征空间中把数据投影到由$W$确定的超平面上,即PCA要求解:<br>$ (\sum_{i=1}^mz_iz_i^T)W=\lambda W\tag{1}$<br>其中$z_i$是样本点$x_i$在高维特征空间中的像,则</p>
+<script type="math/tex; mode=display">W=\frac{1}{\lambda}(\sum_{i=1}^mz_iz_i^T)W=\sum_{i=1}^mz_i\frac{z_i^TW}{\lambda}=\sum_{i=1}^mz_i\alpha_i\tag{2}</script><p>其中$\alpha_i = \frac{1}{\lambda}z_i^TW$ 假定$z_i$是由原始属性空间中的样本点$x_i$通过映射$\Phi$产生,即$z_i = \Phi(x_i),i = 1,2,…m$若$\Phi$能被显示的表示出来则通过将样本映射至高维空间,再在特征空间中实施PCA即可。<br>上面(2)式变为</p>
+<script type="math/tex; mode=display">
+\left(
+\sum_{i=1}^m\phi(x_i)\phi(x_i)^T
+\right)W=\lambda W
+\tag{3}</script><script type="math/tex; mode=display">
+W=\sum_{i=1}^m\phi(x_i)\alpha_i\tag{4}</script><p>一般情况下我们不清楚$\Phi$的具体样子,因此引入核函数(其实核函数本质上就是简化低维非线性可分映射到高维线性可分后的内积计算)。$ K(x_i,x_j) = \Phi(x_i)^T\Phi(x_j)\tag{5}$<br>将(4)、(5)式带入(3)式化简得: </p>
+<script type="math/tex; mode=display">
+KA=\lambda A\tag{6}</script><p>其中$K$为$k$对应的核矩阵,$ A=(\alpha_1,\alpha_2,…,\alpha_n)$，显然上式是一个特征值分解问题,取K最大的d’个特征值对应的矩阵向量即可.<br><strong>对新样本$x_i$其投影后的第j(j = 1,2,..d’)维坐标为:</strong></p>
+<script type="math/tex; mode=display">
+z_j=w_j^T\phi(x)=\sum_{i=1}^m\alpha_i^j\phi(x_i)^T\phi(x)=\sum_{i=1}^m\alpha_i^jk(x_i,x)\tag{7}</script><p>其中$\alpha_i$已经规范化,$\alpha_i^j$是$\alpha_i$的第j个分量。由(7)可以看出,KPCA需要对所有样本求和,因此它的计算开销较大。</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/a927e0fb.html">机器学习中的降维方法——主成分分析(PCA)与核主成分分析(KPCA)原理详解</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年10月31日 - 18:10</p>
+  <p><span>最后更新:</span>2019年01月14日 - 22:01</p>
+  <p><span>原始链接:</span><a href="/articles/a927e0fb.html" title="机器学习中的降维方法——主成分分析(PCA)与核主成分分析(KPCA)原理详解">https://statusrank.xyz/articles/a927e0fb.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/a927e0fb.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"><i class="fa fa-tag"></i> 机器学习</a>
+          
+            <a href="/tags/降维/" rel="tag"><i class="fa fa-tag"></i> 降维</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/bc7a8022.html" rel="next" title="机器学习中的降维方法——————多维缩放(MDS)&& 等度量映射(IsoMap)">
+                <i class="fa fa-chevron-left"></i> 机器学习中的降维方法——————多维缩放(MDS)&& 等度量映射(IsoMap)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/55a565c2.html" rel="prev" title="机器学习中核函数的理解">
+                机器学习中核函数的理解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/f5abd121.html">机器学习中的降维方法——局部线性嵌入(Locally Linear Embedding,LLE)</a></li><li><a href="/articles/65fc542a.html">机器学习之逻辑回归总结</a></li><li><a href="/articles/55a565c2.html">机器学习中核函数的理解</a></li><li><a href="/articles/9cb29377.html">TF-IDF算法详解</a></li><li><a href="/articles/bc7a8022.html">机器学习中的降维方法——————多维缩放(MDS)&& 等度量映射(IsoMap)</a></li><li><a href="/articles/79466b36.html">机器学习————最小二乘法</a></li><li><a href="/articles/562e923c.html">线性回归原理总结(模型,损失函数,正则化)</a></li><li><a href="/articles/9d4ca24c.html">浅谈支持向量机(SVM)</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么需要PCA"><span class="nav-text">为什么需要PCA?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#理论基础"><span class="nav-text">理论基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#向量的表示及基变换"><span class="nav-text">向量的表示及基变换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#内积与投影"><span class="nav-text">内积与投影</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基"><span class="nav-text">基</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基变换的矩阵表示"><span class="nav-text">基变换的矩阵表示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协方差矩阵及优化目标"><span class="nav-text">协方差矩阵及优化目标</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方差"><span class="nav-text">方差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#协方差"><span class="nav-text">协方差</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#协方差矩阵"><span class="nav-text">协方差矩阵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协方差对角化"><span class="nav-text">协方差对角化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#严谨的数学推导"><span class="nav-text">严谨的数学推导</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最近重构性"><span class="nav-text">最近重构性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最大可分性"><span class="nav-text">最大可分性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA算法流程"><span class="nav-text">PCA算法流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核化线性降维-KPCA"><span class="nav-text">核化线性降维(KPCA)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

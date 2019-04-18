@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="评估标准,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这里主要总结一下推荐系统当中常见的一些评价指标,主要包括: MAE,RMSE,recall,precision,MAP,MRR,NDCG等">
+<meta name="keywords" content="评估标准">
+<meta property="og:type" content="article">
+<meta property="og:title" content="推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)">
+<meta property="og:url" content="https://statusrank.xyz/articles/639f7364.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="这里主要总结一下推荐系统当中常见的一些评价指标,主要包括: MAE,RMSE,recall,precision,MAP,MRR,NDCG等">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/639f7364/21.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/639f7364/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/639f7364/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/639f7364/22.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/639f7364/23.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/639f7364/24.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/639f7364/25.png">
+<meta property="og:updated_time" content="2019-01-14T13:19:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)">
+<meta name="twitter:description" content="这里主要总结一下推荐系统当中常见的一些评价指标,主要包括: MAE,RMSE,recall,precision,MAP,MRR,NDCG等">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/639f7364/21.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/639f7364.html">
+
+
+
+
+  <title>推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等) | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/639f7364.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T14:49:02+08:00">
+                2018-12-25
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-01-14T21:19:54+08:00" content="2019-01-14">
+      2019-01-14
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/639f7364.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/639f7364.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/639f7364.html" class="leancloud_visitors" data-flag-title="推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这里主要总结一下推荐系统当中常见的一些评价指标,主要包括: MAE,RMSE,recall,precision,MAP,MRR,NDCG等<br><a id="more"></a></p>
+<h2 id="MAE-Mean-Average-Error-平均绝对误差"><a href="#MAE-Mean-Average-Error-平均绝对误差" class="headerlink" title="MAE(Mean Average Error,平均绝对误差)"></a>MAE(Mean Average Error,平均绝对误差)</h2><p>表示预测值和实际值之间的绝对误差的平均值.</p>
+<h2 id="RMSE-Root-Mean-Square-Error-均方根误差"><a href="#RMSE-Root-Mean-Square-Error-均方根误差" class="headerlink" title="RMSE(Root Mean Square Error,均方根误差)"></a>RMSE(Root Mean Square Error,均方根误差)</h2><p>均方根误差是用来衡量观测值同真实值之间的偏差,RMSE越小越好.</p>
+<h2 id="Recall-召回率-与Precision-精确率"><a href="#Recall-召回率-与Precision-精确率" class="headerlink" title="Recall(召回率)与Precision(精确率)"></a>Recall(召回率)与Precision(精确率)</h2><p>Recall 和precision又叫查全率和查准率.<br>查准率就是说<strong>检索出的信息中有多少是用户真正感兴趣的.</strong><br>查全率就是说<strong>用户真正感兴趣的信息有多少被我们预测到了</strong><br>首先我们明确如下几个定力:<br>TP(True Positive) : 表示样本的真实类别为正,最后预测得到的结果也为正<br>FP(False Positive): 表示样本的真实类别为负,最后预测得到的结果为正<br>TN(True Negative): 表示样本的真实类别为负,最后预测得到的结果也为负<br>FN(False Nositive): 表示样本的真实类别为正,最后预测得到的结果为负<br><strong>可以看到TP,TN是我们预测准确的样本,而FP,FN是我们预测错误的样本.</strong></p>
+<h3 id="Recall"><a href="#Recall" class="headerlink" title="Recall"></a>Recall</h3><p><strong>召回率表示在原样本的正样本中,最后被正确预测为正样本的概率</strong><br>即:</p>
+<script type="math/tex; mode=display">Recall = \frac{TP}{TP + FN}</script><h3 id="Precision"><a href="#Precision" class="headerlink" title="Precision"></a>Precision</h3><p><strong>精确率表示在所有为正的样本中,真正为正的样本概率</strong></p>
+<script type="math/tex; mode=display">
+Precision = \frac{TP}{TP + FP}</script><p>recall 和Precision是相互矛盾的.一般来说查准率高时查全率往往偏低,查全率高时查准率往往偏低.<br>在很多情形下,我们根据学习期的预测结果进行排序,排在前面的我们认为是最可能是正例的样本,排在后面的被认为是最不可能是正例的.根据此顺序我们可以每次计算出recall,precision.以查准率为纵轴,查全率为 横轴就得到了”P-R”曲线,</p>
+<h4 id="P-R曲线"><a href="#P-R曲线" class="headerlink" title="P-R曲线"></a>P-R曲线</h4><p>如图<img src="/articles/639f7364/21.png"><br>P-R图直观的显示出学习器在样本总体上的查全率和查准率.<strong>若一个学习器的p-r曲线被另一个曲线完全包住,则可断言后者的性能优于前者,例如上面的A和B优于学习器C，但是A和B的性能无法直接判断,因为他们之间发生了交叉</strong>.A和B只能在具体的查全率或者查准率条件下进行比较,如果我们仍然希望将A和B比个高低,这时候我们可以比较P-R曲线下的面积大小,它在<strong>一定程度上表征了学习器在查准率和查全率上取得相对”双高”的比例.</strong></p>
+<h4 id="平衡点-Break-Even-Point-BEP"><a href="#平衡点-Break-Even-Point-BEP" class="headerlink" title="平衡点(Break-Even Point ,BEP)"></a>平衡点(Break-Even Point ,BEP)</h4><p>P-R曲线的面积很难去估算,所以BEP我们设为是查准率=查全率时的取值,BEP越大学习器越优.上图中A的BEP大于B,则可认为是A优于B.</p>
+<h4 id="F1度量"><a href="#F1度量" class="headerlink" title="F1度量"></a>F1度量</h4><p>F1是基于precision和recall的调和平均定义的.</p>
+<script type="math/tex; mode=display">
+\frac{1}{F_1} = \frac{1}{2}(\frac{1}{P} + \frac{1}{R})</script><script type="math/tex; mode=display">
+F_1 = \frac{2 \times P \times R}{P + R}</script><p><strong>在一些应用中对recall和Precision的重视程度是不同的</strong>,比如在推荐系统中我们更希望推荐的内容是用户感兴趣的,所以Precision更重要.</p>
+<h4 id="F-beta-度量-加权调和平均"><a href="#F-beta-度量-加权调和平均" class="headerlink" title="$F_\beta$度量(加权调和平均)"></a>$F_\beta$度量(加权调和平均)</h4><p>$F_\beta$是$F_1$度量的一般形式,能让我们表达出对Precision/Recall的不同偏好,定义如下:</p>
+<script type="math/tex; mode=display">
+\frac{1}{F_\beta} = \frac{1}{(1 + \beta^2)} (\frac{1}{P} + \frac{\beta^2}{R})</script><script type="math/tex; mode=display">
+F_\beta = \frac{(1 + \beta^2) \times P \times R}{\beta^2 \times P + R }</script><p>其中$\beta&gt;0$度量了recall和Precision之间的相对重要性,$\beta=1$即$F_1$度量.</p>
+<h3 id="Accuracy"><a href="#Accuracy" class="headerlink" title="Accuracy"></a>Accuracy</h3><p><strong>准确率表示在所有预测的样本中预测正确的概率</strong></p>
+<script type="math/tex; mode=display">
+Accuray = \frac{TP + TN}{TP + TN + FP + FN}</script><h2 id="MAP-Mean-Average-Precision-均值平均精度"><a href="#MAP-Mean-Average-Precision-均值平均精度" class="headerlink" title="MAP(Mean Average Precision,均值平均精度)"></a>MAP(Mean Average Precision,均值平均精度)</h2><p>首先我们需要了解一下AP<br><img src="/articles/639f7364/1.png"><br>MAP就是AP的平均值.<br>例如:现在有两个user,与两个user直接相关的(positive feedback)的item分别有4个和3个.对第一个user的相关4个item的rank分别为1,2,4,7;第二个user的相关3个item的rank分别为1,3,5,则对于第一个user,AP为:</p>
+<script type="math/tex; mode=display">\frac{\frac{1}{1} + \frac{2}{2} + \frac{3}{4} + \frac{4}{7}}{4}  = 0.83</script><p>同理第二个user的为:</p>
+<script type="math/tex; mode=display">\frac{\frac{1}{1} + \frac{2}{3} + \frac{3}{5} }{3}  = 0.75</script><p>则MAP为:$\frac{0.83 + 0.75}{2} = 0.79$</p>
+<h2 id="MRR-Mean-Reciprocal-Rank-平均倒数排名"><a href="#MRR-Mean-Reciprocal-Rank-平均倒数排名" class="headerlink" title="MRR(Mean Reciprocal Rank,平均倒数排名)"></a>MRR(Mean Reciprocal Rank,平均倒数排名)</h2><p>MRR是将user相关item在给出结果中的排名的倒数作为准确度,在对所有的取均值.<br><img src="/articles/639f7364/2.png"></p>
+<h2 id="NDCG-Normalized-Discounted-Cumulative-Gain-归一化折损累计增益"><a href="#NDCG-Normalized-Discounted-Cumulative-Gain-归一化折损累计增益" class="headerlink" title="NDCG(Normalized Discounted Cumulative Gain,归一化折损累计增益)"></a>NDCG(Normalized Discounted Cumulative Gain,归一化折损累计增益)</h2><p>上面我们也介绍了MAP评价指标,但是MAP认为是二元相关性(即对一个Item要么是感兴趣要么是不感兴趣的),而NDCG允许以实数形式进行相关性打分,这种关系类似分类和回归的关系.<br>NDCG这个名字可能比较吓人,但背后的思想却很简单.一个推荐系统返回一些item并形成一个列表,我们想要计算这个列表有多好,每一项都有一个相关的评分值,通常这些评分值是一个非负数,这就是gain(增益).此外对于这些没有用户反馈的项我们通常设置起增益为0.</p>
+<h3 id="CG"><a href="#CG" class="headerlink" title="CG"></a>CG</h3><p>我们将这些增益相加就是Cumulative Gain(累计增益,CG),CG就是将每个推荐结果相关性的分支累加后作为整个推荐列表的得分.</p>
+<script type="math/tex; mode=display">CG_k = \sum_{i = 1}^k rel_i</script><p>这里$rel_i$表示处于位置i的推荐结果的相关性,k表示要考察的推荐列表的大小.</p>
+<h3 id="DCG"><a href="#DCG" class="headerlink" title="DCG"></a>DCG</h3><p><strong>CG的一个缺点是没有考虑每个推荐结果处于不同位置对整个推荐效果的影响,例如我们总是希望相关性高的结果应该排在前面</strong>.显然,如果相关性低的结果排在靠前的位置会严重影响用户的体验,所以在CG的基础上引入位置影响因素,即DCG(Discounted Cumulative Gain),这里指的是对于排名靠后推荐结果的推荐效果进行“打折处理”:</p>
+<script type="math/tex; mode=display">DCG_k = \sum_{i = 1}^k \frac{2^{rel_i} - 1}{log_2(i + 1)}</script><p>从上面的式子可以得到两个结论:<br>1.推荐结果的相关性越大,DCG越大<br>2.相关性好的排在推荐列表前面的话,推荐效果越好,DCG越大.</p>
+<h3 id="NDCG"><a href="#NDCG" class="headerlink" title="NDCG"></a>NDCG</h3><p>DCG仍然有不足之处,即<strong>不同的推荐的推荐列表之间,很难进行横向的评估,而我们评估一个推荐系统不可能仅使用一个用户的推荐列表及相应结果进行评估,而是对整个测试机中的用户及其推荐列表结果进行评估.</strong>那么不同的用户的推荐列表的评估分数就需要进行归一化,也即NDCG(Normalized Discounted Cumulative Gain,归一化折损累计增益).<br>在介绍NDCG之前还需要知道另一个概念,IDCG(Ideal DCG),指推荐系统为某一用户返回的最好推荐结果列表,即假设返回结果按照相关性排序,最相关的结果放在前面,此序列的DCG为IDCG.因此DCG的值介于(0,IDCG],故NDCG的值介于(0,1],那么<strong>用户u的NDCG@K定义为</strong></p>
+<script type="math/tex; mode=display">NDCG_u@K = \frac{DCG_u@K}{IDCG_u}</script><p>因此平均NDCG@K计算为:</p>
+<script type="math/tex; mode=display">NDCG@K = \frac{\sum_{u \in |U|} NDCG_u@K}{|U|}</script><h2 id="ROC与AUC"><a href="#ROC与AUC" class="headerlink" title="ROC与AUC"></a>ROC与AUC</h2><h3 id="ROC"><a href="#ROC" class="headerlink" title="ROC"></a>ROC</h3><p>很多学习器是为测试样本产生一个实值或概率预测，然后将这个预测值与一个分类阈值进行比较，若大于阈值分为正类，否则为反类，因此分类过程可以看作选取一个截断点。<br>不同任务中，可以选择不同截断点，若更注重”查准率”，应选择排序中靠前位置进行截断，反之若注重”查全率”，则选择靠后位置截断。因此排序本身质量的好坏，可以直接导致学习器不同泛化性能好坏，ROC曲线则是从这个角度出发来研究学习器的工具。<br>ROC全称是”受试者工作特征”(Receiver Operating Characteristic)曲线.与P-R曲线类似,我们根据学习器的预测结果对样例进行排序,按此顺序逐个把样本作为正例进行预测,每次计算出两个重要量的值,分别是纵轴:”真正例率(True Positive Rate,TPR)”,横轴是”假正例率(False Positive Rate,FPR)”.公式如下(TP,TR,FP,FR定义同上):</p>
+<script type="math/tex; mode=display">
+TPR = \frac{TP}{TP + FN}</script><script type="math/tex; mode=display">
+FPR = \frac{FP}{TN + FP}</script><p>如图:<br>现实任务中通常利用有限个测试样例来绘制ROC图,因此通常无法产生光滑曲线,如右图.<br><img src="/articles/639f7364/22.png"><br>绘图过程:<br>给定$m^+$个正例和$m^-$个负例,根据学习器的预测结果将所有样例排序,然后把分类阈值设到最大,即把所有样例都看成负例,此时TPR和FPR都是0,在坐标(0,0)处标记一个点.然后将分类阈值依次设为每个样例的预测值,即依次将每个样例划分为正例.设前一个点的为$(x,y)$,若当前样例为正例,则对应标记点的坐标为$(x,y + \frac{1}{m^+}$;若当前点为假正例,则对应点坐标为$(x + \frac{1}{m^-},y)$,然后相邻点连接即可.<br><strong>进行学习器比较时,与P-R曲线类似.如果一个ROC曲线被另一个包住则后者优于前者,若发生交叉则难以断定</strong>.</p>
+<h3 id="AUC"><a href="#AUC" class="headerlink" title="AUC"></a>AUC</h3><p>上面说过如果ROC曲线发生交叉则无法直接断言谁优谁劣.如果非要比较,则可以根据ROC曲线下的面积,即AUC(Area Under ROC Curve).<br><img src="/articles/639f7364/23.png"><br>AUC可通过对ROC曲线下各部分的面积求得.假定ROC曲线是由坐标为$\{(x_1,y_1),(x_2,y_2)…(x_m,y_m)\}$的点按顺序连接形成的($x_1 = 0,x_m = 1$),则AUC可以估算为:</p>
+<script type="math/tex; mode=display">
+AUC = \frac{1}{2} \sum_{i = 1}^{m-1} (x_{i + 1} - x_i)(y_i + y_{i + 1})</script><h4 id="AUC的物理意义"><a href="#AUC的物理意义" class="headerlink" title="AUC的物理意义:"></a>AUC的物理意义:</h4><p>任取一对正负样本,正样本的值大于负样本的概率!<br>形式化的看,AUC考虑的是<strong>样本预测的排序质量</strong>,因此它与排序误差有紧密的联系.给定$m^+$个正例和$m^-$个负例,令$D^+$和$D^-$分别表示正反例的集合,则排序损失<br>定义为:</p>
+<script type="math/tex; mode=display">
+l_{rank} = \frac{1}{m^+m^-} \sum_{x^+ \in D^+ } \sum_{x^- \in D^ -}( \amalg (f(x^+) < f(x^-)) + \frac{1}{2} \amalg(f(x^+) = f(x^-)))</script><p>即考虑每一对正反例,若正例的预测值小于负例,则记1,若二者相等则记0.5分.<br>ROC曲线中每有一个真正例需要向上走一步,每有一个假正例需要向右走一步.对于所有的正例其横坐标所代表的步数就是得分比起高的反例数.因此我们修改ROC空间的坐标,对横坐标乘以$m^-$,纵坐标乘以$m^+$,使得在这个空间中每一步的刻度都为1.<br><img src="/articles/639f7364/24.png"><br>从上图我们看出$l_{rank}$其实是ROC曲线之上的面积<br>比如上图蓝色的线表示ROC曲线.根据这个曲线,我们可以知道正反例顺序: (反,正,[正,正,反],反,正…)其中[]括起来的实例分数相同.<br>对于第一个正例,对应区域1,区域1的面积表示排在其前面的反例数.<br>对于第三个样例第四个样例是特殊情况,它们和一个反例的得分是相同的.我们假设有q个反例p个正例得分相同,那么就是要往上走p步往右走q步,于是得到三角形面积为$\frac{1}{2} pq$.与上式得0.5分相符<br>所以有</p>
+<script type="math/tex; mode=display">
+l_{rank} m^+ m^- = m^+ m^- - m^+ m^- AUC</script><p>因此我们有:</p>
+<script type="math/tex; mode=display">
+AUC = 1 - l_{rank}</script><h3 id="为什么使用Roc和Auc评价分类器"><a href="#为什么使用Roc和Auc评价分类器" class="headerlink" title="为什么使用Roc和Auc评价分类器"></a>为什么使用Roc和Auc评价分类器</h3><p>既然已经这么多标准，为什么还要使用ROC和AUC呢？因为ROC曲线有个很好的特性：当测试集中的正负样本的分布变换的时候，ROC曲线能够保持不变。在实际的数据集中经常会出现样本类不平衡，即正负样本比例差距较大，而且测试数据中的正负样本也可能随着时间变化。下图是ROC曲线和Presision-Recall曲线的对比：<br><img src="/articles/639f7364/25.png"><br>在上图中，(a)和(c)为Roc曲线，(b)和(d)为Precision-Recall曲线。</p>
+<p>(a)和(b)展示的是分类其在原始测试集(正负样本分布平衡)的结果，(c)(d)是将测试集中负样本的数量增加到原来的10倍后，分类器的结果，可以明显的看出，ROC曲线基本保持原貌，而Precision-Recall曲线变化较大。</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/639f7364.html">推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年12月25日 - 14:12</p>
+  <p><span>最后更新:</span>2019年01月14日 - 21:01</p>
+  <p><span>原始链接:</span><a href="/articles/639f7364.html" title="推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)">https://statusrank.xyz/articles/639f7364.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/639f7364.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/评估标准/" rel="tag"><i class="fa fa-tag"></i> 评估标准</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/54e65a77.html" rel="next" title="Python 装饰器总结">
+                <i class="fa fa-chevron-left"></i> Python 装饰器总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/49246251.html" rel="prev" title="Metric-Factorization Recommendation beyond Matrix Factorization">
+                Metric-Factorization Recommendation beyond Matrix Factorization <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MAE-Mean-Average-Error-平均绝对误差"><span class="nav-text">MAE(Mean Average Error,平均绝对误差)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RMSE-Root-Mean-Square-Error-均方根误差"><span class="nav-text">RMSE(Root Mean Square Error,均方根误差)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Recall-召回率-与Precision-精确率"><span class="nav-text">Recall(召回率)与Precision(精确率)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Recall"><span class="nav-text">Recall</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Precision"><span class="nav-text">Precision</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#P-R曲线"><span class="nav-text">P-R曲线</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#平衡点-Break-Even-Point-BEP"><span class="nav-text">平衡点(Break-Even Point ,BEP)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#F1度量"><span class="nav-text">F1度量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#F-beta-度量-加权调和平均"><span class="nav-text">$F_\beta$度量(加权调和平均)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Accuracy"><span class="nav-text">Accuracy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MAP-Mean-Average-Precision-均值平均精度"><span class="nav-text">MAP(Mean Average Precision,均值平均精度)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRR-Mean-Reciprocal-Rank-平均倒数排名"><span class="nav-text">MRR(Mean Reciprocal Rank,平均倒数排名)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NDCG-Normalized-Discounted-Cumulative-Gain-归一化折损累计增益"><span class="nav-text">NDCG(Normalized Discounted Cumulative Gain,归一化折损累计增益)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CG"><span class="nav-text">CG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DCG"><span class="nav-text">DCG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NDCG"><span class="nav-text">NDCG</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ROC与AUC"><span class="nav-text">ROC与AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ROC"><span class="nav-text">ROC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AUC"><span class="nav-text">AUC</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AUC的物理意义"><span class="nav-text">AUC的物理意义:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么使用Roc和Auc评价分类器"><span class="nav-text">为什么使用Roc和Auc评价分类器</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

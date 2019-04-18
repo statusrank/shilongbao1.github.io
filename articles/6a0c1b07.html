@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="RS,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="总结的很好论文翻译在有些推荐场景中,我们是为了在千万级别的商品中推荐个位数的商品给用户,此时我们更关注的是对用户来说，哪些极少数商品在用户心中有更高的优先级，也就是排序更靠前。说白了,我们需要一个算法，这个算法可以把每个用户对应的所有商品按喜好排序。">
+<meta name="keywords" content="RS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="贝叶斯个性化排序(BPR)算法小记">
+<meta property="og:url" content="https://statusrank.xyz/articles/6a0c1b07.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="总结的很好论文翻译在有些推荐场景中,我们是为了在千万级别的商品中推荐个位数的商品给用户,此时我们更关注的是对用户来说，哪些极少数商品在用户心中有更高的优先级，也就是排序更靠前。说白了,我们需要一个算法，这个算法可以把每个用户对应的所有商品按喜好排序。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/6a0c1b07/1.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="贝叶斯个性化排序(BPR)算法小记">
+<meta name="twitter:description" content="总结的很好论文翻译在有些推荐场景中,我们是为了在千万级别的商品中推荐个位数的商品给用户,此时我们更关注的是对用户来说，哪些极少数商品在用户心中有更高的优先级，也就是排序更靠前。说白了,我们需要一个算法，这个算法可以把每个用户对应的所有商品按喜好排序。">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/6a0c1b07/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/6a0c1b07.html">
+
+
+
+
+  <title>贝叶斯个性化排序(BPR)算法小记 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/6a0c1b07.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">贝叶斯个性化排序(BPR)算法小记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-19T16:31:01+08:00">
+                2018-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/6a0c1b07.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/6a0c1b07.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/6a0c1b07.html" class="leancloud_visitors" data-flag-title="贝叶斯个性化排序(BPR)算法小记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://www.cnblogs.com/pinard/p/9128682.html" target="_blank" rel="noopener">总结的很好</a><br><a href="https://blog.csdn.net/qq_20599123/article/details/51315697" target="_blank" rel="noopener">论文翻译</a><br>在有些推荐场景中,我们是为了在千万级别的商品中推荐个位数的商品给用户,此时我们更关注的是对用户来说，哪些极少数商品在用户心中有更高的优先级，也就是排序更靠前。说白了,我们需要一个算法，这个算法<strong>可以把每个用户对应的所有商品按喜好排序</strong>。<br><a id="more"></a></p>
+<h3 id="建模思路"><a href="#建模思路" class="headerlink" title="建模思路"></a>建模思路</h3><p>在BRR算法中，我们将任意用户u对应的物品进行标记,如果用户u在同时有item i和j时点击了i,那么我们就得到了一个triplet$(u,i,j)$,他表示对用户u来说,i的排序要比j更靠前。如果对于用户u来说我们有m组这样的反馈,那么我们就可以得到m组用户u对应的训练样本。<br>基于贝叶斯,我们有如下两个假设:<br>1.每个用户之间的偏好行为相互对立,即用户u在item i和j之间的偏序关系与其他用户无关<br>2.同一用户在不同商品之间的偏序与其他商品无关。也就是u在item i 和j之间的偏序关系与其他商品无关。<br>为了便于表述，我们用$&gt;_u$符号表示用户u的偏好，上面的$(u,i,j)$可以表示为：$i&gt;_uj$。<br>在BPR中，这个排序关系符号$&gt;_u$满足<strong>完全性，反对称性和传递性</strong>，即对于用户集U和物品集I：<br><img src="/articles/6a0c1b07/1.png"><br>同时BPR也用了类似的矩阵分解模型,这里BPR对于用户集$U$合物品集$I$对于的$U \times I$的预测排序矩阵$ \overline X$,我们期望得到两个分解后的用户矩阵$W(|U| \times k)$和物品矩阵 $H(|I|\times k)$,满足:</p>
+<script type="math/tex; mode=display">
+\overline{X} = WH^T</script><p><strong> 这里的K也是自己定义的,一般远远小于$|U|,|I|$</strong><br>由于BPR是基于用户维度的，所以对于任意一个用户u，对应的任意一个物品i我们期望有：</p>
+<script type="math/tex; mode=display">
+\overline{x}_{ui} = w_u \bullet h_i = \sum\limits_{f=1}^kw_{uf}h_{if}</script><p>最终我们的目标，是希望寻找合适的矩阵$W,H$，让$\overline X$和$X$最相似。</p>
+<h2 id="BPR优化"><a href="#BPR优化" class="headerlink" title="BPR优化"></a>BPR优化</h2><p>可能看了上面,大家可能和我一样感觉BPR好像和一般的矩阵分解没什么不同。<br><strong>BPR是基于最大后验估计$P(W,H|&gt;_u)$来求解模型参数$W,H$的</strong>,这里我们用$\theta$来表示参数$W,H$,$&gt;_u$表示用户u对应的所有商品的全序关系,则优化目标是$P(\theta|&gt;_u)$.根据贝叶斯公式得:</p>
+<script type="math/tex; mode=display">
+P(\theta|>_u) = \frac{P(>_u|\theta)P(\theta)}{P(>_u)}</script><p>由于我们求解假设了用户的排序和其他用户无关，那么对于任意一个用户u来说，$P(&gt;_u)$对所有的物品一样，所以有：</p>
+<script type="math/tex; mode=display">
+P(\theta|>_u) \propto P(>_u|\theta)P(\theta)</script><p>这个优化目标转化为两部分。第一部分和样本数据集D有关，第二部分和样本数据集D无关。<br>对于第一部分，由于我们假设每个用户之间的偏好行为相互独立，同一用户对不同物品的偏序相互独立，所以有：</p>
+<script type="math/tex; mode=display">
+\prod_{u \in U}P(>_u|\theta) = \prod_{(u,i,j) \in (U \times I \times I)}P(i >_u j|\theta)^{\delta((u,i,j) \in D)}(1-P(i >_u j|\theta))^{\delta((u,j,i) \not\in D) }</script><p>其中，</p>
+<script type="math/tex; mode=display">
+\delta(b)= \begin{cases} 1& {if\; b\; is \;true}\\ 0& {else} \end{cases}</script><p>根据上面讲到的完整性和反对称性，优化目标的第一部分可以简化为：</p>
+<script type="math/tex; mode=display">
+\prod_{u \in U}P(>_u|\theta) = \prod_{(u,i,j) \in D}P(i >_u j|\theta)</script><p>而对于$ P(i &gt;_u j|\theta)$这个概率，我们可以使用下面这个式子来代替:</p>
+<script type="math/tex; mode=display">
+P(i >_u j|\theta) = \sigma(\overline{x}_{uij}(\theta))</script><p>其中$\sigma(x)$是sigmoid函数。这里你也许会问，为什么可以用这个sigmoid函数来代替呢? 其实这里的代替可以选择其他的函数，不过式子需要满足BPR的完整性，反对称性和传递性。原论文作者这么做除了是满足这三个性质外，另一个原因是为了方便优化计算。<br>对于$\overline{x}_{uij}(\theta)$这个式子，我们要满足当$i &gt;_u j$时，$\overline{x}_{uij}(\theta) &gt; 0$,反之当$j&gt;_u i$时，$\overline{x}_{uij}(\theta) &lt; 0$最简单的表示这个性质的方法就是</p>
+<script type="math/tex; mode=display">
+\overline{x}_{uij}(\theta) = \overline{x}_{ui}(\theta) - \overline{x}_{uj}(\theta)</script><p>而$ \overline{x}_{ui}(\theta) , \overline{x}_{uj}(\theta)$,就是我们的矩阵$\overline X$对应位置的值。这里为了方便，我们不写$\theta$,这样上式可以表示为:</p>
+<script type="math/tex; mode=display">
+\overline{x}_{uij} = \overline{x}_{ui} - \overline{x}_{uj}</script><p>注意上面的这个式子也不是唯一的，只要可以满足上面提到的当$i &gt;_u j$时，$\overline{x}_{uij}(\theta) &gt; 0$，以及对应的相反条件即可。这里我们仍然按原论文的式子来。<br>最终，我们的第一部分优化目标转化为：</p>
+<script type="math/tex; mode=display">
+\prod_{u \in U}P(>_u|\theta) = \prod_{(u,i,j) \in D} \sigma(\overline{x}_{ui} - \overline{x}_{uj})</script><p>对于第二部分$P(\theta)$,作者大胆使用了贝叶斯假设,即这个概率分布符合正态分布,且对应的均值是0,协方差矩阵是$ \lambda_{\theta}I$</p>
+<script type="math/tex; mode=display">
+P(\theta) \sim N(0, \lambda_{\theta}I)</script><p><strong>作者为什么这么假设呢？主要还是为了优化方便，因为后面我们做优化时，需要计算$lnP(\theta)$，而对于上面假设的这个多维正态分布，其对数和$||θ||^2$成正比。即</strong></p>
+<script type="math/tex; mode=display">
+lnP(\theta) = \lambda||\theta||^2</script><p>最终对于我们的最大对数后验估计函数：<br>$<br>ln\;P(\theta|&gt;_u) \propto ln\;P(&gt;_u|\theta)P(\theta) = ln\;\prod\limits_{(u,i,j) \in D} \sigma(\overline{x}_{ui} - \overline{x}_{uj}) + ln P(\theta) = \sum\limits_{(u,i,j) \in D}ln\sigma(\overline{x}_{ui} - \overline{x}_{uj}) + \lambda||\theta||^2\;<br>$<br>这个式子可以用梯度上升法或者牛顿法等方法来优化求解模型参数。如果用梯度上升法，对$\theta$求导，我们有：</p>
+<script type="math/tex; mode=display">
+\frac{\partial ln\;P(\theta|>_u)}{\partial \theta} \propto \sum\limits_{(u,i,j) \in D} \frac{1}{1+e^{\overline{x}_{ui} - \overline{x}_{uj}}}\frac{\partial (\overline{x}_{ui} - \overline{x}_{uj})}{\partial \theta} + \lambda \theta</script><p>由于:</p>
+<script type="math/tex; mode=display">
+\overline{x}_{ui} - \overline{x}_{uj} = \sum\limits_{f=1}^kw_{uf}h_{if} - \sum\limits_{f=1}^kw_{uf}h_{jf}</script><p>这样我们可以求出：</p>
+<script type="math/tex; mode=display">
+\frac{\partial (\overline{x}_{ui} - \overline{x}_{uj})}{\partial \theta} = \begin{cases} (h_{if}-h_{jf})& {if\; \theta = w_{uf}}\\ w_{uf}& {if\;\theta = h_{if}} \\ -w_{uf}& {if\;\theta = h_{jf}}\end{cases}</script><h2 id="BPR算法流程"><a href="#BPR算法流程" class="headerlink" title="BPR算法流程"></a>BPR算法流程</h2><p>下面简要总结下BPR的算法训练流程：<br>输入：训练集$D$三元组，梯度步长$\alpha$， 正则化参数$\lambda$,分解矩阵维度$k$。　<br>输出：模型参数，矩阵$W,H$</p>
+<ol>
+<li>随机初始化矩阵$W,H$</li>
+<li>迭代更新模型参数：<script type="math/tex; mode=display">
+w_{uf} =w_{uf} + \alpha(\sum\limits_{(u,i,j) \in D} \frac{1}{1+e^{\overline{x}_{ui} - \overline{x}_{uj}}}(h_{if}-h_{jf}) + \lambda w_{uf})</script><script type="math/tex; mode=display">
+h_{if} =h_{if} + \alpha(\sum\limits_{(u,i,j) \in D} \frac{1}{1+e^{\overline{x}_{ui} - \overline{x}_{uj}}}w_{uf} + \lambda h_{if})</script><script type="math/tex; mode=display">
+h_{jf} =h_{jf} + \alpha(\sum\limits_{(u,i,j) \in D} \frac{1}{1+e^{\overline{x}_{ui} - \overline{x}_{uj}}}(-w_{uf}) + \lambda h_{jf})</script></li>
+<li>如果$W,H$收敛，则算法结束，输出$W,H$，否则回到步骤2.<br>当我们拿到W,H后，就可以计算出每一个用户u对应的任意一个商品的排序分：$\overline{x}_{ui} = w_u \bullet h_i$，最终选择排序分最高的若干商品输出。<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><strong>BPR是基于矩阵分解的一种排序算法，但是它不是做全局优化,而是针对每一个用户自己的喜好评分做优化,这和其他MF方法的迭代思路完全不同。另外,BPR的训练数据集则需要用户对商品喜好排序的三元组做训练集。</strong></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/6a0c1b07.html">贝叶斯个性化排序(BPR)算法小记</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年11月19日 - 16:11</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/6a0c1b07.html" title="贝叶斯个性化排序(BPR)算法小记">https://statusrank.xyz/articles/6a0c1b07.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/6a0c1b07.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RS/" rel="tag"><i class="fa fa-tag"></i> RS</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/33a62389.html" rel="next" title="A Scalable Probabilistic Tensor Factorization(SPTF)">
+                <i class="fa fa-chevron-left"></i> A Scalable Probabilistic Tensor Factorization(SPTF)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/84288273.html" rel="prev" title="浅谈局部敏感哈希(LSH)">
+                浅谈局部敏感哈希(LSH) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/cdf3f0c1.html">Dual Metric Space Learning for Modeling Heterogeneous User Behaviors</a></li><li><a href="/articles/ed2225da.html">Collaborative Metric Learning(CML)论文总结</a></li><li><a href="/articles/37cad335.html">Extreme Learning to Rank via Low Rank Assumption论文解读</a></li><li><a href="/articles/33a62389.html">A Scalable Probabilistic Tensor Factorization(SPTF)</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#建模思路"><span class="nav-text">建模思路</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#BPR优化"><span class="nav-text">BPR优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BPR算法流程"><span class="nav-text">BPR算法流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-text">小结</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="各种基础知识,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.c和c++的区别是什么？程序 = 数据结构+算法.c语言是面向过程的,面向过程就是分析出解决问题的步骤,然后用函数将其实现,使用时依次调用. 程序= 对象+消息.c++是面向对象的,c++面向对象是将构成问题的事物分解成各个对象，每个对象完成在解决整个问题中的行为.主要特点是类，封装，继承，多态等。面向对象的语言具有更好的可扩展性。举例子">
+<meta name="keywords" content="各种基础知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++知识点总结">
+<meta property="og:url" content="https://statusrank.xyz/articles/8fbac0b2.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="1.c和c++的区别是什么？程序 = 数据结构+算法.c语言是面向过程的,面向过程就是分析出解决问题的步骤,然后用函数将其实现,使用时依次调用. 程序= 对象+消息.c++是面向对象的,c++面向对象是将构成问题的事物分解成各个对象，每个对象完成在解决整个问题中的行为.主要特点是类，封装，继承，多态等。面向对象的语言具有更好的可扩展性。举例子">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++知识点总结">
+<meta name="twitter:description" content="1.c和c++的区别是什么？程序 = 数据结构+算法.c语言是面向过程的,面向过程就是分析出解决问题的步骤,然后用函数将其实现,使用时依次调用. 程序= 对象+消息.c++是面向对象的,c++面向对象是将构成问题的事物分解成各个对象，每个对象完成在解决整个问题中的行为.主要特点是类，封装，继承，多态等。面向对象的语言具有更好的可扩展性。举例子">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/8fbac0b2.html">
+
+
+
+
+  <title>C++知识点总结 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/8fbac0b2.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">C++知识点总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-29T17:30:59+08:00">
+                2018-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/8fbac0b2.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/8fbac0b2.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/8fbac0b2.html" class="leancloud_visitors" data-flag-title="C++知识点总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong><em>1.c和c++的区别是什么？</em></strong><br>程序 = 数据结构+算法.c语言是面向过程的,面向过程就是分析出解决问题的步骤,然后用函数将其实现,使用时依次调用.</p>
+<p>程序= 对象+消息.c++是面向对象的,c++面向对象是将构成问题的事物分解成各个对象，每个对象完成在解决整个问题中的行为.主要特点是类，封装，继承，多态等。面向对象的语言具有更好的可扩展性。<br><a href="https://blog.csdn.net/Edward_Wong/article/details/39533245" target="_blank" rel="noopener">举例子</a></p>
+<a id="more"></a>
+<p><strong><em> 2.const有什么用途?</em></strong><br>    （1）定义一个常量,即该数据只读,发生更改会报错</p>
+<pre><code>（2）修饰函数返回值和函数的参数,增加程序的健壮性
+
+（3）修饰函数定义体.(也就是说这个函数为一个只读函数,该函数不会修改任何数据成员的值)
+
+ 例如: void getDescription() const; 
+
+被const修饰过的函数能被const和非const对象调用,但是const对象只能调用被const修饰过的函数定义体.
+</code></pre><p><strong><em>3.指针和引用的区别是是什么？</em></strong><br>    （1）引用是变量的一个别名,引用与他所引用的变量实际上代表同一个存储单元</p>
+<pre><code>  (2) 引用相比指针对内存的占用少,节省内存空间。
+
+（3）引用是一个绑定的关系,绑定关系是永久的,而指针可以改变
+
+（4）常引用的值不能被修改,主要用途是函数的形参以及函数的返回引用
+</code></pre><p><strong><em>4.malloc/free 和 new/delete的区别是什么？或者说为什么有了malloc/free 还需要new/delete？</em></strong><br>        (1)new 自动计算要分配的存储区的大小,而malloc需要给出所需要分配的存储区的大小.且new会自动返回正确的指针类型。</p>
+<pre><code>  （2）new 可以对分配的存储空间进行初始化，也可以创建对象并对对象进行初始化（创建是调用构造函数,释放时调用析构函数）.
+
+  （3）new/delete可以重载,重载一个与类相关的new/delete运算符.
+</code></pre><p><strong><em>5.数据封装、继承、多态</em></strong></p>
+<pre><code>数据封装：实现了信息隐蔽性,将数据和数据有关的操作集合封装到一起,用户不必知道其实现细节,只需要知道功能即可。
+ 继承: 解决了软件的可重用性和可扩展性
+ 多态性:一个名字或符号具有多种含义,通过重载来实现的. 例如:c++中存在同名函数,根据参数不同自动匹配.
+</code></pre><p><strong><em>6.静态成员与静态成员函数</em></strong><br>静态成员属于类,而不属于对象。无论创建多少个该类的对象,都只有一个静态数据的存储空间,静态数据的初始化不会自动进行,必须在类外初始化.。<br>        类型名 类名:: 静态数据成员[= 常量表达式]<br>  静态成员函数也属于类而不是某个对象。在类外调用一个公有静态成员函数不需要指明对象或指向对象的指针。方式为: 类名:: 静态公有成员函数名(参数列表)<br><strong><em>7.构造函数、析构函数、拷贝构造函数、友元函数</em></strong><br>    一个类只能由一个析构函数。但却可以有多个构造函数,即可以重载构造函数。<font color="red">析构函数的调用顺序和构造函数的调用顺序相反</font><br>    拷贝构造函数用于创建一个新对象并从已存在的对象中依据规则复制数据。缺省的拷贝构造函数采用内存拷贝的形式，将已经存在对象的内存一个字节一个字节的拷贝到新建对象的内存当中。<br>    友元函数没有this指针,一个类的友元可以访问该类的所有成员,包括私有和受保护的,这是基于效率的考虑</p>
+<p><strong><em>8.继承和派生</em></strong><br>  <strong><strong>派生</strong></strong>:首先是继承基类的成员,再修改和增加派生类具有的自己特性的成员。通过派生,派生类在基类的基础上可以获得可重用性和可扩充性,既具备基类的特征又添加了自己的功能。构造函数和析构函数是不能被继承的。<br>  <strong><em>多重继承</em></strong>:一个派生类有两个或两个以上的基类。<br><strong><em>继承的意义:</em></strong>从模块的观点,继承是一种关键的可重用和可扩充技术；从类型的观点,继承的关键是动态匹配。<br><strong><em>公有派生</em></strong>:<br>(1)基类的保护成员在派生类中仍然是保护成员<br>(2)基类的公有成员在派生类中仍然是公有成员<br>(3)基类的私有成员在派生类中成为不可访问成员<br><strong><em>私有派生</em></strong>:<br>(1)基类的保护成员在派生类中仍然是私有成员<br>(2)基类的公有成员在派生类中仍然是私有成员<br>(3)基类的私有成员和不可访问成员在派生类中成为不可访问成员<br><strong><em>保护派生</em></strong><br>基类所有公有段和保护段成员在保护派生中成为保护段。</p>
+<font color="red">保护段的作用:
+保护派生使得基类的一些成员,他们可以被派生类访问,但不能被其他类访问(类内访问)。也就是说除了基类和他的派生类可以看到这部分成员外,对其他类如同私有段成员函数一样。
+</font>
+<font color="red">***基类和派生类共享基类的static成员,要求访问静态成员比用"类名::成员"显示的访问***</font>
+
+<p>派生类的对象创建的时候一定会调用构造函数初始化该类对象,且一定会先调用基类的构造函数(首先基类,其次对象成员,最后派生类),执行析构函数的顺序是相反的。<br><strong><em>访问声明</em></strong><br>仅适用于私有派生,且不能说明任何类型。<br>类D从基类B中私有派生,则D的派生类E不能访问基类B中的任何成员,为了满足需要可以采用访问声明,使得B的几个成员可以被E访问。<br>即在类D中重新声明从基类B中继承的几个成员的类型:<br>基类类名:基类保护段或公有段数据成员<br>基类类名:基类保护段或公有段成员函数<br><strong><em>9.抽象类</em></strong></p>
+<pre><code>抽象类指的是含有纯虚函数的类，该类不能建立对象，只能声明指针和引用，用于基础类的接口声明和运行时的多态 另外，如果抽象类的某个派生类在向继承体系的根回溯过程中，并不是所有的纯虚函数都实现了，该类也是抽象类，同样不能建立对象。
+</code></pre><p></p><h3>虚基类</h3><br>防止有多个间接基类的多个实例。<br><strong><em>虚基类构造函数的调用次序</em></strong><br>虚基类的构造函数在非虚基类之前调用<br>若同一层次中包含多个虚基类,虚基类构造函数按他们的说明顺序调用<br>若虚基类由非虚基类派生,则遵守先调用基类构造函数再调用派生类构造函数的规则<p></p>
+<p></p><h3>11.虚函数</h3><br>虚函数是一种在基类函数中定义为virtual的函数,并在一个或多个派生类中再定义的函数。虚函数的特点是，只要定义一个基类的指针，就可以指向派生类的对象。<br>注：无虚函数时，遵循以下规则：C++规定，定义为基类的指针，也能作指向派生类的指针使用，并可以用这个指向派生类对象的指针访问继承来的基类成员；但不能用它访问派生类的成员。<p></p>
+<font color="red">使用虚函数实现运行时的多态性的关键在于：必须通过基类指针访问这些函数。</font>
+一旦一个函数定义为虚函数，无论它传下去多少层，一直保持为虚函数.
+把虚函数的再定义称为过载（overriding）而不叫重载（overloading）。
+**纯虚函数：**是定义在基类中的一种只给出函数原型，而没有任何与该基类有关的定义的函数。纯虚函数使得任何派生类都必须定义自己的函数版本。否则编译报错。
+纯虚函数定义的一般形式：
+
+Virtual type func_name(参数列表)=0; 虚函数要求参数列表类型返回值完全一样!
+
+<font color="red">
+重载一般函数式,函数的返回类型和参数列表可能是不同的,仅仅要求函数名相同。
+重载虚函数时,要求函数名、返回类型、参量个数、参数类型和顺序是完全相同的,若仅仅是函数名相同,C++会认为这是一般的函数重载,那么此时虚函数特性就会消失.
+</font>
+
+<p>l  含有纯虚函数的基类称为抽象基类。<font color="red">抽象基类又一个重要特性：抽象类不能建立对象。但是抽象基类可以有指向自己的指针，以支持运行时的多态性。</font></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line"></span><br><span class="line">#define ECHO(str) std::cout &lt;&lt; str</span><br><span class="line"></span><br><span class="line">#define ECHOLN(str) std::cout &lt;&lt; str&lt;&lt; std::endl</span><br><span class="line"></span><br><span class="line">/* run this program using the consolepauser or add your own getch, system(&quot;pause&quot;) or input loop */</span><br><span class="line"></span><br><span class="line">class Base&#123;</span><br><span class="line"></span><br><span class="line">         public:</span><br><span class="line"></span><br><span class="line">                       virtual void who()&#123;</span><br><span class="line"></span><br><span class="line">                        ECHOLN(&quot;我是基类！&quot;);</span><br><span class="line"></span><br><span class="line">                      &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class deriv_1:public Base&#123;</span><br><span class="line"></span><br><span class="line">         public:</span><br><span class="line"></span><br><span class="line">                   voidwho()&#123;</span><br><span class="line"></span><br><span class="line">                            ECHOLN(&quot;我是子类deriv_1&quot;);</span><br><span class="line"></span><br><span class="line">                   &#125;</span><br><span class="line"></span><br><span class="line">                  </span><br><span class="line"></span><br><span class="line">         &#125;;</span><br><span class="line"></span><br><span class="line">class deriv_2:public Base&#123;</span><br><span class="line"></span><br><span class="line">         public:</span><br><span class="line"></span><br><span class="line">                  void who()&#123;</span><br><span class="line"></span><br><span class="line">                            ECHOLN(&quot;我是子类deriv_2&quot;);</span><br><span class="line"></span><br><span class="line">                   &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">int main(int argc, char** argv) &#123;</span><br><span class="line"></span><br><span class="line">         classBase *b,b0;</span><br><span class="line"></span><br><span class="line">         classderiv_1 d1;</span><br><span class="line"></span><br><span class="line">         classderiv_2 d2;</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">         b= &amp;b0;</span><br><span class="line"></span><br><span class="line">         b-&gt;who();</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">         b= &amp;d1;</span><br><span class="line"></span><br><span class="line">         b-&gt;who();</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">         b= &amp;d2;</span><br><span class="line"></span><br><span class="line">         b-&gt;who();</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">         return0;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<p>我是基类！</p>
+<p>我是子类deriv_1</p>
+<p>我是子类deriv_2</p>
+<h3 id="堆和栈的区别"><a href="#堆和栈的区别" class="headerlink" title="堆和栈的区别:"></a>堆和栈的区别:</h3><p>栈:由编译器自动分配释放,存放函数的参数值,局部变量,函数的返回值等等。<br>堆: 一般由程序员分配释放,若程序员不释放程序结束时OS可能会回收,主要存放动态分配的内存空间。<br>全局区（静态区）（static）: 全局变量和静态变量.<br><a href="https://blog.csdn.net/HowardEmily/article/details/63291766" target="_blank" rel="noopener">看我这个博客</a></p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/各种基础知识/" rel="tag"><i class="fa fa-tag"></i> 各种基础知识</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/6cb5844a.html" rel="next" title="牛客练习赛25 定向(桥+tarjan)">
+                <i class="fa fa-chevron-left"></i> 牛客练习赛25 定向(桥+tarjan)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/58427e42.html" rel="prev" title="操作系统知识点总结">
+                操作系统知识点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/1351144d.html">数据结构知识点总结</a></li><li><a href="/articles/eb3df616.html">算法知识点总结</a></li><li><a href="/articles/9943af19.html">c语言中移位运算符</a></li><li><a href="/articles/undefined.html">二进制中1的个数</a></li><li><a href="/articles/667ed989.html">梯度下降法,牛顿法,拟牛顿法</a></li><li><a href="/articles/763f1e1a.html">线性代数知识点总结</a></li><li><a href="/articles/4ec2a632.html">高等数学————可微、可导、可积与连续之间的关系</a></li><li><a href="/articles/58427e42.html">操作系统知识点总结</a></li><li><a href="/articles/ef59843b.html">深度学习数学基础</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-text">虚基类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-text">11.虚函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆和栈的区别"><span class="nav-text">堆和栈的区别:</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

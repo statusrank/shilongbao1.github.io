@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="LSH,hash,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文主要参考了一下文章:123感谢! LSH主要用来解决高维空间中点的近似最近邻搜索问题,即Approximate Nearest Neighbor(ANN)。在实际的应用中我们所面对的数据是海量的,并且有着很高的维度。在对数据的各种操作中,查询操作是最常见的一种,这里的查询是指输入一个数据,查找与其相似的数据,那么怎样快速从海量高维数据中找到与某个数据最相似的数据,成为了一个难点。传统的哈希算法">
+<meta name="keywords" content="LSH,hash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈局部敏感哈希(LSH)">
+<meta property="og:url" content="https://statusrank.xyz/articles/84288273.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="本文主要参考了一下文章:123感谢! LSH主要用来解决高维空间中点的近似最近邻搜索问题,即Approximate Nearest Neighbor(ANN)。在实际的应用中我们所面对的数据是海量的,并且有着很高的维度。在对数据的各种操作中,查询操作是最常见的一种,这里的查询是指输入一个数据,查找与其相似的数据,那么怎样快速从海量高维数据中找到与某个数据最相似的数据,成为了一个难点。传统的哈希算法">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/11.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/12.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/13.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/84288273/14.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈局部敏感哈希(LSH)">
+<meta name="twitter:description" content="本文主要参考了一下文章:123感谢! LSH主要用来解决高维空间中点的近似最近邻搜索问题,即Approximate Nearest Neighbor(ANN)。在实际的应用中我们所面对的数据是海量的,并且有着很高的维度。在对数据的各种操作中,查询操作是最常见的一种,这里的查询是指输入一个数据,查找与其相似的数据,那么怎样快速从海量高维数据中找到与某个数据最相似的数据,成为了一个难点。传统的哈希算法">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/84288273/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/84288273.html">
+
+
+
+
+  <title>浅谈局部敏感哈希(LSH) | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/84288273.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浅谈局部敏感哈希(LSH)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-20T15:09:49+08:00">
+                2018-11-20
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/84288273.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/84288273.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/84288273.html" class="leancloud_visitors" data-flag-title="浅谈局部敏感哈希(LSH)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文主要参考了一下文章:<br><a href="https://blog.csdn.net/guoziqing506/article/details/53019049/#commentBox" target="_blank" rel="noopener">1</a><br><a href="http://blog.sina.com.cn/s/blog_67914f2901019p3v.html#cmt_507EB990-7F000001-96D294D9-930-8A0" target="_blank" rel="noopener">2</a><br><a href="https://blog.csdn.net/sinat_28576553/article/details/81589392" target="_blank" rel="noopener">3</a><br>感谢!<br><strong> LSH主要用来解决高维空间中点的近似最近邻搜索问题,即Approximate Nearest Neighbor(ANN)。</strong><br>在实际的应用中我们所面对的数据是海量的,并且有着很高的维度。在对数据的各种操作中,查询操作是最常见的一种,这里的查询是指输入一个数据,查找与其相似的数据,那么怎样快速从海量高维数据中找到与某个数据最相似的数据,成为了一个难点。<br>传统的哈希算法通过哈希函数建立哈希表,由哈希表我们能够得到O(1)的查找时间性能,传统哈希算法的关键在于,找到合适的哈希函数,将原始数据映射到相对应的桶内,如果不同的数据,映射到了同一个位置就是发生了冲突,这是<strong>传统哈希算法所避免的。</strong><br>局部敏感哈希(LSH)的想法恰恰和传统的哈希算法相反,我们渴望冲突,但是我们希望的是<strong>原先相邻的两个数据能够以较高的概率被映射为同一个哈希值,而相似对很低的数据以极低的概率映射成同一个哈希值。</strong>这样的函数我们叫LSH。<br><a id="more"></a></p>
+<font color="red">LSH最根本的作用就是能够高效的处理海量高维数据的最近邻问题,其最大的特点就是保持数据的相似性。</font>
+
+<p>一个不满足LSH的简单例子。<br>假设一个哈希函数$H(x) = x \% 9$.那么我们现在有三个数据分别为356,359,814;上述三个数据经过哈希函数哈希后得到:<br>$ Hash(356) = 356\%9 =5 $;</p>
+<p>$ Hash(359) = 359\%9= 8;$</p>
+<p>$Hash(814) = 814\%9 = 4;$<br>我们可以发现原本356和359很相似,和814相差很远，但是经过哈希影射或后814的哈希值和356的哈希值接近和359的相差较远。也就是经过这样的哈希计算之后,数据之间原有的相似度消失了,所以他不是一个局部敏感哈希。</p>
+<h2 id="LSH定义"><a href="#LSH定义" class="headerlink" title="LSH定义"></a>LSH定义</h2><p>局部敏感哈希函数需要满足如下条件:<br><img src="/articles/84288273/1.png"><br>其中H是一个从欧式空间S到哈希编码空间U的映射,$O_1,O_2 \in S$表示两个具有多维属性的数据对象,$d(O_1,O_2)$为两个对象的相异的程度(根据不同的度量方式,理解也不同。如欧式空间就是距离)说白一点就是,当足够相似时映射为同一个hash值的概率足够大,而足够不相似时映射为同一个hash值的概率足够小。 $ r_1 &lt; r_2,p_1 &gt; p_2$<br>本文主要介绍两种常用的相似度以及不同的LSH:</p>
+<ol>
+<li>使用jaccard(杰卡德)系数度量数据相似度时的Min-hash</li>
+<li>使用欧式距离度量数据相似度时的P-stable hash<br><strong>其实不论是哪种LSH，本质上都是将高维数据降维到低维数据,同时还能在一定程度上保持原数据的相似度不变。LSH不是确定性的，而是概率性的。也就是说有一定的概率导致原本很相似的数据映射成两个不相似的hash值或者原本不相似的两个数据映射成同一个hash值。这是高维数据降维过程中所不能避免的(因为降维必将导致损失)，不过好在LSH的设计能够通过相应的参数控制出现这种错误的概率。</strong><h2 id="Min-hash"><a href="#Min-hash" class="headerlink" title="Min-hash"></a>Min-hash</h2><h3 id="Jaccard系数"><a href="#Jaccard系数" class="headerlink" title="Jaccard系数"></a>Jaccard系数</h3>Jaccard相似指数用来度量两个集合之间的相似性,它被定义为两个集合交集元素个数除以两个集合并集元素个数。<img src="/articles/84288273/2.png">
+Jaccard距离用来度量两个集合之间的差异性m它是jaccard的相似系数的补集:<img src="/articles/84288273/3.png">
+利用jaccard相似度来衡量文档之间的相似性,使用LSH来实现文档相似度计算。</li>
+</ol>
+<p>假设我们有如下四个文档$D_1,D_2,D_3,D_4$的集合情况,每个文档有相应的词项,用$\{w_1,w_2,..w_7\}$ 表示。若某个文档存在这个词项,则标为1，否则标为0。<br><img src="/articles/84288273/4.png"><br>接下来我们就要选择一个适当的哈希函数,令其满足局部民哈希的条件,在此处我们选用的哈希函数数minhash(最小哈希)。<br>MinHash 是用于快速检测两个集合相似性的方法。该方法由 Andrei Broder (1997) 发明，最初用于AltaVista搜索引擎中来检测重复的网页。<br><strong>Minhash的定义为:</strong> 特征矩阵按行进行一个随机的排列后,第一个列值为1的行的行号。<br>可以发现,如果我们对上述的文档进行Minhash,这不会改变文档与此项之间的关系,也不会改变文档之间的相似度。比如可以置换成如下形式:<br><img src="/articles/84288273/5.png"><br>现在我们做这样一件事: 对这个矩阵按行进行多次置换,每次置换之后统计每一列(对应的是每个文档)第一个不为0位置的行号,这样每次统计的结果能构成一个与文档数等大的向量,我们称之为<strong>签名向量</strong>。<br>比如，如果对最上面的矩阵做这样的统计，得到$[1,2,1,2]$，对于下面的矩阵做统计，得到$[1,1,2,1]$.<br>如果拿上面的文档来说,如果两个文档足够相似,也就是说这两个文档中有很多元素是共有的,这样置换出来的签名向量,如果原来其中有一些文档的相似度很高,那么这些文档所对应的签名向量的相应的元素值相同的概率也很高。<br>我们把初始时的矩阵叫做input matrix,由m个文档m，n个词项组成.而把由t次置换后得到的一个$ t\times m$矩阵叫做signature matrix。<br>下图很好的展现了这一流程:<br><img src="/articles/84288273/6.png"><br>图中4个文档做了3次变换,得到了一个$ 3\times 4$的签名矩阵。<br>通过计算原矩阵和签名矩阵M的 各个文档之间的相似度可以看到原来相似度很高的文档之间哈希之后的相似度仍然很高。这满足LSH函数的性质。<br><strong>可以想象一下,当我们有一组高维的数据比如100000等,我们可以使用最小哈希将其哈希100或者几百次,然后比较他们的相似度即可。这大大降低了数据的维度和计算的复杂度</strong></p>
+<h3 id="定理"><a href="#定理" class="headerlink" title="定理"></a>定理</h3><p>对于签名矩阵的任意行,它的两列元素相同的概率是$ \frac{x}{n}$，其中x代表这两个文档所拥有的公共词项的数目,而$\frac{x}{n}$也就是这两个文档的jaccard系数。<br><img src="/articles/84288273/7.png"><br>需要注意的是，置换矩阵的行，在代码实现的时候，可以用这样的算法实现：<br>1.在当下剩余的行中（初始时，剩余的行为全部行），随机选取任意一行，看看这一行哪些位置（这里的位置其实是列号）的元素是1，如果签名向量中这个位置的元素还未被写入，则在这个位置写入随机选取的这个行的行号。并将这一行排除。<br>2.持续进行1步的工作，直到签名向量全部被写满为止。</p>
+<p>以上2步的意义跟对整个矩阵置换、再统计，结果是一样的。代码如下:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigGen</span><span class="params">(matrix)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    * generate the signature vector</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param matrix: a ndarray var</span></span><br><span class="line"><span class="string">    :return a signature vector: a list var</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># the row sequence set</span></span><br><span class="line">    seqSet = [i <span class="keyword">for</span> i <span class="keyword">in</span> range(matrix.shape[<span class="number">0</span>])]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># initialize the sig vector as [-1, -1, ..., -1]</span></span><br><span class="line">    result = [<span class="number">-1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(matrix.shape[<span class="number">1</span>])]</span><br><span class="line"></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> len(seqSet) &gt; <span class="number">0</span>:</span><br><span class="line"></span><br><span class="line">        <span class="comment"># choose a row of matrix randomly</span></span><br><span class="line">        randomSeq = random.choice(seqSet)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(matrix.shape[<span class="number">1</span>]):</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> matrix[randomSeq][i] != <span class="number">0</span> <span class="keyword">and</span> result[i] == <span class="number">-1</span>:</span><br><span class="line">                result[i] = randomSeq</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> count == matrix.shape[<span class="number">1</span>]:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        seqSet.remove(randomSeq)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># return a list</span></span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure></p>
+<h3 id="构造LSH函数族"><a href="#构造LSH函数族" class="headerlink" title="构造LSH函数族"></a>构造LSH函数族</h3><p>为了能实现前面LSH定义中的两个条件要求,我们通过多次置换求取签名向量,构建了一组哈希函数,也就是最终得到了一个signature matrix。为了控制相似度与映射概率之间的关系,我们需要按下面进行三步操作。<br>1.将signature matrix水平分割成一些区块（记为band）每个band包含了signature matrix中的r行。需要注意的是，同一列的每个band都是属于同一个文档的。如下图所示。<br><img src="/articles/84288273/8.png"><br>2.对每个band计算hash值，这里的hash算法没有特殊要求，MD5，SHA1等等均可。一般情况下，我们需要将这些hash值做处理，使之成为事先设定好的hash桶的tag，然后把这些band“扔”进hash桶中。如下图所示。但是这里，我们只是关注算法原理，不考虑实际操作的效率问题。所以，省略处理hash值得这一项，得到每个band的hash值就OK了，这个hash值也就作为每个hash bucket的tag。<br><img src="/articles/84288273/9.png"><br>3.如果某两个文档的，同一水平方向上的band，映射成了同一hash值（如果你选的hash函数比较安全，抗碰撞性好，那这基本说明这两个band是一样的），我们就将这两个文档映射到同一个hash bucket中，也就是认为这两个文档是足够相近的。<br><strong> 另外， 需要注意的是，每一层的band只能和同一层的band相比，若hash值相同，则放入同一个哈希桶中。</strong><br>好了，既然执行的是上面三步的操作，那不难计算出两个文档被映射到同一个hash bucket中的概率：<br>对于两个文档的任意一个band来说，这两个band值相同的概率是：$s^r$ 其中$ s \in [0,1]$是这两个文档的相似度<br>也就是说,这两个band不相同的概率是$ 1-s^r$<br>这两个文档一共存在b个band,这b个band都不相同的概率是 $ (1 - s^r)^b$<br>所以说b个band至少有一个相同的概率是 $ 1-(1-s^r)^b$<br>把这样的方法称为AND then OR，它是先要求<strong>每个band的所有对应元素必须都相同，再要求多个band中至少有一个相同。符合这两条，才能发生hash碰撞</strong>。<br><strong>概率 $ 1-(1-s^r)^b 就是最终两个文档被映射到同一个hash bucket中的概率</strong>。我们发现,这样一来实际可以通过控制参数r,b的值来控制两个文档被映射到同一个哈希桶的概率。而且效果非常好。比如令 $ b = 20,r = 5$<br>当$ s = 0.8$，两个文档被映射到同一个哈希桶的概率是:</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+Pr(LSH(O_1) = LSH(O_2)) = 1 - (1 - 0.8^5)^5 = 0.9996439421094793
+\end{equation}</script><p>当$ s=0.2$ 时，两个文档被映射到同一个哈希桶的概率是： </p>
+<script type="math/tex; mode=display">
+\begin{equation}
+Pr(LSH(O_1) = LSH(O_2)) = 1 - (1 - 0.2^5)^5 = 0.0063805813047682
+\end{equation}</script><p>不难看出，这样的设计通过调节参数值，达到了“越相似，越容易在一个哈希桶；越不相似，越不容易在一个哈希桶”的效果。这也就能实现我们上边说的LSH的两个性质。<br>我画出了在$ r=5,b=20$ 参数环境下的概率图，大家会有个更清晰的认识。<br><img src="/articles/84288273/10.png"><br>当相似度高于某个值的时候，概率会变得非常大，并且快速靠近1，而当相似度低于某个值的时候，概率会变得非常小，并且快速靠近0.</p>
+<h2 id="P-stable-Hash"><a href="#P-stable-Hash" class="headerlink" title="P-stable Hash"></a>P-stable Hash</h2><p>目前来讲,还不存在通用的LSH函数,不同的相似度模型LSH也是不同的。上面的jaccard相似度我们使用的minhash,那么对于欧几里得空间我们使用的是P-Stable Hash。</p>
+<h3 id="p-stable-distribution"><a href="#p-stable-distribution" class="headerlink" title="p-stable distribution"></a>p-stable distribution</h3><p>p稳定分布的定义:<br><img src="/articles/84288273/11.png"><br>目前根据相关文献,在$ p \in (0,2]$这个范围内存在稳定分布，我们最常见的是$ p = 1,p = 2$的情况。<br>$p=1$ 时，这个分布就是标准的柯西分布。概率密度函数：$ c(x) = \frac{1}{\pi} \frac{1}{1 + x^2}$<br>$p=2$ 时，这个分布就是标准的正态分布。概率密度函数：$ c(x) = \frac{1}{\sqrt{2\pi}} e^{-x^2/2}$<br>当然，p值不是仅能取1和2. $(0,2]$中的小数也是可以的。<br><strong>p稳定分布一个重要应用就是可以估计给定向量v在欧式空间下的p范数$||v||_p$的长度</strong>:<br>对于一个向量$v$(相当于上面公式中的$ (v_1,v_2,v…v_n)$)现在从p稳定分布中随机选取v的维度(设维度为n)个随机变量(相当于上面公式中的$ X_1,X_2,..X_n$)构成向量$a$，计算$a\cdot v = \sum_i v_iX_i$,此时$ a \cdot v$与$||v||_pX$同分布.我们就可以通过多给几个不同的向量$a$，多计算几个$a\cdot v$的值，来估计$||v||_p$的值。</p>
+<h3 id="p-stable分布LSH函数族构造"><a href="#p-stable分布LSH函数族构造" class="headerlink" title="p-stable分布LSH函数族构造"></a>p-stable分布LSH函数族构造</h3><p>在p稳定的局部敏感哈希中,我们将利用$ a\cdot v$可以估计$||v||_p$的长度来构建hash函数族。(这里并不用来估计$||v||_p$而是构造函数)<br>将空间中的一条直线分成长度为r的等长的若干段，通过一种映射函数(也就是我们需要的,满足局部敏感的函数)，将空间中的点映射到这条直线上,给映射到同一段的点赋予相同的hash值。不难理解,若空间中的两点离的距离越近,他们被映射到一段的概率也就越高。之前说过,$a \cdot v$可以用来估计$||v||_p$的长度，那么$ a \cdot v_1 - a \cdot v_2 = a(v_1 - v_2)$也可以用来估计$||v_1 -v_2||_p$的 长度。<br>由此我们得出结论:<strong>空间中的两个点距离: $||v_1-v_2||_p$近到一定程度时应该被hash成同一hash值,而向量点积的性质正好保持了这种局部敏感性,因此可以用点积来设计hash函数族。</strong><br>有人提出了这一一种hash函数族:</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+h_{a, b}(v) = \lfloor\frac{a \cdot v + b}{r}\rfloor
+\end{equation}</script><p>其中$ b \in (0,r)$是一个随机数,$r$是直线的分段长度,hash函数族的函数是依据$a ,b$的不同建立的。可见,若要空间中的两个点$v_1,v_2$映射为同一hash值需要满足的条件为:<br><strong> 这两个点与a的点积加上随机b的计算结果在同一条线段上。</strong><br>现在估计下这个概率,定义符合p-stable分布的随机变量绝对值的概率密度函数为$f_p(t)$设<br>$ c = ||v_1-v_2||_p$，则$a \cdot v_1 - a \cdot v_2$与$cX$同分布。概率公式如下:</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+p(c) = Pr[h_{a, b}(v_1) =  h_{a, b}(v_2)] = \int_{0}^{r} \frac{1}{c} f_p(\frac{t}{c})(1 - \frac{t}{r})dt
+\end{equation}</script><p>当r值确定的时候,这个公式可以看做是一个仅与C的取值有关的函数。概率p(c)是关于c的单调递减函数，c越大,函数值越小(碰撞概率越低),c越小,函数值越大(碰撞概率越高)。<br>上式$p(c)$的证明:<br>设$a \cdot v_1$在点M处,$a \cdot v_2$在点B出,此处设N点在靠近Q的位置。<br><strong>1.b对映射后点的影响</strong><br><img src="/articles/84288273/12.png"><br><strong>2.点积对映射后点的影响</strong><br><img src="/articles/84288273/13.png"><br>但是关于r的取值，并没有给出一个确定的值。这需要我们根据c与p的值来设定。</p>
+<h3 id="p-stable-分布LSH相似性搜索算法"><a href="#p-stable-分布LSH相似性搜索算法" class="headerlink" title="p-stable 分布LSH相似性搜索算法"></a>p-stable 分布LSH相似性搜索算法</h3><p>我们构建hash table的过程就是要用这个函数族的每一个函数对每一个向量执行hash计算。<strong>为了减少漏报率False Negative（就是本来很相近的两条数据被认为是不相似的）</strong>，一种解决方案是用多个hash函数对向量执行hash运算。比如说,对任意一个向量$v_i$现在准备了k个hash函数$(h_1(), h_2(), \dots , h_k())$这k个hash函数是从LSH函数族中随机选取的k个,这样通过计算,就得到了k个hash值$(h_1(v_i), h_2(v_i), \dots , h_k(v_i))$，而对于查询q用同样的k个hash函数,也能得到一组值$ (h_1(q), h_2(q), \dots , h_k(q))$，这两组值间只要有一个对应位的值相等,我们就认为$v_i$是查询q的一个近邻。<br><strong>但是上面这种做法也存在一个问题,就是说选用k个hash函数确实减少了漏报率,但是也增加了误报率(本来不相近的数据认为是相近的)。所以需要在上面方法的基础上再增加一个措施。</strong>我们从LSH函数族中,随机选取L组这样的函数族,每个函数组都有k个随机选取的函数构成,当然L个函数组之间不一定是一样的。现在这L组函数分别对数据处理,只要有一组完全相等就认为两条数据是相近的。<br>其实上面两段的做法，就是一个简单的AND then OR的逻辑，与我们上面说的min-hash的思路是一致的。<br>现在假设$ P = Pr[h_{a, b}(v_1) =  h_{a, b}(v_2)]$(这个概率可由上面的积分公式算出)，那么两条数据被认为是近邻的概率是:</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+1 - (1 - P^k)^L
+\end{equation}</script><p>构建hash table时，如果把一个函数组对向量的一组hash值$ (h_1(v_i), h_2(v_i), \dots , h_k(v_i))$作为hash bucket的标识，有两个缺点：1. 空间复杂度大；2. 不易查找。为了解决这个问题，我们采用如下方法：<br>先设计两个hash函数：$H_1,H_2$:<br>$H_1:Z^k \to \{0, 1, 2, \dots, size - 1\}$ 简单说就是把一个k个数组成的整数向量映射到hash table的某一个位上，其中size是hash table的长度。<br>$H_2:Z^k \to \{0, 1, 2, \dots, C\},C = 2^{32} - 5$ 是一个大素数<br>这两个函数具体的算法如下，其中$r_i, r_i^{‘}$是两个随机整数</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+H_1(x_1, \dots, x_k) = ((\sum_{i = 1}^{k} r_ix_i) \mod C) \mod size\\
+H_2(x_1, \dots, x_k) = (\sum_{i = 1}^{k} r_i^{'}x_i) \mod C
+\end{equation}</script><p>我们把H2计算的结果成为一个数据向量的“指纹”，这也好理解，它就是由数据向量的k个hash值计算得到的。而H1相当于是数据向量的指纹在hash table中的索引，这个算法跟基本的散列表算法是一个思路.<br>通过这两个新建的函数，我们可以将hash table的构建步骤作以下详细说明：<br>1.从设计好的LSH函数族中，随机选取L组hash函数，每组由k个hash函数构成，记为$\{g_1(\cdot), g_2(\cdot), \dots, g_L(\cdot)\}$,其中:$g_i(\cdot) = (h_1(\cdot), h_2(\cdot), \dots , h_k(\cdot))$<br>2.每个数据向量经过$g_i(⋅)$被映射成一个整型向量，记为$(x_1,…,x_k)$<br>3.将2步生成的$(x_1,…,x_k)(x_1,…,x_k)$通过$H_1,H_2$计算得到两个数值：index,fp，前者是hash table的索引，后者是数据向量对应的指纹。这里，为了方便描述这种hash table的结构，我将我们用的hash table的结构画出，如图Fig.1所示。<br>4.若其中有数据向量拥有相同的数据指纹，那么必然会被映射到同一个hash bucket当中<br><img src="/articles/84288273/14.png"><br><a href="https://github.com/spotify/annoy" target="_blank" rel="noopener">annoy</a></p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/84288273.html">浅谈局部敏感哈希(LSH)</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年11月20日 - 15:11</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/84288273.html" title="浅谈局部敏感哈希(LSH)">https://statusrank.xyz/articles/84288273.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/84288273.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LSH/" rel="tag"><i class="fa fa-tag"></i> LSH</a>
+          
+            <a href="/tags/hash/" rel="tag"><i class="fa fa-tag"></i> hash</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/6a0c1b07.html" rel="next" title="贝叶斯个性化排序(BPR)算法小记">
+                <i class="fa fa-chevron-left"></i> 贝叶斯个性化排序(BPR)算法小记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/9d4ca24c.html" rel="prev" title="浅谈支持向量机(SVM)">
+                浅谈支持向量机(SVM) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LSH定义"><span class="nav-text">LSH定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Min-hash"><span class="nav-text">Min-hash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Jaccard系数"><span class="nav-text">Jaccard系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定理"><span class="nav-text">定理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造LSH函数族"><span class="nav-text">构造LSH函数族</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#P-stable-Hash"><span class="nav-text">P-stable Hash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#p-stable-distribution"><span class="nav-text">p-stable distribution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#p-stable分布LSH函数族构造"><span class="nav-text">p-stable分布LSH函数族构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#p-stable-分布LSH相似性搜索算法"><span class="nav-text">p-stable 分布LSH相似性搜索算法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

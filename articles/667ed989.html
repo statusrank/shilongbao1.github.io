@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="各种基础知识,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最优化是一种数学方法,它是研究在给定约束之下如何寻求某些因素,以使某一些指标达到最优的一些学科的总称.在机器学习中,大部分的机器学习算法的本质都是建立优化模型,通过最优化方法对目标函数(损失函数)进行优化,从而训练出最好的模型.梯度下降法,牛顿法和拟牛顿法是求解无约束最优化问题的常用方法.">
+<meta name="keywords" content="各种基础知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="梯度下降法,牛顿法,拟牛顿法">
+<meta property="og:url" content="https://statusrank.xyz/articles/667ed989.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="最优化是一种数学方法,它是研究在给定约束之下如何寻求某些因素,以使某一些指标达到最优的一些学科的总称.在机器学习中,大部分的机器学习算法的本质都是建立优化模型,通过最优化方法对目标函数(损失函数)进行优化,从而训练出最好的模型.梯度下降法,牛顿法和拟牛顿法是求解无约束最优化问题的常用方法.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/667ed989/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/667ed989/2.gif">
+<meta property="og:image" content="https://statusrank.xyz/articles/667ed989/3.jpg">
+<meta property="og:image" content="https://statusrank.xyz/articles/667ed989/5.png">
+<meta property="og:updated_time" content="2019-01-16T10:24:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="梯度下降法,牛顿法,拟牛顿法">
+<meta name="twitter:description" content="最优化是一种数学方法,它是研究在给定约束之下如何寻求某些因素,以使某一些指标达到最优的一些学科的总称.在机器学习中,大部分的机器学习算法的本质都是建立优化模型,通过最优化方法对目标函数(损失函数)进行优化,从而训练出最好的模型.梯度下降法,牛顿法和拟牛顿法是求解无约束最优化问题的常用方法.">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/667ed989/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/667ed989.html">
+
+
+
+
+  <title>梯度下降法,牛顿法,拟牛顿法 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/667ed989.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">梯度下降法,牛顿法,拟牛顿法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-16T16:29:34+08:00">
+                2019-01-16
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-01-16T18:24:18+08:00" content="2019-01-16">
+      2019-01-16
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/667ed989.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/667ed989.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/667ed989.html" class="leancloud_visitors" data-flag-title="梯度下降法,牛顿法,拟牛顿法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最优化是一种数学方法,它是研究在给定约束之下如何寻求某些因素,以使某一些指标达到最优的一些学科的总称.在机器学习中,大部分的机器学习算法的本质都是建立优化模型,通过最优化方法对目标函数(损失函数)进行优化,从而训练出最好的模型.梯度下降法,牛顿法和拟牛顿法是求解无约束最优化问题的常用方法.<br><a id="more"></a></p>
+<h1 id="梯度下降法"><a href="#梯度下降法" class="headerlink" title="梯度下降法"></a>梯度下降法</h1><p>梯度下降法实现简单,当目标函数为凸函数时,梯度下降法的解是全局最优解.</p>
+<h2 id="梯度"><a href="#梯度" class="headerlink" title="梯度"></a>梯度</h2><p>梯度的定义: 函数在某一点的梯度是这样一个向量,它的方向与取得最大方向导数的方向一致(即<strong>函数沿梯度方向有最大的变化率</strong>),而它的摸为方向导数的最大值.<br>1.梯度是一个向量<br>2.梯度的方向是最大方向导数的方向<br>3.梯度的值是最大方向导数的值</p>
+<h2 id="梯度下降法-1"><a href="#梯度下降法-1" class="headerlink" title="梯度下降法"></a>梯度下降法</h2><p>梯度下降法的优化思想: 用当前位置负梯度方向作为搜索方向,因为该方向为当前位置的最快下降方向.梯度下降法越接近目标值步长越小,前进越慢.<br>梯度下降法过程如下:<br><img src="/articles/667ed989/1.png"><br><strong>缺点:</strong><br>梯度下降法越靠近极小值,下降变慢;对于学习率(步长的选择不当)可能会造成’之’字形下降.</p>
+<h1 id="牛顿法"><a href="#牛顿法" class="headerlink" title="牛顿法"></a>牛顿法</h1><h2 id="方程的根"><a href="#方程的根" class="headerlink" title="方程的根"></a>方程的根</h2><p>牛顿法最经典的应用就是来求解方程根的问题,因为并不是所有的方程都有求根公式,或者比较复杂求解起来比较困难.<br>首先利用泰勒公式,在$x_0$出一阶展开:</p>
+<script type="math/tex; mode=display">
+f(x) = f(x_0) + f'(x_0)(x-x_0)</script><p>那么我们要求解$f(x) = 0$等价于:</p>
+<script type="math/tex; mode=display">
+f(x_0) + f'(x_0)(x-x_0)</script><p>进而有:</p>
+<script type="math/tex; mode=display">
+x = x_0 - \frac{f(x_0)}{f'(x_0)}</script><p><strong>注意</strong>这里因为是使用泰勒公式一阶展开,所以$f(x) = f(x_0) + f’(x_0)(x-x_0)$并不是完全相等,而是近似相等,所以这里我们求得的$x$并不一定能使得$f(x) = 0$只是相比于$f(x_0)$的值更接近0.<br>所以我们可以得到迭代求解法:</p>
+<script type="math/tex; mode=display">
+x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}</script><p>已经证明,如果$f’$是连续的,并且待求的零点x孤立,那么在零点x周围存在一个区域,只要初始值$x_0$在这个区域内,那么牛顿法必定收敛.<br>过程如下:<br><img src="/articles/667ed989/2.gif"></p>
+<h2 id="最优化"><a href="#最优化" class="headerlink" title="最优化"></a>最优化</h2><p>在最优化问题中,目标函数$f(x)$存在极值的条件是<strong>极值点处一阶导数为0</strong>,即$f’(x_0) = 0$.这时候就发现其实还是用到上面说到的那种方法.<br>我们可以将$f’(x)$使用泰勒公式进行一阶展开,得到:</p>
+<script type="math/tex; mode=display">
+f'(x) = f'(x_0) + f''(x_0)(x-x_0)</script><p>同样的令$f’(x) = 0$,那么有迭代公式:</p>
+<script type="math/tex; mode=display">
+x_n = x_{n-1} + \frac{f'(x_{n - 1})}{f''(x_{n - 1})} ,n = 1,2,3....</script><p>一般认为牛顿法可以利用曲线本身的信息,比梯度下降法更容易收敛.(因为还考虑了二阶导数的信息),如下图是一个最小化一个目标方程的例子, 红色曲线是利用牛顿法迭代求解, 绿色曲线是利用梯度下降法求解.<br><img src="/articles/667ed989/3.jpg"></p>
+<h3 id="牛顿法一般公式"><a href="#牛顿法一般公式" class="headerlink" title="牛顿法一般公式"></a>牛顿法一般公式</h3><p>上面我们讨论的都是2维的情况,高维情况的牛顿法迭代公式为:</p>
+<script type="math/tex; mode=display">
+{x_{n + 1}} = {x_n} – {[Hf({x_n})]^{ – 1}}\nabla f({x_n}),n \ge 0</script><p>其中$H$是hessian矩阵,$\nabla f({x_n})$是$f(x)$的梯度向量在$x_n$处的值.<br>$f(x)$有极值的必要条件: 它的一阶导在极值点处取值为0,若是极小值点,则要求Hessian矩阵为正定矩阵.</p>
+<h3 id="hessian矩阵和-Jacobian矩阵"><a href="#hessian矩阵和-Jacobian矩阵" class="headerlink" title="hessian矩阵和# Jacobian矩阵"></a>hessian矩阵和# Jacobian矩阵</h3><h4 id="jacobian矩阵"><a href="#jacobian矩阵" class="headerlink" title="jacobian矩阵"></a>jacobian矩阵</h4><p>jacobian矩阵是一阶偏导数以一定方式排列成的矩阵,其行列式成为jacabian行列式,jacabian类似于多元函数的导数.</p>
+<h4 id="Hessian矩阵"><a href="#Hessian矩阵" class="headerlink" title="Hessian矩阵"></a>Hessian矩阵</h4><p>在数学中,hessian矩阵是一个自变量为向量的实值函数的二阶偏导数组成的方块矩阵,此函数如下:</p>
+<script type="math/tex; mode=display">
+f({x_1},{x_2} \ldots ,{x_n})</script><p>如果所有的二阶导数都存在,那么$f$的Hessian矩阵为$H(f)$:</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix} 
+\frac{\partial^2 f}{\partial x_1^2} & \frac{\partial^2 f}{\partial x_1\,\partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_1\,\partial x_n} \\  \\ 
+\frac{\partial^2 f}{\partial x_2\,\partial x_1} & \frac{\partial^2 f}{\partial x_2^2} & \cdots & \frac{\partial^2 f}{\partial x_2\,\partial x_n} \\  \\ 
+\vdots & \vdots & \ddots & \vdots \\  \\ 
+\frac{\partial^2 f}{\partial x_n\,\partial x_1} & \frac{\partial^2 f}{\partial x_n\,\partial x_2} & \cdots & \frac{\partial^2 f}{\partial x_n^2} 
+\end{bmatrix}</script><h3 id="牛顿法优缺点"><a href="#牛顿法优缺点" class="headerlink" title="牛顿法优缺点"></a>牛顿法优缺点</h3><p>从本质上看牛顿法是二阶收敛(最优化时,),而梯度下降法是一阶收敛.如果通俗的说就是,梯度下降法每次从你当前所处的位置选一个坡度最大的方向走一步,牛顿法在选择方向时不仅会考虑坡度是否够大,还会考虑你走了一步之后坡度是否会变得更大.<strong>所以，可以说牛顿法比梯度下降法看得更远一点，能更快地走到最底部。（牛顿法目光更加长远，所以少走弯路；相对而言，梯度下降法只考虑了局部的最优，没有全局思想。）</strong><br>缺点: 可以上面每一次迭代都需要求解Hessian矩阵及其逆矩阵,计算复杂.<br>这就引出了拟牛顿法</p>
+<h1 id="拟牛顿法"><a href="#拟牛顿法" class="headerlink" title="拟牛顿法"></a>拟牛顿法</h1><p>在牛顿法的迭代中,需要计算Hessian矩阵及其逆矩阵,计算过程比较复杂,考虑使用一个n阶矩阵$G_k = G(x_k)$来代替Hessian矩阵$H_k^{-1} = H^{-1}(x_k)$,这是牛顿法的<strong>基本思想</strong>.<br>那么满足什么条件的$G_k$才能用来代替$H_k^{-1}$呢?我们先来看一下$H_k$满足的条件,又叫拟牛顿条件.</p>
+<h2 id="拟牛顿条件"><a href="#拟牛顿条件" class="headerlink" title="拟牛顿条件"></a>拟牛顿条件</h2><script type="math/tex; mode=display">
+\nabla f(x_{k + 1}) = \nabla f(x_k) -  H_k(x_{k + 1} - x_k)</script><p>从而有:</p>
+<script type="math/tex; mode=display">
+H_k^{-1}(\nabla f(x_{k + 1})  -\nabla f(x_k) ) = x_{k + 1} - x_k</script><p>记:<br>$y_k = g_{k + 1} - g_k= \nabla f(x_{k + 1})  -\nabla f(x_k)$;<br>$\delta_k = x_{k + 1} - x_k$<br>此外如果$H_k$是正定的($H^{-1}_k$也是正定的),那么可以保证牛顿法搜索方向<br>$-H^{-1}_k \nabla f(x_k)$是下降方向,所以$G_k$要扮演$H^{-1}_k$的角色,应当满足同样的条件,即:<br>1)替代矩阵$G_k$正定,只有正定才能保证牛顿法的搜索方向是向下搜索的.<br>2)替代矩阵$G_k$满足拟牛顿条件,$G_k(\nabla f(x_{k + 1}) - \nabla f(x_k)) = x_{k + 1} - x_k$<br>显然$G_K$的选择并不是唯一的,因为每次迭代都需要更新替代矩阵$G_k$,$G_{k + 1} = G_k + \Delta G_k$<br>这里对DFP算法和DFGS算法做简单的介绍.</p>
+<h2 id="DFP算法"><a href="#DFP算法" class="headerlink" title="DFP算法"></a>DFP算法</h2><p>DFP算法选择$G_{k + 1}$的方法是: 假设每一步迭代中矩阵$G_{k + 1}$是由$G_k$ 加上两个附加项构成的,即$G_{k + 1} = G_k + P_k + Q_k$<br>其中$P_k,Q_k$是待定矩阵.此时有: $G_{k+ 1}y_k = G_ky_k + P_ky_k + Q_ky_k$<br>为使$G_{k + 1}$满足拟牛顿条件,那么可使$P_K,Q_k$满足:</p>
+<script type="math/tex; mode=display">
+P_ky_k = \delta_k \\ Q_ky_k = -G_ky_k</script><p>事实上,不难找出满足条件的$P_k,Q_k$,例如取:</p>
+<script type="math/tex; mode=display">
+P_k = \frac{\delta_k\delta^T_k}{\delta^T_ky_k} \\
+Q_k = \frac{G_ky_ky^T_kG_k}{y^T_kG_ky_k}</script><p>称为DEP算法。可以证明，如果初始矩阵 $G_0$ 是正定的，则迭代过程中每个矩阵 $G_k$都是正定的。</p>
+<h2 id="BFPS算法"><a href="#BFPS算法" class="headerlink" title="BFPS算法"></a>BFPS算法</h2><p>DFP算法考虑用$G_k$逼近Hessian矩阵的逆$H^{-1}$,而BFPS算法考虑用$B_k$去逼近Hessian矩阵$H_k$.此时对应的拟牛顿条件为:<br><img src="/articles/667ed989/5.png"><br>可以证明,如果初始矩阵$B_0$是正定的,则迭代过程中每个矩阵$B_k$都是正定的.</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/667ed989.html">梯度下降法,牛顿法,拟牛顿法</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2019年01月16日 - 16:01</p>
+  <p><span>最后更新:</span>2019年01月16日 - 18:01</p>
+  <p><span>原始链接:</span><a href="/articles/667ed989.html" title="梯度下降法,牛顿法,拟牛顿法">https://statusrank.xyz/articles/667ed989.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/667ed989.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/各种基础知识/" rel="tag"><i class="fa fa-tag"></i> 各种基础知识</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/52563db7.html" rel="next" title="LeetCode Longest Common Prefix">
+                <i class="fa fa-chevron-left"></i> LeetCode Longest Common Prefix
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/78db25ba.html" rel="prev" title="总结一下LeetCode上的KSum问题(实时更新)">
+                总结一下LeetCode上的KSum问题(实时更新) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/1351144d.html">数据结构知识点总结</a></li><li><a href="/articles/eb3df616.html">算法知识点总结</a></li><li><a href="/articles/9943af19.html">c语言中移位运算符</a></li><li><a href="/articles/undefined.html">二进制中1的个数</a></li><li><a href="/articles/763f1e1a.html">线性代数知识点总结</a></li><li><a href="/articles/4ec2a632.html">高等数学————可微、可导、可积与连续之间的关系</a></li><li><a href="/articles/8fbac0b2.html">C++知识点总结</a></li><li><a href="/articles/58427e42.html">操作系统知识点总结</a></li><li><a href="/articles/ef59843b.html">深度学习数学基础</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度下降法"><span class="nav-text">梯度下降法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度"><span class="nav-text">梯度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度下降法-1"><span class="nav-text">梯度下降法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#牛顿法"><span class="nav-text">牛顿法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方程的根"><span class="nav-text">方程的根</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最优化"><span class="nav-text">最优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#牛顿法一般公式"><span class="nav-text">牛顿法一般公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hessian矩阵和-Jacobian矩阵"><span class="nav-text">hessian矩阵和# Jacobian矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jacobian矩阵"><span class="nav-text">jacobian矩阵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hessian矩阵"><span class="nav-text">Hessian矩阵</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#牛顿法优缺点"><span class="nav-text">牛顿法优缺点</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拟牛顿法"><span class="nav-text">拟牛顿法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#拟牛顿条件"><span class="nav-text">拟牛顿条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DFP算法"><span class="nav-text">DFP算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BFPS算法"><span class="nav-text">BFPS算法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

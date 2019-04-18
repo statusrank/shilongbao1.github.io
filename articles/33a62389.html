@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="RS,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="论文知乎上的中文回答SPTF具体来说还是基于张量分解TF的一种方法,同时也还是基于score learning的。">
+<meta name="keywords" content="RS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Scalable Probabilistic Tensor Factorization(SPTF)">
+<meta property="og:url" content="https://statusrank.xyz/articles/33a62389.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="论文知乎上的中文回答SPTF具体来说还是基于张量分解TF的一种方法,同时也还是基于score learning的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/11.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/12.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/13.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/14.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/15.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/16.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/17.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/18.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/19.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/20.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/21.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/22.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/22.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/33a62389/24.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A Scalable Probabilistic Tensor Factorization(SPTF)">
+<meta name="twitter:description" content="论文知乎上的中文回答SPTF具体来说还是基于张量分解TF的一种方法,同时也还是基于score learning的。">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/33a62389/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/33a62389.html">
+
+
+
+
+  <title>A Scalable Probabilistic Tensor Factorization(SPTF) | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/33a62389.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">A Scalable Probabilistic Tensor Factorization(SPTF)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-14T18:51:56+08:00">
+                2018-11-14
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/33a62389.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/33a62389.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/33a62389.html" class="leancloud_visitors" data-flag-title="A Scalable Probabilistic Tensor Factorization(SPTF)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://net.pku.edu.cn/daim/hongzhi.yin/papers/ICDM17.pdf" target="_blank" rel="noopener">论文</a><br><a href="https://zhuanlan.zhihu.com/p/36109076" target="_blank" rel="noopener">知乎上的中文回答</a><br>SPTF具体来说还是基于张量分解TF的一种方法,同时也还是基于score learning的。<br><a id="more"></a></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>用户历史行为可以被分为两种类型: 显示反馈(explicit feedback)和隐式反馈(implicit feedback). explicit feedback包括用户关于他们感兴趣的item的显示输入,主要体现在对item的rating(评分)。但是explicit feedback并不总是能够获得。更多的情况下,隐式评分通过用户的行为例如点击或不点击,买或不买等表达出来,这些更容易常见也更容易获得。<strong> 关于implicic feedback的一个缺陷就是只有正反馈我们才能观察到(比如user点击了某件item,或者购买了item等,对于不点击和不购买我们无法获知,且那些negative中并不是所有的都是对此不感兴趣,也可能user暂时不买,以后会买等)</strong>。仅仅根据上面所说的正样例或者可观察到的协同过滤(CF)我们成为one-class Collaborative Filtering(OCCF).<br>现在很多工作集中在同质的用户行为上,并没有考虑到现实世界中用户行为的多样性和异质性。比如,典型的电商平台中用户的行为类型最少有四种(点击,加入购物车,收藏,购买)。<strong>不同的用户行为类型暗示着不同的语义和用户意图。</strong>人们和item交互的方式在理解用户意图和建模用户兴趣时是关键。也就是说我们关注的不是用户和什么交互了,而是用户怎样和item交互。另外,在单一行为类型上的(例如购买)用户隐式反馈数据是很稀疏的,因此，必须集体利用丰富的异构行为数据来增强每种类型的行为预测，尤其是对稀疏行为类型的预测（例如，购买预测）。<br>在这个论文中作者提出了SPTF模型,每个用户行为记录都是三元组(user,type,item)表示而不是二元组,我们区分不同的行为类型因为他们传达了不同的语义。SPTF为每个user,item,type学习潜在的向量表示。张量是对象之间多种关系的有用方式，张量因子分解被视为预测未来他们可能关系的重要手段。但是现存的TF模型如BPTF何RESCAL忽视了所有的未观察的样本,正如MF对explicit feedback 所做的那样。<br>为了解决这个问题作者提出了<strong>非负采样技术。</strong>那些未观察到的样本,例如用户没有购买某个item等,是<strong>真正负样本(例如用户对某个item不感兴趣)和潜在的正样本(用户在未来可能会想买这个item)的混合</strong>。这对确定真正具有代表性的负面例子来说十分有挑战性。一个广泛采用的方案是把所有未观察到的样本全部看成是负样本,这种方案在小数据上运行良好比如 weighted MF 和 BPR-based。但是这种方法会限制预测的准确率,因为一些丢失的数据可能是正的。而且这种方法无法用到大规模数据上,计算量大。<br>另外,在这个问题当中用户行为是异构的,正样例的分布是非常不均匀的。比如在数据中点击动作类型所占数据的比例大,其他的动作比较少等。如果这样训练下去的话最后训练出来的model可能会很大程度偏向于预测click。据此,作者提出了适应性基于排序的采样方法,主要思想就是在low-rank的正样例应该有更高的概率被采样,因为这种正样本存在更多的信息同时对修正当前模型的参数很有帮助，</p>
+<h3 id="主要贡献"><a href="#主要贡献" class="headerlink" title="主要贡献"></a>主要贡献</h3><p>1.本文提出了语义感知的用户行为预测的研究问题，目的是为了预测用户某种特定行为下最有可能的top-n个产品。<br>2.提出了一种可大规模扩展的基于概率的张量分解模型，用于建模可以感知语义多样性的用户行为数据。提出了双向流行度偏差化负例采样方法来优化该模型。<br>3.提出了一种适应性基于排序的正例采样策略用于生成训练数据。</p>
+<h2 id="模型描述"><a href="#模型描述" class="headerlink" title="模型描述"></a>模型描述</h2><p>user集合$U = \{u_1,u_2,…u_I\}$<br>item集合$V = \{v_1,v_2,…v_J\}$<br>behavior集合$ T = \{t_1,t_2,…t_K\}$<br>$x(i,j,k)$表示一条行为记录。<br><img src="/articles/33a62389/1.png"></p>
+<p>我们的目标是:<strong> 给定一个目标用户和操作类型,我们去预测$u_i$执行动作$t_k$时最优可能的前N个item</strong><br>每种用户，商品，行为类别被表示为一个D维的隐向量，$y(i,j,k) $表示一组用户行为信息,用$u_i,v_j,t_k$表示,$ \theta = \{u_i,t_k,v_j\}$代表我们的模型参数.我们的得分函数$f$,用来预测$x(i,k,j)$的存在,他表示了在给定参数$\theta$，三元组$x(i,k,j)$存在的置信度。<img src="/articles/33a62389/2.png"></p>
+<p>公式2理解为,所有的用户行为数据 $y_{ijk}$是基于独立条件概率于给定的user,item,behavior的隐向量。模型通过一个评分方程$f(x_{ijk};\Theta)$来建模一组用户数据$x_{ikj}$的存在性，评分方程表示了模型的confidence。 $\sigma(x) = \frac{1}{(1+e^{-x})}$ 为sigmoid逻辑函数,它将评分函数映射到(0,1)之间从而表示概率。$Ber(y|p)$为伯努利分布,表示为:<img src="/articles/33a62389/3.png"><br>多种张量分解模型TF,CP,Pairwise Interaction Factorization (PIF)可以用来实现提出的SPTF模型,此工作采用了PIF:<br><img src="/articles/33a62389/4.png"><br>根据概率矩阵分解成功的经验,我们在被优化参数上采用高斯先验分布,模型的概率生成如下:<br><img src="/articles/33a62389/5.png"><br>基于上面我们模型的概率生成过程,通过简单的<a href="https://www.cnblogs.com/hxsyl/p/4876465.html" target="_blank" rel="noopener">贝叶斯推断</a>,user,item,behavior的隐向量的后验分布如下:<br><img src="/articles/33a62389/6.png"><br>U, V, T 是由 u, v, t为列向量所构成的矩阵。优化目标是最大化公式5种的似然函数，其等价于公式6种最小化负对数似然函数。</p>
+<h2 id="模型优化"><a href="#模型优化" class="headerlink" title="模型优化"></a>模型优化</h2><p>直接优化Eq(6)的代价非常昂贵,因为数据中未观测到的数据为3次方用户或商品的数量。同时,<strong>并不是所有的未观察的样本都是真正的负样本。因此,从负样本采样得到了灵感,相对于利用所有未观测的样本,作者选择一些最有可能的负样本来优化模型。</strong></p>
+<h3 id="双向负例采样"><a href="#双向负例采样" class="headerlink" title="双向负例采样"></a>双向负例采样</h3><p>采样的概率非常重要,现有的负采样方法都只替换triple的一边来构建负例,称为统一方向采样。<br>具体的说,比如给定一组用户交互行为$(u_i,t_k,v_j)$，大多数目前的方法通过固定$u_i,t_k$同时根据一个噪声比例替换$v_j$来构建负例(寻找那些$u_i$对$v_j$从未有过$t_k$的item)。<br>如果我们只从用户角度去构建负例,如同BPR方法里的那样，那么模型就不能准确的学习到商品V的隐向量。因为在这种情况下,只有正的用户(用户i对商品j有过t行为)被考虑到，因此学习到的商品v的隐向量则不能分别其正用户和负用户。<br>本文采用的双向负例菜一样方法,首先固定$u,t$采样$v$,然后固定$t,v$采样$u$。然后该如何决定<strong>采样概率</strong>呢?为此作者提出如下负采样方法:<br>1.Popularity-biased Item Sampling (PIS): 采用<img src="/articles/33a62389/7.png">作为负采样item的概率分布。$ \sum_i Y(i,k,n)$表示动作$t_k$下的$v_n$的流行度。<strong>给定一个user,它未通过$t_k$和这些受欢迎的items交互,就有很高的概率是真正的负样例。</strong><br>2.Popularity-biased User Sampling (PUS):采用<img src="/articles/33a62389/8.png">作为负采样user的概率分布。那些通过动作$t_k$和许多items交互,但是未和此$v_j$交互的，就有很高的概率对$v_j$不感兴趣。<br>$N$为对一个正例$(u_i,t_k,v_j)$采样负item和负user的数量，我们的目标函数如下:<br><img src="/articles/33a62389/9.png"><br>因此任务就是使用逻辑回归的方法将正例从他们相应的负例中区分开。<br>我们的目标函数如下:<br><img src="/articles/33a62389/10.png"><br>算法流程:<img src="/articles/33a62389/11.png"></p>
+<h3 id="适应性正样本采样策略"><a href="#适应性正样本采样策略" class="headerlink" title="适应性正样本采样策略"></a>适应性正样本采样策略</h3><p>由于用户行为数据是多种多样的,并且对于每种行为,其分布也是广泛不均匀的。大多数优化算法在优化过程中,默认所有的行为数据分布是均匀的,这就会产生问题，比如占比重大的用户行为类型数据将会被采样的非常多,相对来说一部分占比较少的用户行为记录将会被采样的非常少。这样的后果就是,<strong>占比多的交互行为类别将会被预测的非常准确,而那些分布比较少的行为类型预测精度就会不足。</strong><br>此外即使对于相同类型的用户行为,每个正例的重要性和信息性也是不相同的,并且可能在模型训练中发生变化。我们期望的正采样器选择那些当前学习状态下信息性强(对于当前的模型参数集$\Theta$)并且对修正模型更有帮助的高概率的正例。(至于为什么适应性正采样可以这里我有点懵。。)<br>因此本文提出为每个正例计算出一个权重:<img src="/articles/33a62389/12.png"><br>然后采样概率计算如下:<img src="/articles/33a62389/13.png"><br>作者提出使用连续采样程序去重复采样负例直到我们找到一个负例$x(i,k,n)$它的得分比$x(i,k,j)$大来估计$rank(i,k,j)$。这样的负例我们叫做imposter，$Nikj$表示我们需要 采样多少个负例才能找到一个imposter,则$rank(i,k,j)$近似为<br>$ \lfloor \frac{Nik + 1}{Nikj}\rfloor$<br><img src="/articles/33a62389/14.png"></p>
+<h3 id="语义感知用户行为预测"><a href="#语义感知用户行为预测" class="headerlink" title="语义感知用户行为预测"></a>语义感知用户行为预测</h3><p>一旦我们的模型参数$\Theta$被估计好后,我们就可以进行语义感知用户行为预测。也就是说,给定我们一个$u_i$和动作$t_k$我们根据$f$算出的得分去预测$u_i$在动作$t_k$下的top-n items。</p>
+<h2 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h2><p>此实验使用了Tmall 2014年公开的数据集,大约有2000w条记录。</p>
+<h3 id="Data-Format"><a href="#Data-Format" class="headerlink" title="Data Format"></a>Data Format</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">user_id item_id action_type</span><br><span class="line">   <span class="string">'''</span></span><br><span class="line"><span class="string">   user_id 标识唯一user</span></span><br><span class="line"><span class="string">   item_id 标识唯一item</span></span><br><span class="line"><span class="string">   action_type = &#123;1,2,3,4&#125; 分别表示 click,add-to-favorite,add-to-cart,purchase</span></span><br><span class="line"><span class="string">   另外paper中提到原数据中应该还有timestamps 字段,是该交互行为发生的时间。但是在公开的dataset中并没有。</span></span><br><span class="line"><span class="string">   '''</span></span><br></pre></td></tr></table></figure>
+<h3 id="预测准确率的评估"><a href="#预测准确率的评估" class="headerlink" title="预测准确率的评估"></a>预测准确率的评估</h3><p>所有观察到的implicit feedback 组成的集合为$ D^+$ ，我们根据其中的timestamps字段就行排序,然后将我们的数据集分为 $Train/test/validation = 80/10/10 \%$. </p>
+<h4 id="命中率-Hits-ratio"><a href="#命中率-Hits-ratio" class="headerlink" title="命中率 Hits ratio"></a>命中率 Hits ratio</h4><p>为了评估预测模型,采用了推荐系统和知识图舍去广泛采用的方法<strong>命中率 Hits ratio</strong>.<br><strong>如何计算命中率?</strong> 对于每个$x_{ikj} \in D^+_{test} , x_{ikj} = (u_i,t_k,v_j)$:<br>1.我们首先随机选择10000件 item $v_l$, 要求:$u_i$从未对$v_l$有过$t_k$动作。选择这样10000个triplet $(u_i,t_k,v_l)$ 组成我们的负样本。<br>2.根据Eq(4)的基于PIF的得分函数我们计算这10001个triplet的score。<br>3.根据他们的score进行排序,组成一个ranked list .设 $rank(x_{ikj})$表示正例$x_{ikj}$ranked list中的排名。<br>4.我们从ranked list中选择前n个来组成我们预测的Top-n item. 如果<br>$ rand(x_{ikj}) &lt;= n$,那么就是命中,否则就是不命中。<br>Hits ratio计算公式如下:<br><img src="/articles/33a62389/15.png"><br>hit@n : 对于单个$xikj$ 如果其$ rank &lt;= n$即被选中就是1,,否则为0<br>#hit@n 即为所有hit@n的和，所以可以看出Hits@n其实就是hit@n的均值。<br><strong>我们还可以将数据根据action type 分为4组三元组,这样可以进一步分析对于每种特定类型的用户行为预测的性能。</strong> </p>
+<h4 id="Mean-Reciprocal-Rank-MRR"><a href="#Mean-Reciprocal-Rank-MRR" class="headerlink" title="Mean Reciprocal Rank(MRR)"></a>Mean Reciprocal Rank(MRR)</h4><p>MRR是平均倒数排序的简称。MRR方法计算每一个查询中第一个相关结果位置的倒数。(在这里就是我们的每一个$x_{ikj}$ 在ranked list中的rank的倒数)<br>定义如下:<br><img src="/articles/33a62389/16.png"><br>MRR是所有正样例在其所有采样的负样例中的rank的倒数。显然一个好的预测模型应该有更大的MRR值。</p>
+<h4 id="超参数优化"><a href="#超参数优化" class="headerlink" title="超参数优化"></a>超参数优化</h4><p><a href="https://blog.csdn.net/hdu_lazy_man/article/details/79590598" target="_blank" rel="noopener">网格搜索与交叉验证</a><br>使用网格搜索方法去寻找最优超参数得到 $ D = 50, λ_U = 0.001, λ_T = 0.0001, λ_V = 0.01$<br>$ D $ 为潜在向量空间的维度。</p>
+<h4 id="评估模型的效率和可扩展性"><a href="#评估模型的效率和可扩展性" class="headerlink" title="评估模型的效率和可扩展性"></a>评估模型的效率和可扩展性</h4><p>除了预测准确性之外，我们还根据时间成本评估模型训练的效率。 由于采用异步随机梯度下降算法进行模型优化，我们还通过改变线程数来测试模型训练过程的加速比。</p>
+<h3 id="对比方法"><a href="#对比方法" class="headerlink" title="对比方法"></a>对比方法</h3><p>主要是比较了一些TF和MF的方法。<br>大体瞟了一眼引用paper,发现作者比较的TF和MF的方法稍微比较古老,所以原理啥的暂时不看了,只是看了一下为什么SPTF优于他们。<br>1.BPTF<br>BPTF是设计在显示反馈数据集的得分预测,它只考虑了可以观察到的样例。<br>2.RESCAL<br>RESCAL是用于分解知识图的最先进的张量分解模型。 与BPTF不同，“predicate”（例如，我们问题中的行为类型）由矩阵而不是向量表示。 因此，它具有更强大的表达能力和更多的参数来估计。 同样的，RESCAL只从观察到的例子中学习。<br>3.BPR-PITF<br>BPR-PITF是Tucker分解的一个特例,它明确的建模了user，item，type之间的成对交互。 通过贝叶斯个性化排名（BPR）标准的适应来学习该模型。<strong>在此模型中,所有未观察的例子都被看成是负例,并且每个训练案例都是均匀的。(也就是说每个正例被选择的概率是相等的)。</strong>尽管SPTF选择了同样的成对交互方法去分解张量,但是通过不同的损失函数和优化方法来学习模型。另外,SPTF并没有将所有的未观察的例子全部看成负例,而是使用双向流行度偏差负采样方法来选择那些更有可能的负样例,还使用了基于自适应排序的正抽样方法去解决数据集中action type的不均匀问题。<br>4.BPR-SMF<br>与BPR-PITF相比，BPR-SMF是单独的基于BPR的矩阵分解。这里四个user-item 的矩阵，每个矩阵存储一种特定类型的用户行为。我们将基于BPR的矩阵分解模型分别用于每个矩阵,并且为每个user或item学习4个潜在的向量,这些向量分别与他们的4种action type 对应。因此，相同用户或项目的潜在向量不在四个矩阵中共享。 我们采用基于BPR的矩阵分解模型，因为它在one-class协同过滤(OCCF)中具有出色的性能。</p>
+<p>作者使用四个SPTF变体(也就是控制变量法)来研究SPTF所提出的几种方法的性能。<br>如图:<br><img src="/articles/33a62389/17.png"></p>
+<h3 id="Effectiveness-of-Semantic-Aware-User-Behavior-Prediction"><a href="#Effectiveness-of-Semantic-Aware-User-Behavior-Prediction" class="headerlink" title="Effectiveness of Semantic-Aware User Behavior Prediction"></a>Effectiveness of Semantic-Aware User Behavior Prediction</h3><p>下面是SPTF与上面提到的四种方法的关于$#Hit@n$的比较,我们只比较了Top-n，n分别为1,5,10,15,20.当n再大通常没有意义。可以看出在n&lt;=5时 对于命中率的提升最明显。<br><img src="/articles/33a62389/18.png"><br>通过上面我们发现：<br>1.SPTF,BPR-PITF和BPR-SMF的预测准确率比BPTF和RESCAL更高,<strong>因为这三种方法都使用了负例,而RESCAL和BPTF都只考虑了正例。</strong>BPTF只是对于显示得分的预测。<br>2.SPTF和BPR-PITF比BPR-SMF要好。<strong>这证明了在多种关系数据上的整体分解建模要比基于独立分解的方法好，因为整体分解模型通过在所有关系中共享同样的潜在向量能够有效的解决数据稀疏的问题。</strong><br>3.BPR_SMF在click行为上的预测要好于其在其他三种type上的预测,因为我们有充足的关于click action的训练数据<br>4.尽管SPTF和BPR_PITF使用同样的pair-wise张量分解方法,但是他们两个采用了不同的负采样方法（BPR_PITF将所有未观察到的全部看成负的）和不同的正采样策略。<br>5.另外，五种方法的MRR和他们的命中率高度一致:<br><img src="/articles/33a62389/19.png"></p>
+<h3 id="不同因素的影响"><a href="#不同因素的影响" class="headerlink" title="不同因素的影响"></a>不同因素的影响</h3><h4 id="不同采样策略分析"><a href="#不同采样策略分析" class="headerlink" title="不同采样策略分析"></a>不同采样策略分析</h4><p>主要讨论了SPTF提出的三种方法: 基于流行度偏差负采样、双向负采样以及适应的基于排序的正采样。<br>Figure2展示了对于Table2的五种SPTF的比较结果。<br><img src="/articles/33a62389/20.png"></p>
+<h4 id="敏感性分析"><a href="#敏感性分析" class="headerlink" title="敏感性分析"></a>敏感性分析</h4><p>这一部分作者讨论了SPTF中的超参数,包括负例的个数N,随机梯度下降的步数M,训练样例的个数以及在适应性基于排序的采样方法中我们采样负例的个数$ N_{ikj}$ .<br>如图: <img src="/articles/33a62389/21.png"><br>可以看到当$ N&gt;=4 $时,开始变得稳定了。<br>下图展示了$N_{ikj}$ 的个数<br><img src="/articles/33a62389/22.png"><br>可以看出当$ N_{ikj} &gt;= 15$变得逐渐稳定。<br>下图展示了随机梯度下降的步数M,当$ M &gt;= 300000000$就收敛了。<br><img src="/articles/33a62389/22.png"></p>
+<h3 id="效率和可扩展性的评估"><a href="#效率和可扩展性的评估" class="headerlink" title="效率和可扩展性的评估"></a>效率和可扩展性的评估</h3><p>这里主要讲的是在GPUs上的线程数与预测准确率 还有加速比,以及同等硬件环境下的上述四种方法与SPTF训练所需要的时间。。</p>
+<h3 id="行为语义的相似性分析"><a href="#行为语义的相似性分析" class="headerlink" title="行为语义的相似性分析"></a>行为语义的相似性分析</h3><p><strong>这里主要研究了任意两种类型的用户行为之间的语义相似性。</strong>主要是研究了学习到的四种行为类型的潜在向量之间的相似度.给定任意两个action type $ t_i,t_j$ ，计算出他们的内积以及欧式距离来表示他们之间的相似度。 结果如下:<img src="/articles/33a62389/24.png"><br>可以看出加入购物车和收藏与购买之间的相似度较大,这意味着添加到收藏夹和添加到购物车的行为数据具有更强大的潜力来改善用户购买行为的预测。同时也发现添加到收藏夹与购买之间的相似度比添加到购物车与购买之间的相似度要大。</p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/33a62389.html">A Scalable Probabilistic Tensor Factorization(SPTF)</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年11月14日 - 18:11</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/33a62389.html" title="A Scalable Probabilistic Tensor Factorization(SPTF)">https://statusrank.xyz/articles/33a62389.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/33a62389.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RS/" rel="tag"><i class="fa fa-tag"></i> RS</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/cdf3f0c1.html" rel="next" title="Dual Metric Space Learning for Modeling Heterogeneous User Behaviors">
+                <i class="fa fa-chevron-left"></i> Dual Metric Space Learning for Modeling Heterogeneous User Behaviors
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/6a0c1b07.html" rel="prev" title="贝叶斯个性化排序(BPR)算法小记">
+                贝叶斯个性化排序(BPR)算法小记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/6a0c1b07.html">贝叶斯个性化排序(BPR)算法小记</a></li><li><a href="/articles/cdf3f0c1.html">Dual Metric Space Learning for Modeling Heterogeneous User Behaviors</a></li><li><a href="/articles/ed2225da.html">Collaborative Metric Learning(CML)论文总结</a></li><li><a href="/articles/37cad335.html">Extreme Learning to Rank via Low Rank Assumption论文解读</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#主要贡献"><span class="nav-text">主要贡献</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型描述"><span class="nav-text">模型描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型优化"><span class="nav-text">模型优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#双向负例采样"><span class="nav-text">双向负例采样</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适应性正样本采样策略"><span class="nav-text">适应性正样本采样策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语义感知用户行为预测"><span class="nav-text">语义感知用户行为预测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiment"><span class="nav-text">Experiment</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-Format"><span class="nav-text">Data Format</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预测准确率的评估"><span class="nav-text">预测准确率的评估</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命中率-Hits-ratio"><span class="nav-text">命中率 Hits ratio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mean-Reciprocal-Rank-MRR"><span class="nav-text">Mean Reciprocal Rank(MRR)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#超参数优化"><span class="nav-text">超参数优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#评估模型的效率和可扩展性"><span class="nav-text">评估模型的效率和可扩展性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对比方法"><span class="nav-text">对比方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Effectiveness-of-Semantic-Aware-User-Behavior-Prediction"><span class="nav-text">Effectiveness of Semantic-Aware User Behavior Prediction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同因素的影响"><span class="nav-text">不同因素的影响</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#不同采样策略分析"><span class="nav-text">不同采样策略分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#敏感性分析"><span class="nav-text">敏感性分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效率和可扩展性的评估"><span class="nav-text">效率和可扩展性的评估</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行为语义的相似性分析"><span class="nav-text">行为语义的相似性分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

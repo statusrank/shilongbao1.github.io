@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="RS,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="论文 问题介绍度量学习算法通过学习生成什么样的距离度量来帮助解决数据间的重要关系。传统的CF(主要以MF,TF为主)的方法只能学习到user-item之间的潜在关系而无法学习到user-user,item-item的Similarity。本文作者将传统的CF与Metric Learning相结合提出CML,学习到了user-item，以及user-user,item-item的similarity">
+<meta name="keywords" content="RS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Collaborative Metric Learning(CML)论文总结">
+<meta property="og:url" content="https://statusrank.xyz/articles/ed2225da.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="论文 问题介绍度量学习算法通过学习生成什么样的距离度量来帮助解决数据间的重要关系。传统的CF(主要以MF,TF为主)的方法只能学习到user-item之间的潜在关系而无法学习到user-user,item-item的Similarity。本文作者将传统的CF与Metric Learning相结合提出CML,学习到了user-item，以及user-user,item-item的similarity">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/11.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/12.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/14.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/ed2225da/13.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Collaborative Metric Learning(CML)论文总结">
+<meta name="twitter:description" content="论文 问题介绍度量学习算法通过学习生成什么样的距离度量来帮助解决数据间的重要关系。传统的CF(主要以MF,TF为主)的方法只能学习到user-item之间的潜在关系而无法学习到user-user,item-item的Similarity。本文作者将传统的CF与Metric Learning相结合提出CML,学习到了user-item，以及user-user,item-item的similarity">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/ed2225da/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/ed2225da.html">
+
+
+
+
+  <title>Collaborative Metric Learning(CML)论文总结 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/ed2225da.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Collaborative Metric Learning(CML)论文总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-13T15:23:58+08:00">
+                2018-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/推荐/" itemprop="url" rel="index">
+                    <span itemprop="name">推荐</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/ed2225da.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/ed2225da.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/ed2225da.html" class="leancloud_visitors" data-flag-title="Collaborative Metric Learning(CML)论文总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://delivery.acm.org/10.1145/3060000/3052639/p193-hsieh.pdf?ip=112.6.124.171&amp;id=3052639&amp;acc=ACTIVE%20SERVICE&amp;key=BF85BBA5741FDC6E%2E33A83A51ACB36C8E%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35&amp;__acm__=1542094284_84051fb2edb5faf170d850677a2f0385" target="_blank" rel="noopener">论文</a></p>
+<h2 id="问题介绍"><a href="#问题介绍" class="headerlink" title="问题介绍"></a>问题介绍</h2><p>度量学习算法<strong>通过学习生成什么样的距离度量来帮助解决数据间的重要关系。</strong><br>传统的CF(主要以MF,TF为主)的方法只能学习到user-item之间的潜在关系而无法学习到user-user,item-item的Similarity。本文作者将传统的CF与Metric Learning相结合提出CML,学习到了user-item，以及user-user,item-item的similarity。在借助用户隐式评分下产生了state-of-the-art的Top-k推荐结果。<br><a id="more"></a></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>这里我们需要学习一种度量,使得给相似的pair一个较小的距离,给不相似的pair一个较大的距离。<br>这里的Metric需要满足<strong>三角不等式</strong> (triangle inequality):<br>即任意两边和大于第三边。也就是说如果x和y,z都相似,那么我们的Metric肯定给$dis(x,y),dis(x,z)$指定的距离很小;此时根据三角不等式$dis(x,y) + dis(x,z) &gt;= dis(y,z)$所以说y和z的距离也应该尽可能的小。<br>在协同过滤中,我们观察确定的pair(user,item)，根据用户给item打的分数去给那些未观察到的pair提供一些信息。比如矩阵因子分解(MF),它利用user/item之间的点积去获取已知的分数,并用户这种点积来预测未知的分数,但是<strong>这种点积本质上是不满足三角不等式的</strong>。</p>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><h3 id="Metric-Learning"><a href="#Metric-Learning" class="headerlink" title="Metric Learning"></a>Metric Learning</h3><p>度量学习中的标签以成对约束的形式指定,包括已知相似的集合$ S = \{(x_i,x_j)\}$，以及不相似的集合对$D = \{x_i,x_j\}$。<br>原始的Metric Learning方法尝试学习马氏距离度量<br><img src="/articles/ed2225da/1.png"></p>
+<h3 id="CollaborativeFiltering"><a href="#CollaborativeFiltering" class="headerlink" title="CollaborativeFiltering"></a>CollaborativeFiltering</h3><p>传统的CF算法是基于启发式计算用户的相似度,例如余弦相似度。推荐是根据合计该查询用户的K个最相似的用户的打分。<br>在过去十年,MF成为了最受欢迎的CF方法,因为他超前的表现。原始的MF模型设计通过去映射user和item到一个隐因子空间而建模用户的显示反馈,这样user-item的关系就可以通过他们之间的点积所捕获。<br>$r_{ij}$表示$user_i$对$item_j$的打分，我们学习到了用户向量$u_i \in R^r$ item向量$v_j \in R^r$,然后用他们的点积去近似$r_{ij}$。然后我们只需要在已知的数据集上去优化均方误差<br><img src="/articles/ed2225da/2.png"></p>
+<h4 id="隐式反馈"><a href="#隐式反馈" class="headerlink" title="隐式反馈"></a>隐式反馈</h4><p>直接应用传统的MF在隐式反馈上是存在问题的。通过隐式反馈我们只观察到正反馈。我们不能忽视那些未观察到的user-item交互,否则会导致trival但无用的解决方案。同时我们也不能假定这些未观察到的交互都是负反馈,因为我们不知道这些交互没有发生是因为用户不喜欢他们还是说暂时没什么意愿(可能以后会买)。<br>Weighted regularized matrix factorization(WRMF)将所有的未观察到的user-item交互看成是负样例,然后使用权重$c_{ij}$去减少这些不确定样本的影响。<br><img src="/articles/ed2225da/3.png"></p>
+<h4 id="BPR"><a href="#BPR" class="headerlink" title="BPR"></a>BPR</h4><p>上面的讨论表明了,通过隐式反馈,rating开始变得不准确了。最近的一些MF模型开始从估计一组明确的评级转为建模item之间的相对偏好。<br>Bayesian Personalized Ranking 就是这种方法。<br><img src="/articles/ed2225da/4.png"><br>BPR损失函数存在一个问题,对low-rank item惩罚不足。</p>
+<h2 id="CML"><a href="#CML" class="headerlink" title="CML"></a>CML</h2><p>给定所有数据和一个数据集$S$，$S$里面是user-item的数据对，并且是已知具有正相关的，通过学习user-item之间度量来将这种关系编码到第三方空间，具体的学习，拉近$S$中正相关item，推远其他的item。由于三角形不等式,我们也聚合了<strong>1)共同喜欢相同物品的用户在一起2)同一用户共同喜欢的item在一起</strong><br>最终,任何给定的用户的最近邻将变为:该用户之前喜欢的item，以及与该用户具有相似品味的其他用户所喜欢的item。<br>也就是说,通过学习遵循已知正关系的metric,我们不仅将这些关系传播到其他user-item，还将其传播到了item-item,user-user。这些都是我们无法直接观察到的关系。<br>度量使用的是欧几里得距离:<img src="/articles/ed2225da/5.png"><br>距离损失函数:<img src="/articles/ed2225da/6.png"><br>其中$S$为数据中具有正相关的集合，即为$item_j$为用户i所喜欢的，$item_k$为用户i所不喜欢的，$[z]+=max(z,0)$为 hinge loss，$w_{ij}$叫做ranking loss weight，后面会提到，$m&gt;$0为安全边界值。<br>下图表示了在梯度训练时的过程：<img src="/articles/ed2225da/7.png"><br>可以看到在loss函数的控制下,正相关的item与user的距离沿着梯度缩小,而不相关的则相反。其中impostor表示在安全边界内出现的负样本(与user不相关的item)。</p>
+<h3 id="Approximated-Ranking-Loss"><a href="#Approximated-Ranking-Loss" class="headerlink" title="Approximated Ranking Loss"></a>Approximated Ranking Loss</h3><p>距离损失函数中的$w_{ij}$采取一种叫做WARP（Weighted Approximate-Rank Pairwise）的loss来建立<br><img src="/articles/ed2225da/8.png"><br>目的是来惩罚排名靠后的正相关item项。其中:<br>$rank_d(i,j)$为$user_i$的推荐列表中$item_j$的排名,通过以下的策略来近似:<br>1、对于每个user-item对$(i,j)$，采样$U$个负样本item，并计算距离损失函数。损失函数非0即为impostor。</p>
+<p>2、让$M$代表$U$中impostor的个数，则其中$rank_d(i,j)$可近似为：$ \lfloor \frac{J \times M}{U} \rfloor$<br>其中，$J$为所有的item数。</p>
+<h3 id="特征损失函数"><a href="#特征损失函数" class="headerlink" title="特征损失函数"></a>特征损失函数</h3><p>本文借助隐式反馈作为用户喜欢的item的feature,$f(x)$将特征$x$映射到user-item空间的函数(即为本文的<strong>学习结果</strong>),$v_j$为相应的item向量,特征损失函数的目的是把item的特征向量作为item本身的一种高斯先验，来调整$v_j$的位置,即相同feature的item应该离得更近,并且能改善那些很少评分的item的位置。$f(x)$由训练得来,使用MLP + dropout实现。<br>特征损失函数如下:<br><img src="/articles/ed2225da/9.png"><br><img src="/articles/ed2225da/10.png"><br>上面说到$f(x)$是一个特征函数,负责将item的特征映射到user-item Space中。我们在这里将其看成是item本身的先验来后去调整$v_j$的位置,使得相同特征的item离得更近。Paper中作者使用2层MLP+0.5 Dropout,256-D Hidden-layer.<br>本来自己不是很理解这个$f(x)$的作用以及怎么去训练的,于是就去看了一下CML的原代码,发现这个特征函数$f(x)$是跟我们最后的目标函数一起训练的。<br>我们可以理解成有很多item其实有很多是具有相同特征的(如一篇文章的tags等),通过一个NN将提取出的item特征映射到user-item空间中作为item的先验,可以使得具有相同特征的item$v_j$在Space尽可能离得更近(因为具有相同特征的$v_j$随机初始化的vector可能相差很大,而提取出的相同特征经$f(x)$映射到Space位置大体相差不大,所以可以起到调节作用)。另外对于那些和user交互很少的item,他们本身就无法根据三角形不等式使item之间的位置靠的很近,通过特征函数的映射来调整他们之间的相对位置也是一个很不错的办法。<br>同时这里的$f(x)$还可以解决RS的cold-start问题,就是说因为我们已经训练好了$f(x)$后,它是将item feature 或者user feature映射到user-item Space的,如果我们现在有一个新user他没有任何的implicit feedback,我们可以通过$f$将其映射到user-item space然后预测其Top-n。同理一个新item也可以这样添加进去。<br>当然,对于user我们也可以使用该方法。</p>
+<h3 id="正则项损失函数"><a href="#正则项损失函数" class="headerlink" title="正则项损失函数"></a>正则项损失函数</h3><img src="/articles/ed2225da/11.png">
+<p>其中C为协方差矩阵:<img src="/articles/ed2225da/12.png"></p>
+<p>其中$y_i^n$为user or item vector,n为batch中的索引,i为向量的维度。 $ \mu _{i} =\frac{1}{N} \Sigma _{n}y_{i}^{n}  $ ，N为batch大的大小。<br><strong>协方差正则的引入,主要是解除各维度间的相关性。因为协方差可以看成向量间的冗余,这样能使得整个空间能进行更多信息的表达</strong><br>对于正则损失函数是<a href="https://arxiv.org/abs/1511.06068" target="_blank" rel="noopener">此Paper提出</a>的DeCov loss,其主要是用在Depp networks 为了减少过拟合。和Dropout思想类似,DeCov通过减少各隐藏层神经元之间的相关性去减少过拟合。<br>该文章中也使用了该正则化方法,刚开始我比较迷惑,就去读了原论文。其实我觉得这里的思想和PCA里的降维很类似(也是根据协方差矩阵来减少各维度之间的相关性,但是我们这里不降维)。我们知道这里我们需要去将每一个user,item embedding到user-item空间中,我们假设他是二维的,这样显得更直观一些。<br>如图(可能这张图并不是很合适。。。):<br><img src="/articles/ed2225da/14.png"><br>如果我们的user和item是这样的,那么我们就可以发现我们造成了维度浪费,因为图中红线就可以表示他们了(也就是说我们选了r-Dimension其实根本不用),同时可以发现通过协方差接触各维度相关性的同时可以使得我们点”相对分散”,去利用好我们的整个Space.</p>
+<h3 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程"></a>训练过程</h3><p>目标函数:<img src="/articles/ed2225da/13.png"><br>这是总的损失函数，下方的限制条件为保证空间可计算性。整个过程为Mini-Batch SGD训练，学习率采用AdaGrad控制。训练步骤如下：<br>1.从$S$中抽样N个正相关user-item对<br>2.对于每一对,抽样$U$个负样本item,并计算近似的$rand_d(i,j) = \lfloor \frac{J \times M}{U} \rfloor$<br>3.对于每一对,保留使得距离损失函数最大的那个负样本item(k),并组成一个batchN。<br>4.计算梯度并更新参数<br>5.重复此过程直到收敛</p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p>见论文。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p><a href="https://github.com/changun/CollMetric" target="_blank" rel="noopener">见github</a></p>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/ed2225da.html">Collaborative Metric Learning(CML)论文总结</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年11月13日 - 15:11</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/ed2225da.html" title="Collaborative Metric Learning(CML)论文总结">https://statusrank.xyz/articles/ed2225da.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/ed2225da.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RS/" rel="tag"><i class="fa fa-tag"></i> RS</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/9b114ae4.html" rel="next" title="张量分解——CP分解与Tucker分解详解">
+                <i class="fa fa-chevron-left"></i> 张量分解——CP分解与Tucker分解详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/cdf3f0c1.html" rel="prev" title="Dual Metric Space Learning for Modeling Heterogeneous User Behaviors">
+                Dual Metric Space Learning for Modeling Heterogeneous User Behaviors <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/6a0c1b07.html">贝叶斯个性化排序(BPR)算法小记</a></li><li><a href="/articles/cdf3f0c1.html">Dual Metric Space Learning for Modeling Heterogeneous User Behaviors</a></li><li><a href="/articles/37cad335.html">Extreme Learning to Rank via Low Rank Assumption论文解读</a></li><li><a href="/articles/33a62389.html">A Scalable Probabilistic Tensor Factorization(SPTF)</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题介绍"><span class="nav-text">问题介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-text">背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Metric-Learning"><span class="nav-text">Metric Learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CollaborativeFiltering"><span class="nav-text">CollaborativeFiltering</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#隐式反馈"><span class="nav-text">隐式反馈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BPR"><span class="nav-text">BPR</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CML"><span class="nav-text">CML</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Approximated-Ranking-Loss"><span class="nav-text">Approximated Ranking Loss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特征损失函数"><span class="nav-text">特征损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则项损失函数"><span class="nav-text">正则项损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#训练过程"><span class="nav-text">训练过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果"><span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-text">代码实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

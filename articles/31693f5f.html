@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="Deep Learning,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文部分转载自该大佬TensorFlow中文文档 张量(Tensor)Tensorflow内部的计算都是基于张量的,因此我们有必要先对张量有个认识。张量是在我们熟悉的标量、向量之上定义的,详细的定义很复杂,我们可以先简单的将其理解为多维数组。">
+<meta name="keywords" content="Deep Learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow入门">
+<meta property="og:url" content="https://statusrank.xyz/articles/31693f5f.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="本文部分转载自该大佬TensorFlow中文文档 张量(Tensor)Tensorflow内部的计算都是基于张量的,因此我们有必要先对张量有个认识。张量是在我们熟悉的标量、向量之上定义的,详细的定义很复杂,我们可以先简单的将其理解为多维数组。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/31693f5f/1.gif">
+<meta property="og:image" content="https://statusrank.xyz/articles/31693f5f/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/31693f5f/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/31693f5f/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/31693f5f/5.png">
+<meta property="og:updated_time" content="2018-12-20T13:28:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow入门">
+<meta name="twitter:description" content="本文部分转载自该大佬TensorFlow中文文档 张量(Tensor)Tensorflow内部的计算都是基于张量的,因此我们有必要先对张量有个认识。张量是在我们熟悉的标量、向量之上定义的,详细的定义很复杂,我们可以先简单的将其理解为多维数组。">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/31693f5f/1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/31693f5f.html">
+
+
+
+
+  <title>TensorFlow入门 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/31693f5f.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TensorFlow入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-16T12:37:21+08:00">
+                2018-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-12-20T21:28:52+08:00" content="2018-12-20">
+      2018-12-20
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/TensorFlow/" itemprop="url" rel="index">
+                    <span itemprop="name">TensorFlow</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/31693f5f.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/31693f5f.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/31693f5f.html" class="leancloud_visitors" data-flag-title="TensorFlow入门">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://blog.csdn.net/geyunfei_/article/details/78782804" target="_blank" rel="noopener">本文部分转载自该大佬</a><br><a href="https://www.w3cschool.cn/tensorflow_python/tensorflow_python-st6f2ez1.html" target="_blank" rel="noopener">TensorFlow中文文档</a></p>
+<p></p><h3>张量(Tensor)</h3><br>Tensorflow内部的计算都是基于张量的,因此我们有必要先对张量有个认识。张量是在我们熟悉的标量、向量之上定义的,详细的定义很复杂,我们可以先简单的将其理解为多维数组。<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">3                                       # 这个 0 阶张量就是标量，shape=[]</span><br><span class="line">[1., 2., 3.]                            # 这个 1 阶张量就是向量，shape=[3]</span><br><span class="line">[[1., 2., 3.], [4., 5., 6.]]            # 这个 2 阶张量就是二维数组，shape=[2, 3]</span><br><span class="line">[[[1., 2., 3.]], [[7., 8., 9.]]]        # 这个 3 阶张量就是三维数组，shape=[2, 1, 3]</span><br></pre></td></tr></table></figure><p></p>
+<p>TensorFlow内部使用tf.Tensor类的实例来表示张量,每个tf.Tensor具有两个属性:<br>dtype Tensor存储的数据类型,可以为tf.float32,tf.int32,tf.string。。。<br>shape Tensor存储的多维数组中每个维度的数组元素的个数.<br>我们现在可以敲几行代码看一下 Tensor 。在命令终端输入 python 或者 python3 启动一个 Python 会话，然后输入下面的代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 引入 tensorflow 模块</span><br><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line"># 创建一个整型常量，即 0 阶 Tensor</span><br><span class="line">t0 = tf.constant(3, dtype=tf.int32)</span><br><span class="line"></span><br><span class="line"># 创建一个浮点数的一维数组，即 1 阶 Tensor</span><br><span class="line">t1 = tf.constant([3., 4.1, 5.2], dtype=tf.float32)</span><br><span class="line"></span><br><span class="line"># 创建一个字符串的2x2数组，即 2 阶 Tensor</span><br><span class="line">t2 = tf.constant([[&apos;Apple&apos;, &apos;Orange&apos;], [&apos;Potato&apos;, &apos;Tomato&apos;]], dtype=tf.string)</span><br><span class="line"></span><br><span class="line"># 创建一个 2x3x1 数组，即 3 阶张量，数据类型默认为整型</span><br><span class="line">t3 = tf.constant([[[5], [6], [7]], [[4], [3], [2]]])</span><br><span class="line"></span><br><span class="line"># 打印上面创建的几个 Tensor</span><br><span class="line">print(t0)</span><br><span class="line">print(t1)</span><br><span class="line">print(t2)</span><br><span class="line">print(t3)</span><br></pre></td></tr></table></figure></p>
+<p>注意下面代码输出的shape类型:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; print(t0)</span><br><span class="line">Tensor(&quot;Const:0&quot;, shape=(), dtype=int32)</span><br><span class="line">&gt;&gt;&gt; print(t1)</span><br><span class="line">Tensor(&quot;Const_1:0&quot;, shape=(3,), dtype=float32)</span><br><span class="line">&gt;&gt;&gt; print(t2)</span><br><span class="line">Tensor(&quot;Const_2:0&quot;, shape=(2, 2), dtype=string)</span><br><span class="line">&gt;&gt;&gt; print(t3)</span><br><span class="line">Tensor(&quot;Const_3:0&quot;, shape=(2, 3, 1), dtype=int32)</span><br></pre></td></tr></table></figure></p>
+<font color="red">print一个Tensor只能打印出它的属性定义,并不能打印出他的值,要想查看一个Tensor中的值还需要经过Session运行一下</font>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; sess = tf.Session()</span><br><span class="line">&gt;&gt;&gt; print(sess.run(t0))</span><br><span class="line">3</span><br><span class="line">&gt;&gt;&gt; print(sess.run(t1))</span><br><span class="line">[ 3.          4.0999999   5.19999981]</span><br><span class="line">&gt;&gt;&gt; print(sess.run(t2))</span><br><span class="line">[[b&apos;Apple&apos; b&apos;Orange&apos;]</span><br><span class="line"> [b&apos;Potato&apos; b&apos;Tomato&apos;]]</span><br><span class="line">&gt;&gt;&gt; print(sess.run(t3))</span><br><span class="line">[[[5]</span><br><span class="line">  [6]</span><br><span class="line">  [7]]</span><br><span class="line"></span><br><span class="line"> [[4]</span><br><span class="line">  [3]</span><br><span class="line">  [2]]]</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+<p></p><h3>数据流图(Dataflow Graph)</h3><br>数据流是一种常见的并行计算编程模型,数据流图是由结点(nodes)和线(edges)构成的有向图:<br>节点(nodes) 表示计算单元，也可以是输入的起点或者输出的终点<br>线(edges) 表示节点之间的输入/输出关系.<br>在TensorFlow中每个结点都是用tf.Tensor的实例来表示的,即每个节点的输入、输出都是Tensor,如图,Tensor在Graph中流动,形象的展示TensorFlow的由来<br><img src="/articles/31693f5f/1.gif"><p></p>
+<p></p><h3>Session</h3><br>我们在Python中需要做一些计算操作时一般会使用NumPy，NumPy在做矩阵操作等复杂的计算的时候会使用其他语言(C/C++)来实现这些计算逻辑，来保证计算的高效性。但是频繁的在多个编程语言间切换也会有一定的耗时，如果只是单机操作这些耗时可能会忽略不计，但是如果在分布式并行计算中，计算操作可能分布在不同的CPU、GPU甚至不同的机器中，这些耗时可能会比较严重。<br>TensorFlow 底层是使用C++实现，这样可以保证计算效率，并使用 tf.Session类来连接客户端程序与C++运行时。上层的Python、Java等代码用来设计、定义模型，构建的Graph，最后通过tf.Session.run()方法传递给底层执行。<p></p>
+<p></p><h3>构建计算图</h3><br>Tensor 可以表示输入、输出的端点,还可以表示计算单元,如下的代码创建了对两个Tensor执行+操作:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"># 创建两个常量节点</span><br><span class="line">node1 = tf.constant(3.2)</span><br><span class="line">node2 = tf.constant(4.8)</span><br><span class="line"># 创建一个 adder 节点，对上面两个节点执行 + 操作</span><br><span class="line">adder = node1 + node2</span><br><span class="line"># 打印一下 adder 节点</span><br><span class="line">print(adder)</span><br><span class="line"># 打印 adder 运行后的结果</span><br><span class="line">sess = tf.Session()</span><br><span class="line">print(sess.run(adder))</span><br></pre></td></tr></table></figure><p></p>
+<p>输出为:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Tensor(&quot;add:0&quot;, shape=(), dtype=float32)</span><br><span class="line">8.0</span><br></pre></td></tr></table></figure></p>
+<p>上面使用的tf.constant()创建的Tensor都是常量,一旦创建后其中的值就不能在改变了.但是有时我们还会需要从外部输入数据,这时可以用tf.placeholder创建占位的Tensor,占位Tensor的值可以在运行的时候输入。例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"># 创建两个占位 Tensor 节点</span><br><span class="line">a = tf.placeholder(tf.float32)</span><br><span class="line">b = tf.placeholder(tf.float32)</span><br><span class="line"># 创建一个 adder 节点，对上面两个节点执行 + 操作</span><br><span class="line">adder_node = a + b</span><br><span class="line"># 打印三个节点</span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br><span class="line">print(adder)</span><br><span class="line"># 运行一下，后面的 dict 参数是为占位 Tensor 提供输入数据</span><br><span class="line">sess = tf.Session()</span><br><span class="line">print(sess.run(adder, &#123;a: 3, b: 4.5&#125;))</span><br><span class="line">print(sess.run(adder, &#123;a: [1, 3], b: [2, 4]&#125;))</span><br></pre></td></tr></table></figure></p>
+<p>运行结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Tensor(&quot;Placeholder:0&quot;, dtype=float32)</span><br><span class="line">Tensor(&quot;Placeholder_1:0&quot;, dtype=float32)</span><br><span class="line">Tensor(&quot;add:0&quot;, dtype=float32)</span><br><span class="line">7.5</span><br><span class="line">[ 3.  7.]</span><br></pre></td></tr></table></figure></p>
+<p></p><h2>TensorFlow 应用实例<br>下面通过一个例子来了解下TensorFlow。<p></p>
+<p></p><h3>建立模型</h3><br>如下为我们进行某项实验获得的一些实验数据：<p></p>
+<p>输入    输出<br>1    4.8<br>2    8.5<br>3    10.4<br>6    21<br>8    25.3<br>我们将这些数据放到一个二维图上可以看的更直观一些，如下，这些数据在图中表现为一些离散的点：<br><img src="/articles/31693f5f/2.png"><br>我们需要根据现有的这些数据归纳出一个通用模型，通过这个模型我们可以预测其他的输入值产生的输出值。假设我们现在选择一个线性模型来拟合这些数据。如果用 x 表示输入， y 表示输出，线性模型可以用下面的方程表示： $ y = Wx + b$<br>即使我们选择了直线模型，可以选择的模型也会有很多，如下图的三条直线都像是一种比较合理的模型，只是W和b参数不同。这时我们需要设计一个损失模型(loss model)，来评估一下哪个模型更合理一些，并找到一个最准确的模型。<br> <img src="/articles/31693f5f/3.png"><br>如下图每条黄线代表线性模型计算出来的值与实际输出值之间的差值:<br><img src="/articles/31693f5f/4.png"><br>我们用y′表示实验得到的实际输出，用下面的方程表示我们的损失模型：<br>$ loss = \sum_{n = 1}^N (y_n - y_n’)^2 $<br>显然，损失模型里得到的loss越小，说明我们的线性模型越准确。</p>
+<p></p><h3>使用Tensorflow实现模型</h3><br>在我们设计的模型$ y = Wx + b$中 x是我们输入的值,所以可以使用tf.placeholder 来实现。输出y可以用线性模型的输出表示,我们需要不断的改变W和b的值,来找到一个使loss最小的值。这里W和b可以用变量tf.Variable()来表示。<p></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import tensorflow as tf</span><br><span class="line"># 创建变量 W 和 b 节点，并设置初始值</span><br><span class="line">W = tf.Variable([.1], dtype=tf.float32)</span><br><span class="line">b = tf.Variable([-.1], dtype=tf.float32)</span><br><span class="line"># 创建 x 节点，用来输入实验中的输入数据</span><br><span class="line">x = tf.placeholder(tf.float32)</span><br><span class="line"># 创建线性模型</span><br><span class="line">linear_model = W*x + b</span><br><span class="line"># 创建 y 节点，用来输入实验中得到的输出数据，用于损失模型计算</span><br><span class="line">y = tf.placeholder(tf.float32)</span><br><span class="line"># 创建损失模型</span><br><span class="line">loss = tf.reduce_sum(tf.square(linear_model - y))</span><br><span class="line"></span><br><span class="line"># 创建 Session 用来计算模型</span><br><span class="line">sess = tf.Session()</span><br></pre></td></tr></table></figure>
+<p>通过tf.Variable()创建变量Tensor时需要设置一个初始值,这个初始值不能立即使用必须通过init过程进行初始化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 初始化变量</span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">sess.run(init)</span><br></pre></td></tr></table></figure>
+<p>这之后再使用print(sess.run(W))打印就可以看到我们之前赋的初始值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0.1]</span><br></pre></td></tr></table></figure></p>
+<p>变量初始化完之后，我们可以先用上面对W和b设置的初始值0.1和-0.1运行一下我们的线性模型看看结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(sess.run(linear_model, &#123;x: [1, 2, 3, 6, 8]&#125;))</span><br></pre></td></tr></table></figure></p>
+<p>输出结果为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ 0.          0.1         0.20000002  0.5         0.69999999]</span><br></pre></td></tr></table></figure></p>
+<p></p><h3>使用Tensorflow训练模型</h3><br>Tensorflow提供了很多优化算法来帮助我们训练模型,最简单的就是Gradient Descent.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#创建一个梯度下降优化器,学习率为0.001</span><br><span class="line">optimizer = tf.train.GradientDescentOptimizer(0.001)</span><br><span class="line">train = optimizer.minimize(loss)</span><br><span class="line"># 用两个数组保存训练数据</span><br><span class="line">x_train = [1, 2, 3, 6, 8]</span><br><span class="line">y_train = [4.8, 8.5, 10.4, 21.0, 25.3]</span><br><span class="line"># 训练10000次</span><br><span class="line">for i in range(10000):</span><br><span class="line">    sess.run(train, &#123;x: x_train, y: y_train&#125;)</span><br><span class="line"></span><br><span class="line"> 打印一下训练后的结果</span><br><span class="line">print(&apos;W: %s b: %s loss: %s&apos; % (sess.run(W), sess.run(b), sess.run(loss, &#123;x: x_train , y: y_train&#125;)))</span><br></pre></td></tr></table></figure><p></p>
+<p>打印出来的训练结果如下，可以看到损失值已经很小了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">W: [ 2.98236108] b: [ 2.07054377] loss: 2.12941</span><br></pre></td></tr></table></figure></p>
+<h3 id="TensorFlow基本用法"><a href="#TensorFlow基本用法" class="headerlink" title="TensorFlow基本用法"></a>TensorFlow基本用法</h3><h4 id="tf-get-variable"><a href="#tf-get-variable" class="headerlink" title="tf.get_variable"></a>tf.get_variable</h4><p>获取具有这些参数的现有变量或者创建一个新的变量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">tf.get_variable(</span><br><span class="line">    name,</span><br><span class="line">    shape=None,</span><br><span class="line">    dtype=None,</span><br><span class="line">    initializer=None,</span><br><span class="line">    regularizer=None,</span><br><span class="line">    trainable=None,</span><br><span class="line">    collections=None,</span><br><span class="line">    caching_device=None,</span><br><span class="line">    partitioner=None,</span><br><span class="line">    validate_shape=True,</span><br><span class="line">    use_resource=None,</span><br><span class="line">    custom_getter=None,</span><br><span class="line">    constraint=None,</span><br><span class="line">    synchronization=tf.VariableSynchronization.AUTO,</span><br><span class="line">    aggregation=tf.VariableAggregation.NONE</span><br><span class="line">)</span><br><span class="line">  常用:</span><br><span class="line">   w = tf.get_variable(&quot;w&quot;,shape = [],initializer = &quot;&quot;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="tf-nn-conv2d"><a href="#tf-nn-conv2d" class="headerlink" title="tf.nn.conv2d"></a>tf.nn.conv2d</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tf.nn.conv2d(</span><br><span class="line">    input,<span class="comment">#需要卷积的图像,它要求是一个Tensor，具有[batch, in_height, in_width, in_channels]这样的shape</span></span><br><span class="line">    filter,<span class="comment">#卷积核它要求是一个Tensor，具有[filter_height, filter_width, in_channels, out_channels]这样的shape</span></span><br><span class="line">    strides, <span class="comment">#步长,这是一个一维的向量，长度4</span></span><br><span class="line">    padding,<span class="comment">#只能是"SAME","VALID"其中之一</span></span><br><span class="line">    use_cudnn_on_gpu=<span class="keyword">True</span>,</span><br><span class="line">    data_format=<span class="string">'NHWC'</span>,</span><br><span class="line">    dilations=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">    name=<span class="keyword">None</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>tf.nn.conv2d(X,W,stride=[1,s,s,1],padding = ‘SAME’)<br>结果返回一个Tensor，这个输出，就是我们常说的feature map，shape仍然是[batch, height, width, channels]这种形式。<br>对于给定的输入张量[batch, in_height, in_width, in_channels]和一个卷积核[filter_height, filter_width, in_channels, out_channels],它们的计算方式如下:<br>1.先将卷积核编程二维的[fliter_height<em>fliter_width</em>in_channels,output_channels].<br>2.从输入张量中提取图像块组成一个虚拟张量[batch,out_height,out_width,fliter_height<em>fliter_width</em>in_channels]<br>3.对于每个块,右乘filter</p>
+<h4 id="tf-nn-max-pool"><a href="#tf-nn-max-pool" class="headerlink" title="tf.nn.max_pool"></a>tf.nn.max_pool</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tf.nn.max_pool(</span><br><span class="line">    value,</span><br><span class="line">    ksize,<span class="comment">#每一维的窗口大小4-D</span></span><br><span class="line">    strides,<span class="comment">#4-D 每一维步长</span></span><br><span class="line">    padding,<span class="comment"># padding方式</span></span><br><span class="line">    data_format=<span class="string">'NHWC'</span>,</span><br><span class="line">    name=<span class="keyword">None</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">#最大值池化操作,返回一个池化后的Tensor</span></span><br></pre></td></tr></table></figure>
+<p>tf.nn.max_pool(A, ksize = [1,f,f,1], strides = [1,s,s,1], padding = ‘SAME’): given an input A, this function uses a window of size (f, f) and strides of size (s, s) to carry out max pooling over each window.</p>
+<h3 id="tf-nn-relu"><a href="#tf-nn-relu" class="headerlink" title="tf.nn.relu"></a>tf.nn.relu</h3><p>tf.nn.relu(Z1): computes the elementwise ReLU of Z1 (which can be any shape)</p>
+<h3 id="tf-contrib-layers-flatten"><a href="#tf-contrib-layers-flatten" class="headerlink" title="tf.contrib.layers.flatten"></a>tf.contrib.layers.flatten</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tf.contrib.layers.flatten(</span><br><span class="line">    inputs,# [batch_size,....]</span><br><span class="line">    outputs_collections=None,</span><br><span class="line">    scope=None</span><br><span class="line">)</span><br><span class="line">#Return a tensor [batch_size,k]</span><br></pre></td></tr></table></figure>
+<p>将一个输入,变为2-D的Tensor</p>
+<h4 id="tf-contrib-layers-fully-connected"><a href="#tf-contrib-layers-fully-connected" class="headerlink" title="tf.contrib.layers.fully_connected"></a>tf.contrib.layers.fully_connected</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">tf.contrib.layers.fully_connected(</span><br><span class="line">    inputs,#Tensor [bathc_size,image_pixels]</span><br><span class="line">    num_outputs,# 输出(神经元)的个数 [batch_size,num_outputs]</span><br><span class="line">    activation_fn=tf.nn.relu, #采用的激活函数,不需要请指定为None</span><br><span class="line">    normalizer_fn=None,</span><br><span class="line">    normalizer_params=None,</span><br><span class="line">    weights_initializer=initializers.xavier_initializer(),</span><br><span class="line">    weights_regularizer=None,</span><br><span class="line">    biases_initializer=tf.zeros_initializer(),</span><br><span class="line">    biases_regularizer=None,</span><br><span class="line">    reuse=None,</span><br><span class="line">    variables_collections=None,</span><br><span class="line">    outputs_collections=None,</span><br><span class="line">    trainable=True,</span><br><span class="line">    scope=None</span><br><span class="line">)</span><br><span class="line">tf.contrib.layers.fully_connected(P2,6,activation_fn = None)</span><br><span class="line">#输入为P2,输出为6个神经元,不需要激活函数</span><br></pre></td></tr></table></figure>
+<p><font color="red">tf.contrib.layers.fully_connected(),在计算图中会自动的初始化参数w,并且会训练这些参数,所以不需要你来初始化他们</font></p>
+<h4 id="tf-nn-softmax-cross-entropy-with-logits"><a href="#tf-nn-softmax-cross-entropy-with-logits" class="headerlink" title="tf.nn.softmax_cross_entropy_with_logits"></a>tf.nn.softmax_cross_entropy_with_logits</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tf.nn.softmax_cross_entropy_with_logits(</span><br><span class="line">    _sentinel=None,</span><br><span class="line">    labels=None,#[batch_size,num_classes],神经网络的期望输出</span><br><span class="line">    logits=None,#神经网络的最后一层输出</span><br><span class="line">    dim=-1,#分类的个数,默认为tensor的最后一维</span><br><span class="line">    name=None</span><br><span class="line">)</span><br><span class="line">#这个函数内部自动计算softmax函数,然后在计算代价损失,所以logits必须是未经softmax处理过的函数,否则会造成错误.</span><br></pre></td></tr></table></figure>
+<h4 id="tf-reduce-mean"><a href="#tf-reduce-mean" class="headerlink" title="tf.reduce_mean"></a>tf.reduce_mean</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tf.reduce_mean(</span><br><span class="line">    input_tensor,</span><br><span class="line">    axis=None,#在哪一维求平均,默认对所有数求平均</span><br><span class="line">    keepdims=None,#是否保留原来维度</span><br><span class="line">    name=None,</span><br><span class="line">    reduction_indices=None,</span><br><span class="line">    keep_dims=None</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h4 id="tf-boolean-mask"><a href="#tf-boolean-mask" class="headerlink" title="tf.boolean_mask"></a>tf.boolean_mask</h4><p>基本形式:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.boolean_mask(tensor,mask,name=<span class="string">'boolean_mask'</span>,axis=<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure></p>
+<p>参数：tensor是N维度的tensor，mask是K维度的，注意K小于等于N，name可选项也就是这个操作的名字，axis是一个0维度的int型tensor，表示的是从参数tensor的哪个axis开始mask，默认的情况下，axis=0表示从第一维度进行mask，因此K+axis小于等于N。</p>
+<p>返回的是N-K+1维度的tensor，也就是mask为True的地方保存下来。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一般来说，0&lt;dim(mask)=K&lt;=dim(tensor),mask的大小必须匹配参数tensor的shape的前K维度。</span><br></pre></td></tr></table></figure></p>
+<img src="/articles/31693f5f/5.png">
+<h4 id="tf-image-non-max-suppression"><a href="#tf-image-non-max-suppression" class="headerlink" title="tf.image.non_max_suppression()"></a>tf.image.non_max_suppression()</h4><p>非最大值抑制函数<br>基本形式:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nms_indices = tf.image.non_max_suppression(boxes,scores,max_boxes,iou_threshold= <span class="number">0.5</span>)</span><br></pre></td></tr></table></figure></p>
+<p>boxes 是不同box的坐标,scores是不同boxes预测的分数,max_boxes是保留最大box的个数,iou_threshold是一个阈值</p>
+<h4 id="tf-reduce-sum"><a href="#tf-reduce-sum" class="headerlink" title="tf.reduce_sum"></a>tf.reduce_sum</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">reduce_sum(</span><br><span class="line">    input_tensor, <span class="comment">#表示输入,要求和的Tensor</span></span><br><span class="line">    axis=<span class="keyword">None</span>, <span class="comment">#在哪个维度上进行操作,如果缺省,默认对所有维度求和</span></span><br><span class="line">    keep_dims=<span class="keyword">False</span>, <span class="comment">#是否保留原始数据的维度</span></span><br><span class="line">    name=<span class="keyword">None</span>,</span><br><span class="line">    reduction_indices=<span class="keyword">None</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h4 id="tf-subtract"><a href="#tf-subtract" class="headerlink" title="tf.subtract"></a>tf.subtract</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">tf.subtract(</span><br><span class="line">    x,</span><br><span class="line">    y,</span><br><span class="line">    name=<span class="keyword">None</span></span><br><span class="line">)<span class="comment">#返回x-y,支持广播</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">x：一个 Tensor，必须是下列类型之一：half，bfloat16，float32，float64，uint8，int8，uint16，int16，int32，int64，complex64，complex128。</span></span><br><span class="line"><span class="string">y：一个 Tensor，必须与 x 具有相同的类型。</span></span><br><span class="line"><span class="string">name：操作的名称（可选）。</span></span><br><span class="line"><span class="string">tf.subtract 返回一个Tensor 与x具有相同的类型</span></span><br><span class="line"><span class="string">"""</span></span><br></pre></td></tr></table></figure>
+<h4 id="tf-transpose"><a href="#tf-transpose" class="headerlink" title="tf.transpose"></a>tf.transpose</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tf.transpose(</span><br><span class="line">    a,</span><br><span class="line">    perm=<span class="keyword">None</span>,<span class="comment">#perm参数用于指定交换后的张量的轴是原先张量的轴的位置</span></span><br><span class="line">    name=<span class="string">'transpose'</span>,</span><br><span class="line">    conjugate=<span class="keyword">False</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">#将a进行转置，并且根据perm参数重新排列输出维度。这是对数据的维度的进行操作的形式。</span></span><br></pre></td></tr></table></figure>
+<p>tf.transpose() 是TensorFlow中用于矩阵，张量转置用的，除了可以交换二维矩阵的行和列之外，还可以交换张量的不同轴之间的顺序<br>例子如：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">raw = tf.Variable(tf.random_normal(shape=(<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>)))</span><br><span class="line">transed_1 = tf.transpose(raw, perm=[<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>])</span><br><span class="line">transed_2 = tf.transpose(raw, perm=[<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(tf.global_variables_initializer())</span><br><span class="line">    print(raw.eval())</span><br><span class="line">    print(<span class="string">'-----------------------------'</span>)</span><br><span class="line">    print(sess.run(transed_1))</span><br><span class="line">    print(<span class="string">'-----------------------------'</span>)</span><br><span class="line">    print(sess.run(transed_2))</span><br><span class="line">---------------------</span><br></pre></td></tr></table></figure></p>
+<p>输出如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">[[[<span class="number">-1.41665018</span> <span class="number">-1.47619307</span>]</span><br><span class="line">  [<span class="number">-0.26559591</span> <span class="number">-0.33706442</span>]</span><br><span class="line">  [<span class="number">-0.70152593</span>  <span class="number">0.93126309</span>]]</span><br><span class="line"></span><br><span class="line"> [[ <span class="number">0.67472041</span> <span class="number">-0.81008494</span>]</span><br><span class="line">  [ <span class="number">1.74384487</span>  <span class="number">1.2157737</span> ]</span><br><span class="line">  [ <span class="number">0.94848555</span>  <span class="number">0.12342481</span>]]</span><br><span class="line"></span><br><span class="line"> [[<span class="number">-1.14412427</span>  <span class="number">0.00174908</span>]</span><br><span class="line">  [ <span class="number">1.09407389</span> <span class="number">-0.67949998</span>]</span><br><span class="line">  [<span class="number">-0.40438497</span>  <span class="number">0.5193854</span> ]]</span><br><span class="line"></span><br><span class="line"> [[ <span class="number">0.79596692</span> <span class="number">-0.58678174</span>]</span><br><span class="line">  [ <span class="number">1.16309321</span>  <span class="number">0.42068651</span>]</span><br><span class="line">  [ <span class="number">1.03116786</span> <span class="number">-0.69529283</span>]]]</span><br><span class="line">-----------------------------</span><br><span class="line">[[[<span class="number">-1.41665018</span> <span class="number">-1.47619307</span>]</span><br><span class="line">  [ <span class="number">0.67472041</span> <span class="number">-0.81008494</span>]</span><br><span class="line">  [<span class="number">-1.14412427</span>  <span class="number">0.00174908</span>]</span><br><span class="line">  [ <span class="number">0.79596692</span> <span class="number">-0.58678174</span>]]</span><br><span class="line"></span><br><span class="line"> [[<span class="number">-0.26559591</span> <span class="number">-0.33706442</span>]</span><br><span class="line">  [ <span class="number">1.74384487</span>  <span class="number">1.2157737</span> ]</span><br><span class="line">  [ <span class="number">1.09407389</span> <span class="number">-0.67949998</span>]</span><br><span class="line">  [ <span class="number">1.16309321</span>  <span class="number">0.42068651</span>]]</span><br><span class="line"></span><br><span class="line"> [[<span class="number">-0.70152593</span>  <span class="number">0.93126309</span>]</span><br><span class="line">  [ <span class="number">0.94848555</span>  <span class="number">0.12342481</span>]</span><br><span class="line">  [<span class="number">-0.40438497</span>  <span class="number">0.5193854</span> ]</span><br><span class="line">  [ <span class="number">1.03116786</span> <span class="number">-0.69529283</span>]]]</span><br><span class="line">-----------------------------</span><br><span class="line">[[[<span class="number">-1.41665018</span> <span class="number">-0.26559591</span> <span class="number">-0.70152593</span>]</span><br><span class="line">  [ <span class="number">0.67472041</span>  <span class="number">1.74384487</span>  <span class="number">0.94848555</span>]</span><br><span class="line">  [<span class="number">-1.14412427</span>  <span class="number">1.09407389</span> <span class="number">-0.40438497</span>]</span><br><span class="line">  [ <span class="number">0.79596692</span>  <span class="number">1.16309321</span>  <span class="number">1.03116786</span>]]</span><br><span class="line"></span><br><span class="line"> [[<span class="number">-1.47619307</span> <span class="number">-0.33706442</span>  <span class="number">0.93126309</span>]</span><br><span class="line">  [<span class="number">-0.81008494</span>  <span class="number">1.2157737</span>   <span class="number">0.12342481</span>]</span><br><span class="line">  [ <span class="number">0.00174908</span> <span class="number">-0.67949998</span>  <span class="number">0.5193854</span> ]</span><br><span class="line">  [<span class="number">-0.58678174</span>  <span class="number">0.42068651</span> <span class="number">-0.69529283</span>]]]</span><br><span class="line">---------------------</span><br></pre></td></tr></table></figure></p>
+<h4 id="tf-InteractiveSession"><a href="#tf-InteractiveSession" class="headerlink" title="tf.InteractiveSession()"></a>tf.InteractiveSession()</h4><p>tf.InteractiveSession() 相较于tf.Session()使用Tensor.eval()和Operation.run() 方法代替 Session.run()<br>TensorFlow的前后端的连接依靠于session，使用TensorFlow程序的流程构建计算图完成之后，在session中启动运行。<br>InteractiveSession（）：先构建一个session，然后再构建计算图；也就是说，InteractiveSession（）能够在运行图时，插入一些计算图，比较方便。</p>
+<p>Session（）：先构建整个计算图，然后构建session，并在session中启动已经构建好的计算图；也就是说，在会话构建之前，构建好计算图。</p>
+<p>版权声明：本文为博主原创文章，转载请附上博文链接！</p>
+</h2>
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/31693f5f.html">TensorFlow入门</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2018年08月16日 - 12:08</p>
+  <p><span>最后更新:</span>2018年12月20日 - 21:12</p>
+  <p><span>原始链接:</span><a href="/articles/31693f5f.html" title="TensorFlow入门">https://statusrank.xyz/articles/31693f5f.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/31693f5f.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Deep-Learning/" rel="tag"><i class="fa fa-tag"></i> Deep Learning</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/65d241ff.html" rel="next" title="deeplearning.ai 改善深度神经网络(正则化、优化、mini-batch等)">
+                <i class="fa fa-chevron-left"></i> deeplearning.ai 改善深度神经网络(正则化、优化、mini-batch等)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/articles/206a47f4.html" rel="prev" title="deeplearning.ai-note 结构化机器学习项目">
+                deeplearning.ai-note 结构化机器学习项目 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/e5e71180.html">深度学习----神经风格迁移(neural style transfer)</a></li><li><a href="/articles/b04eb2da.html">深度学习之图像分类-----------K最邻近算法（KNN）</a></li><li><a href="/articles/74255015.html">GoogLeNet(从Inception v1到v4的演进)</a></li><li><a href="/articles/e8d78fff.html">深度学习——--残差网络(ResNet)</a></li><li><a href="/articles/6fc928f5.html">DeepLearning.ai 卷积神经网络-目标检测</a></li><li><a href="/articles/1798e6c8.html">神经网络中的梯度消失、爆炸原因及解决办法</a></li><li><a href="/articles/206a47f4.html">deeplearning.ai-note 结构化机器学习项目</a></li><li><a href="/articles/a0a72429.html">卷积神经网络原理与实例</a></li><li><a href="/articles/65d241ff.html">deeplearning.ai 改善深度神经网络(正则化、优化、mini-batch等)</a></li><li><a href="/articles/70ac7c7c.html">深度学习之图像分类----多分类支持向量机（Multi-SVM）与softmax分类</a></li></ul> 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-text">张量(Tensor)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-text">数据流图(Dataflow Graph)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-text">Session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-text">构建计算图</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">TensorFlow 应用实例下面通过一个例子来了解下TensorFlow。
+建立模型如下为我们进行某项实验获得的一些实验数据：
+输入    输出1    4.82    8.53    10.46    218    25.3我们将这些数据放到一个二维图上可以看的更直观一些，如下，这些数据在图中表现为一些离散的点：我们需要根据现有的这些数据归纳出一个通用模型，通过这个模型我们可以预测其他的输入值产生的输出值。假设我们现在选择一个线性模型来拟合这些数据。如果用 x 表示输入， y 表示输出，线性模型可以用下面的方程表示： $ y = Wx + b$即使我们选择了直线模型，可以选择的模型也会有很多，如下图的三条直线都像是一种比较合理的模型，只是W和b参数不同。这时我们需要设计一个损失模型(loss model)，来评估一下哪个模型更合理一些，并找到一个最准确的模型。 如下图每条黄线代表线性模型计算出来的值与实际输出值之间的差值:我们用y′表示实验得到的实际输出，用下面的方程表示我们的损失模型：$ loss = \sum_{n = 1}^N (y_n - y_n’)^2 $显然，损失模型里得到的loss越小，说明我们的线性模型越准确。
+使用Tensorflow实现模型在我们设计的模型$ y = Wx + b$中 x是我们输入的值,所以可以使用tf.placeholder 来实现。输出y可以用线性模型的输出表示,我们需要不断的改变W和b的值,来找到一个使loss最小的值。这里W和b可以用变量tf.Variable()来表示。
+123456789101112131415import tensorflow as tf# 创建变量 W 和 b 节点，并设置初始值W = tf.Variable([.1], dtype=tf.float32)b = tf.Variable([-.1], dtype=tf.float32)# 创建 x 节点，用来输入实验中的输入数据x = tf.placeholder(tf.float32)# 创建线性模型linear_model = W*x + b# 创建 y 节点，用来输入实验中得到的输出数据，用于损失模型计算y = tf.placeholder(tf.float32)# 创建损失模型loss = tf.reduce_sum(tf.square(linear_model - y))# 创建 Session 用来计算模型sess = tf.Session()
+通过tf.Variable()创建变量Tensor时需要设置一个初始值,这个初始值不能立即使用必须通过init过程进行初始化。
+123# 初始化变量init = tf.global_variables_initializer()sess.run(init)
+这之后再使用print(sess.run(W))打印就可以看到我们之前赋的初始值1[0.1]
+变量初始化完之后，我们可以先用上面对W和b设置的初始值0.1和-0.1运行一下我们的线性模型看看结果：1print(sess.run(linear_model, {x: [1, 2, 3, 6, 8]}))
+输出结果为：1[ 0.          0.1         0.20000002  0.5         0.69999999]
+使用Tensorflow训练模型Tensorflow提供了很多优化算法来帮助我们训练模型,最简单的就是Gradient Descent.123456789101112#创建一个梯度下降优化器,学习率为0.001optimizer = tf.train.GradientDescentOptimizer(0.001)train = optimizer.minimize(loss)# 用两个数组保存训练数据x_train = [1, 2, 3, 6, 8]y_train = [4.8, 8.5, 10.4, 21.0, 25.3]# 训练10000次for i in range(10000):    sess.run(train, {x: x_train, y: y_train}) 打印一下训练后的结果print(&#39;W: %s b: %s loss: %s&#39; % (sess.run(W), sess.run(b), sess.run(loss, {x: x_train , y: y_train})))
+打印出来的训练结果如下，可以看到损失值已经很小了：1W: [ 2.98236108] b: [ 2.07054377] loss: 2.12941
+TensorFlow基本用法tf.get_variable获取具有这些参数的现有变量或者创建一个新的变量12345678910111213141516171819tf.get_variable(    name,    shape=None,    dtype=None,    initializer=None,    regularizer=None,    trainable=None,    collections=None,    caching_device=None,    partitioner=None,    validate_shape=True,    use_resource=None,    custom_getter=None,    constraint=None,    synchronization=tf.VariableSynchronization.AUTO,    aggregation=tf.VariableAggregation.NONE)  常用:   w = tf.get_variable(&quot;w&quot;,shape = [],initializer = &quot;&quot;)
+tf.nn.conv2d12345678910tf.nn.conv2d(    input,#需要卷积的图像,它要求是一个Tensor，具有[batch, in_height, in_width, in_channels]这样的shape    filter,#卷积核它要求是一个Tensor，具有[filter_height, filter_width, in_channels, out_channels]这样的shape    strides, #步长,这是一个一维的向量，长度4    padding,#只能是&quot;SAME&quot;,&quot;VALID&quot;其中之一    use_cudnn_on_gpu=True,    data_format=&#39;NHWC&#39;,    dilations=[1, 1, 1, 1],    name=None)
+tf.nn.conv2d(X,W,stride=[1,s,s,1],padding = ‘SAME’)结果返回一个Tensor，这个输出，就是我们常说的feature map，shape仍然是[batch, height, width, channels]这种形式。对于给定的输入张量[batch, in_height, in_width, in_channels]和一个卷积核[filter_height, filter_width, in_channels, out_channels],它们的计算方式如下:1.先将卷积核编程二维的[fliter_heightfliter_widthin_channels,output_channels].2.从输入张量中提取图像块组成一个虚拟张量[batch,out_height,out_width,fliter_heightfliter_widthin_channels]3.对于每个块,右乘filter
+tf.nn.max_pool123456789tf.nn.max_pool(    value,    ksize,#每一维的窗口大小4-D    strides,#4-D 每一维步长    padding,# padding方式    data_format=&#39;NHWC&#39;,    name=None)#最大值池化操作,返回一个池化后的Tensor
+tf.nn.max_pool(A, ksize = [1,f,f,1], strides = [1,s,s,1], padding = ‘SAME’): given an input A, this function uses a window of size (f, f) and strides of size (s, s) to carry out max pooling over each window.
+tf.nn.relutf.nn.relu(Z1): computes the elementwise ReLU of Z1 (which can be any shape)
+tf.contrib.layers.flatten123456tf.contrib.layers.flatten(    inputs,# [batch_size,....]    outputs_collections=None,    scope=None)#Return a tensor [batch_size,k]
+将一个输入,变为2-D的Tensor
+tf.contrib.layers.fully_connected123456789101112131415161718tf.contrib.layers.fully_connected(    inputs,#Tensor [bathc_size,image_pixels]    num_outputs,# 输出(神经元)的个数 [batch_size,num_outputs]    activation_fn=tf.nn.relu, #采用的激活函数,不需要请指定为None    normalizer_fn=None,    normalizer_params=None,    weights_initializer=initializers.xavier_initializer(),    weights_regularizer=None,    biases_initializer=tf.zeros_initializer(),    biases_regularizer=None,    reuse=None,    variables_collections=None,    outputs_collections=None,    trainable=True,    scope=None)tf.contrib.layers.fully_connected(P2,6,activation_fn = None)#输入为P2,输出为6个神经元,不需要激活函数
+tf.contrib.layers.fully_connected(),在计算图中会自动的初始化参数w,并且会训练这些参数,所以不需要你来初始化他们
+tf.nn.softmax_cross_entropy_with_logits12345678tf.nn.softmax_cross_entropy_with_logits(    _sentinel=None,    labels=None,#[batch_size,num_classes],神经网络的期望输出    logits=None,#神经网络的最后一层输出    dim=-1,#分类的个数,默认为tensor的最后一维    name=None)#这个函数内部自动计算softmax函数,然后在计算代价损失,所以logits必须是未经softmax处理过的函数,否则会造成错误.
+tf.reduce_mean12345678tf.reduce_mean(    input_tensor,    axis=None,#在哪一维求平均,默认对所有数求平均    keepdims=None,#是否保留原来维度    name=None,    reduction_indices=None,    keep_dims=None)
+tf.boolean_mask基本形式:1tf.boolean_mask(tensor,mask,name=&#39;boolean_mask&#39;,axis=None)
+参数：tensor是N维度的tensor，mask是K维度的，注意K小于等于N，name可选项也就是这个操作的名字，axis是一个0维度的int型tensor，表示的是从参数tensor的哪个axis开始mask，默认的情况下，axis=0表示从第一维度进行mask，因此K+axis小于等于N。
+返回的是N-K+1维度的tensor，也就是mask为True的地方保存下来。1一般来说，0&lt;dim(mask)=K&lt;=dim(tensor),mask的大小必须匹配参数tensor的shape的前K维度。
+
+tf.image.non_max_suppression()非最大值抑制函数基本形式:1nms_indices = tf.image.non_max_suppression(boxes,scores,max_boxes,iou_threshold= 0.5)
+boxes 是不同box的坐标,scores是不同boxes预测的分数,max_boxes是保留最大box的个数,iou_threshold是一个阈值
+tf.reduce_sum1234567reduce_sum(    input_tensor, #表示输入,要求和的Tensor    axis=None, #在哪个维度上进行操作,如果缺省,默认对所有维度求和    keep_dims=False, #是否保留原始数据的维度    name=None,    reduction_indices=None)
+tf.subtract1234567891011tf.subtract(    x,    y,    name=None)#返回x-y,支持广播&quot;&quot;&quot;x：一个 Tensor，必须是下列类型之一：half，bfloat16，float32，float64，uint8，int8，uint16，int16，int32，int64，complex64，complex128。y：一个 Tensor，必须与 x 具有相同的类型。name：操作的名称（可选）。tf.subtract 返回一个Tensor 与x具有相同的类型&quot;&quot;&quot;
+tf.transpose1234567tf.transpose(    a,    perm=None,#perm参数用于指定交换后的张量的轴是原先张量的轴的位置    name=&#39;transpose&#39;,    conjugate=False)#将a进行转置，并且根据perm参数重新排列输出维度。这是对数据的维度的进行操作的形式。
+tf.transpose() 是TensorFlow中用于矩阵，张量转置用的，除了可以交换二维矩阵的行和列之外，还可以交换张量的不同轴之间的顺序例子如：1234567891011121314import tensorflow as tfraw = tf.Variable(tf.random_normal(shape=(4, 3, 2)))transed_1 = tf.transpose(raw, perm=[1, 0, 2])transed_2 = tf.transpose(raw, perm=[2, 0, 1])with tf.Session() as sess:    sess.run(tf.global_variables_initializer())    print(raw.eval())    print(&#39;-----------------------------&#39;)    print(sess.run(transed_1))    print(&#39;-----------------------------&#39;)    print(sess.run(transed_2))---------------------
+输出如1234567891011121314151617181920212223242526272829303132333435363738394041[[[-1.41665018 -1.47619307]  [-0.26559591 -0.33706442]  [-0.70152593  0.93126309]] [[ 0.67472041 -0.81008494]  [ 1.74384487  1.2157737 ]  [ 0.94848555  0.12342481]] [[-1.14412427  0.00174908]  [ 1.09407389 -0.67949998]  [-0.40438497  0.5193854 ]] [[ 0.79596692 -0.58678174]  [ 1.16309321  0.42068651]  [ 1.03116786 -0.69529283]]]-----------------------------[[[-1.41665018 -1.47619307]  [ 0.67472041 -0.81008494]  [-1.14412427  0.00174908]  [ 0.79596692 -0.58678174]] [[-0.26559591 -0.33706442]  [ 1.74384487  1.2157737 ]  [ 1.09407389 -0.67949998]  [ 1.16309321  0.42068651]] [[-0.70152593  0.93126309]  [ 0.94848555  0.12342481]  [-0.40438497  0.5193854 ]  [ 1.03116786 -0.69529283]]]-----------------------------[[[-1.41665018 -0.26559591 -0.70152593]  [ 0.67472041  1.74384487  0.94848555]  [-1.14412427  1.09407389 -0.40438497]  [ 0.79596692  1.16309321  1.03116786]] [[-1.47619307 -0.33706442  0.93126309]  [-0.81008494  1.2157737   0.12342481]  [ 0.00174908 -0.67949998  0.5193854 ]  [-0.58678174  0.42068651 -0.69529283]]]---------------------
+tf.InteractiveSession()tf.InteractiveSession() 相较于tf.Session()使用Tensor.eval()和Operation.run() 方法代替 Session.run()TensorFlow的前后端的连接依靠于session，使用TensorFlow程序的流程构建计算图完成之后，在session中启动运行。InteractiveSession（）：先构建一个session，然后再构建计算图；也就是说，InteractiveSession（）能够在运行图时，插入一些计算图，比较方便。
+Session（）：先构建整个计算图，然后构建session，并在session中启动已经构建好的计算图；也就是说，在会话构建之前，构建好计算图。
+版权声明：本文为博主原创文章，转载请附上博文链接！
+</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-text">建立模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-text">使用Tensorflow实现模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#undefined"><span class="nav-text">使用Tensorflow训练模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorFlow基本用法"><span class="nav-text">TensorFlow基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-get-variable"><span class="nav-text">tf.get_variable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-nn-conv2d"><span class="nav-text">tf.nn.conv2d</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-nn-max-pool"><span class="nav-text">tf.nn.max_pool</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tf-nn-relu"><span class="nav-text">tf.nn.relu</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tf-contrib-layers-flatten"><span class="nav-text">tf.contrib.layers.flatten</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-contrib-layers-fully-connected"><span class="nav-text">tf.contrib.layers.fully_connected</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-nn-softmax-cross-entropy-with-logits"><span class="nav-text">tf.nn.softmax_cross_entropy_with_logits</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-reduce-mean"><span class="nav-text">tf.reduce_mean</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-boolean-mask"><span class="nav-text">tf.boolean_mask</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-image-non-max-suppression"><span class="nav-text">tf.image.non_max_suppression()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-reduce-sum"><span class="nav-text">tf.reduce_sum</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-subtract"><span class="nav-text">tf.subtract</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-transpose"><span class="nav-text">tf.transpose</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tf-InteractiveSession"><span class="nav-text">tf.InteractiveSession()</span></a></li></ol></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

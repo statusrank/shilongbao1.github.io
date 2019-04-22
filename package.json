@@ -1,0 +1,80 @@
+{
+  "name": "package.json",
+  "version": "0.0.0",
+  "private": true,
+  "hexo": {
+    "version": "3.8.0"
+  },
+  "dependencies": {
+    "clipboard": "^2.0.1",
+    "fixed": "^0.3.0",
+    "for": "^0.1.0",
+    "gitment": "0.0.3",
+    "gulp": "^3.9.1",
+    "gulp-htmlclean": "^2.7.22",
+    "gulp-htmlmin": "^4.0.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-uglify": "^3.0.1",
+    "hexo": "^3.2.0",
+    "hexo-abbrlink": "^2.0.5",
+    "hexo-algoliasearch": "^0.3.0",
+    "hexo-all-minifier": "^0.5.2",
+    "hexo-asset-image": "git+https://github.com/CodeFalling/hexo-asset-image.git",
+    "hexo-baidu-url-submit": "0.0.5",
+    "hexo-deployer-git": "^0.3.1",
+    "hexo-generator-archive": "^0.1.4",
+    "hexo-generator-baidu-sitemap": "^0.1.5",
+    "hexo-generator-category": "^0.1.3",
+    "hexo-generator-feed": "^1.2.2",
+    "hexo-generator-index": "^0.2.0",
+    "hexo-generator-json-content": "^3.0.1",
+    "hexo-generator-search": "^2.2.5",
+    "hexo-generator-searchdb": "^1.0.8",
+    "hexo-generator-sitemap": "^1.2.0",
+    "hexo-generator-tag": "^0.2.0",
+    "hexo-git-backup": "^0.1.2",
+    "hexo-renderer-ejs": "^0.3.0",
+    "hexo-renderer-kramed": "^0.1.4",
+    "hexo-renderer-mathjax": "^0.6.0",
+    "hexo-renderer-stylus": "^0.3.1",
+    "hexo-server": "^0.2.2",
+    "it": "^1.1.1",
+    "me": "^0.3.0",
+    "save": "^2.3.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
+    "del": "^3.0.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^3.10.0",
+    "gulp-htmlclean": "^2.7.22",
+    "gulp-htmlmin": "^4.0.0",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-uglify": "^3.0.1",
+    "gulp-util": "^3.0.8",
+    "run-sequence": "^2.2.1"
+  },
+  "main": "gulpfile.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/statusrank/statusrank.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/statusrank/statusrank.github.io/issues"
+  },
+  "homepage": "https://github.com/statusrank/statusrank.github.io#readme",
+  "description": ""
+}

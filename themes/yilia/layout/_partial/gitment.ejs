@@ -1,0 +1,18 @@
+<div id="gitment"></div>
+
+<!-- 主页不要加载gitment -->
+<% if (!index){ %>
+
+<script>
+var gitment = new Gitment({
+  owner: 'statusrank',
+  repo: 'statusrank.github.io',
+  oauth: {
+    client_id: 'c23049bc7759dd5ba61a',
+    client_secret: 'e7fcfb42348c118a7aed52505c5eff386a8d8167',
+  },
+})
+gitment.render('gitment')
+</script>
+
+<% } %>

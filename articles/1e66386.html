@@ -114,17 +114,21 @@
 
 
 
-<meta name="description" content="退役Acmer努力摆脱四非加成光环的菜鸡">
+<meta name="description" content="传送门 题意将k个有序的列表合并成一个有序的列表，并分析时间复杂度和空间复杂度。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="merge-k-sorted-lists">
+<meta property="og:title" content="LeetCode 23. Merge k Sorted Lists">
 <meta property="og:url" content="https://statusrank.xyz/articles/1e66386.html">
 <meta property="og:site_name" content="Statusrank&#39;s Blog">
-<meta property="og:description" content="退役Acmer努力摆脱四非加成光环的菜鸡">
+<meta property="og:description" content="传送门 题意将k个有序的列表合并成一个有序的列表，并分析时间复杂度和空间复杂度。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-24T13:09:33.230Z">
+<meta property="og:image" content="https://statusrank.xyz/articles/1e66386/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/1e66386/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/1e66386/3.png">
+<meta property="og:updated_time" content="2019-04-24T14:30:21.950Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="merge-k-sorted-lists">
-<meta name="twitter:description" content="退役Acmer努力摆脱四非加成光环的菜鸡">
+<meta name="twitter:title" content="LeetCode 23. Merge k Sorted Lists">
+<meta name="twitter:description" content="传送门 题意将k个有序的列表合并成一个有序的列表，并分析时间复杂度和空间复杂度。">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/1e66386/1.png">
 
 
 
@@ -159,7 +163,7 @@
 
 
 
-  <title>merge-k-sorted-lists | Statusrank's Blog</title>
+  <title>LeetCode 23. Merge k Sorted Lists | Statusrank's Blog</title>
   
 
 
@@ -370,7 +374,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">merge-k-sorted-lists</h1>
+          <h1 class="post-title" itemprop="name headline">LeetCode 23. Merge k Sorted Lists</h1>
         
 
         <div class="post-meta">
@@ -394,11 +398,33 @@
 	
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-24T21:09:33+08:00" content="2019-04-24">
+    <time itemprop="dateUpdated" datetime="2019-04-24T22:30:21+08:00" content="2019-04-24">
       2019-04-24
     </time>
   </span>
 
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index">
+                    <span itemprop="name">LeetCode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -417,7 +443,7 @@
 
           
           
-             <span id="/articles/1e66386.html" class="leancloud_visitors" data-flag-title="merge-k-sorted-lists">
+             <span id="/articles/1e66386.html" class="leancloud_visitors" data-flag-title="LeetCode 23. Merge k Sorted Lists">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -448,7 +474,19 @@
       
 
       
-        
+        <p><a href="https://leetcode.com/problems/merge-k-sorted-lists/" target="_blank" rel="noopener">传送门</a></p>
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>将k个有序的列表合并成一个有序的列表，并分析时间复杂度和空间复杂度。<br><a id="more"></a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><h3 id="法一"><a href="#法一" class="headerlink" title="法一"></a>法一</h3><p>首先我们想到的就是先两个列表合并为一个，然后再挑一个和该列表进行合并，以此类推，直到最后合并为一个列表。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mergeKLists</span><span class="params">(self, lists)</span>:</span></span><br><span class="line">        head = cur = ListNode(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> lists:</span><br><span class="line">            <span class="keyword">if</span> l:</span><br><span class="line">                <span class="keyword">if</span> head.next <span class="keyword">is</span> <span class="keyword">None</span>:         </span><br><span class="line">                    cur.next = l</span><br><span class="line">                    cur = cur.next</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    pre, cur = head, head.next</span><br><span class="line">                    <span class="keyword">while</span> cur <span class="keyword">and</span> l:</span><br><span class="line">                        <span class="keyword">while</span> cur <span class="keyword">and</span> l.val &gt;= cur.val:</span><br><span class="line">                            pre = cur</span><br><span class="line">                            cur = cur.next</span><br><span class="line">                        temp = l.next</span><br><span class="line">                        l.next = cur</span><br><span class="line">                        pre.next = l</span><br><span class="line">                        pre = pre.next</span><br><span class="line">                        l = temp</span><br><span class="line">                    <span class="keyword">if</span> cur <span class="keyword">is</span> <span class="keyword">None</span> <span class="keyword">and</span> l:</span><br><span class="line">                        pre.next = l</span><br><span class="line">        <span class="keyword">return</span> head.next</span><br></pre></td></tr></table></figure></p>
+<p><strong>复杂度分析：</strong><br>时间复杂度:<br>假设有$k$个列表，总长度为$N$，那么平均每个列表长度为$\frac{N}{k}$，k个列表合并为一个共需要$k-1$合并。第一次将两个合并一个时间复杂度为$O(2\cdot \frac{N}{k})$，此时列表长度为$\frac{2N}{k}$，再和第三个合并，复杂度为$O(3\cdot\frac{N}{k})$，以此类推，总的时间复杂度为$O(n) = \sum_{i = 1}^{k-1} (i + 1)\cdot \frac{N}{k} = O(kN)$。<br>空间复杂度: $O(1)$</p>
+<h3 id="法二"><a href="#法二" class="headerlink" title="法二"></a>法二</h3><p>我们其实可以发现这里的序列合并问题，其实完全可以采用分治的思想。或者可以说，我们采用类似于归并排序的思想，即: 先将k个元素分为两两合并，然后将合并获得的序列再进行两两合并。我们用一个图来描述这个过程:<br><img src="/articles/1e66386/1.png"><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mergeKLists</span><span class="params">(self, lists)</span>:</span></span><br><span class="line">        numb = len(lists)</span><br><span class="line">        iter = <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> iter &lt; numb:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, numb - iter, iter * <span class="number">2</span>):</span><br><span class="line">                lists[i] = self.merge2Lists(lists[i],lists[i + iter])</span><br><span class="line">            iter *= <span class="number">2</span></span><br><span class="line">        <span class="keyword">return</span> lists[<span class="number">0</span>] <span class="keyword">if</span> numb &gt; <span class="number">0</span> <span class="keyword">else</span> []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge2Lists</span><span class="params">(self, l1, l2)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> l1 == <span class="keyword">None</span>: <span class="keyword">return</span> l2</span><br><span class="line">        <span class="keyword">if</span> l2 == <span class="keyword">None</span>: <span class="keyword">return</span> l1</span><br><span class="line">        h1,h2,cur = l1,l2,ListNode(<span class="number">-1</span>)</span><br><span class="line">        head = cur</span><br><span class="line">        <span class="keyword">while</span> h1 <span class="keyword">and</span> h2:</span><br><span class="line">            <span class="keyword">if</span> h1.val &gt; h2.val:</span><br><span class="line">                cur.next = h2</span><br><span class="line">                cur = h2</span><br><span class="line">                h2 = h2.next</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cur.next = h1</span><br><span class="line">                cur = h1</span><br><span class="line">                h1 = h1.next</span><br><span class="line">        <span class="keyword">if</span> h1:</span><br><span class="line">            cur.next = h1</span><br><span class="line">        <span class="keyword">if</span> h2:</span><br><span class="line">            cur.next = h2</span><br><span class="line">        <span class="keyword">return</span> head.next</span><br></pre></td></tr></table></figure></p>
+<p><strong>复杂度分析:</strong><br>时间复杂度:<br>将k个列表，每次二分每次二分，直到最后两两列表进行合并，该二叉树的深度最多$\log_2k$.在每一层，都相当于将总长度为$N$的列表合并了一次，所以总的复杂度为$O(N \log k)$。<br>空间复杂度: $O(1)$，代码中未使用递归</p>
+<h3 id="法三"><a href="#法三" class="headerlink" title="法三"></a>法三</h3><p>最简单的方法就是先将k个列表不管顺序的合并为长度为$N$的列表，再用快排等高效的排序方法进行排序即可。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"># class ListNode:</span></span><br><span class="line"><span class="comment">#     def __init__(self, x):</span></span><br><span class="line"><span class="comment">#         self.val = x</span></span><br><span class="line"><span class="comment">#         self.next = None</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mergeKLists</span><span class="params">(self, lists)</span>:</span></span><br><span class="line">        _list = []</span><br><span class="line">        head = cur = ListNode(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> lists:</span><br><span class="line">            <span class="keyword">while</span> l:</span><br><span class="line">                _list.append(l.val)</span><br><span class="line">                l = l.next</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> sorted(_list):</span><br><span class="line">            cur.next = ListNode(l)</span><br><span class="line">            cur = cur.next</span><br><span class="line">        <span class="keyword">return</span> head.next</span><br></pre></td></tr></table></figure></p>
+<p><strong>复杂度分析:</strong><br>时间复杂度:<br>合并为整个列表，复杂度为$O(N)$，进行快排的复杂度为$O(N\log N)$，最后再遍历为一个链表，复杂度为$O(N)$，所以时间复杂度为$O(N\log N)$。<br>空间复杂度为: $O(N)$，链表$O(N)$，列表$O(N)$</p>
+<h2 id="法四"><a href="#法四" class="headerlink" title="法四"></a>法四</h2><p>我们还可以从每个序列的头开始，每次比较这k个结点哪个小，把最小的合并到序列中，指针后移，再进行比较。。<br><img src="/articles/1e66386/2.png"><br><img src="/articles/1e66386/3.png"><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mergeKLists</span><span class="params">(self, lists)</span>:</span></span><br><span class="line">        head = cur = ListNode(<span class="number">0</span>)</span><br><span class="line">        _list = []</span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> lists:</span><br><span class="line">            <span class="keyword">if</span> l:</span><br><span class="line">                _list.append((l.val,l))</span><br><span class="line">        <span class="keyword">while</span> len(_list):</span><br><span class="line">            _id, _min = <span class="number">0</span>, _list[<span class="number">0</span>][<span class="number">0</span>]</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(_list)):</span><br><span class="line">                <span class="keyword">if</span> _list[i][<span class="number">0</span>] &lt; _min:</span><br><span class="line">                    _min = _list[i][<span class="number">0</span>]</span><br><span class="line">                    _id = i</span><br><span class="line">            cur.next = ListNode(_min)</span><br><span class="line">            cur = cur.next</span><br><span class="line">            <span class="keyword">if</span> _list[_id][<span class="number">1</span>].next <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                _list.append((_list[_id][<span class="number">1</span>].next.val, _list[_id][<span class="number">1</span>].next))</span><br><span class="line">            <span class="keyword">del</span> _list[_id]</span><br><span class="line">        <span class="keyword">return</span> head.next</span><br></pre></td></tr></table></figure></p>
+<p><strong>复杂度分析:</strong><br>时间复杂度:<br>每找到一个最小的结点合并到序列中，就需要比较$k-1$次，一共有$N$个结点，所以复杂度为$O(kN)$.<br>空间复杂度: 创建一个新链表——$O(N)$</p>
+<h2 id="法五"><a href="#法五" class="headerlink" title="法五"></a>法五</h2><p>在方法四中，每次比较k个结点的结点的大小关系有点过于费时，我们可以维护一个大小为$k$的优先队列(或堆，<a href="https://statusrank.xyz/articles/1eeb7190.html">关于优先队列</a>），这样每次就可以快速地找出当前最小的结点。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> queue <span class="keyword">import</span> PriorityQueue</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">mergeKLists</span><span class="params">(self, lists)</span>:</span></span><br><span class="line">        head = cur = ListNode(<span class="number">0</span>)</span><br><span class="line">        que = PriorityQueue()</span><br><span class="line">        index = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> l <span class="keyword">in</span> lists:</span><br><span class="line">            <span class="keyword">if</span> l:</span><br><span class="line">                que.put((l.val, index, l))</span><br><span class="line">                index += <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> que.empty():</span><br><span class="line">            val, _, node = que.get()</span><br><span class="line">            cur.next = ListNode(val)</span><br><span class="line">            cur = cur.next</span><br><span class="line">            <span class="keyword">if</span> node.next:</span><br><span class="line">                que.put((node.next.val, index, node.next))</span><br><span class="line">                index += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> head.next</span><br></pre></td></tr></table></figure></p>
+<p><strong>复杂度分析</strong>：<br>时间复杂度:<br>大小为k的优先队列，每次插入和比较需要$O(\log k)$，但是找到最小元素是$O(1)$的，一共有$N$个结点，总的时间复杂度为$O(N\log k)$。<br>空间复杂度:<br>创建一个新链表，复杂度为$O(N)$；创建一个大小为$k$的优先队列，复杂度为$O(k)$，总的复杂度为$O(N)$。</p>
+
       
     </div>
     
@@ -473,12 +511,12 @@
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/articles/1e66386.html">merge-k-sorted-lists</a></p>
+  <p><span>本文标题:</span><a href="/articles/1e66386.html">LeetCode 23. Merge k Sorted Lists</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
   <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
   <p><span>发布时间:</span>2019年04月24日 - 16:04</p>
-  <p><span>最后更新:</span>2019年04月24日 - 21:04</p>
-  <p><span>原始链接:</span><a href="/articles/1e66386.html" title="merge-k-sorted-lists">https://statusrank.xyz/articles/1e66386.html</a>
+  <p><span>最后更新:</span>2019年04月24日 - 22:04</p>
+  <p><span>原始链接:</span><a href="/articles/1e66386.html" title="LeetCode 23. Merge k Sorted Lists">https://statusrank.xyz/articles/1e66386.html</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/1e66386.html" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
@@ -628,8 +666,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -721,6 +768,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题意"><span class="nav-text">题意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#法一"><span class="nav-text">法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#法二"><span class="nav-text">法二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#法三"><span class="nav-text">法三</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#法四"><span class="nav-text">法四</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#法五"><span class="nav-text">法五</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

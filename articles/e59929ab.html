@@ -114,18 +114,18 @@
 
 
 
-<meta name="description" content="概念可变对象与不可变对象的区别在于对象本身是否可变。python内置类型中  可变对象：列表(list)，字典(dict)，集合(set) 不可变对象：元组(tuple)，string，int，float，bool例如：1234567891011#可变对象&amp;gt;&amp;gt;&amp;gt; a = [1, 2, 3]&amp;gt;&amp;gt;&amp;gt; a[1] = 4&amp;gt;&amp;gt;&amp;gt; a[1, 4, 3]#">
+<meta name="description" content="概念可变对象与不可变对象的区别在于对象本身是否可变。python内置类型中  可变对象：列表(list)，字典(dict)，集合(set) 不可变对象：元组(tuple)，string，int，float，bool">
 <meta name="keywords" content="python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python中的可变对象与不可变对象">
 <meta property="og:url" content="https://statusrank.xyz/articles/e59929ab.html">
 <meta property="og:site_name" content="Statusrank&#39;s Blog">
-<meta property="og:description" content="概念可变对象与不可变对象的区别在于对象本身是否可变。python内置类型中  可变对象：列表(list)，字典(dict)，集合(set) 不可变对象：元组(tuple)，string，int，float，bool例如：1234567891011#可变对象&amp;gt;&amp;gt;&amp;gt; a = [1, 2, 3]&amp;gt;&amp;gt;&amp;gt; a[1] = 4&amp;gt;&amp;gt;&amp;gt; a[1, 4, 3]#">
+<meta property="og:description" content="概念可变对象与不可变对象的区别在于对象本身是否可变。python内置类型中  可变对象：列表(list)，字典(dict)，集合(set) 不可变对象：元组(tuple)，string，int，float，bool">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-24T08:43:17.111Z">
+<meta property="og:updated_time" content="2019-04-24T13:12:35.211Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python中的可变对象与不可变对象">
-<meta name="twitter:description" content="概念可变对象与不可变对象的区别在于对象本身是否可变。python内置类型中  可变对象：列表(list)，字典(dict)，集合(set) 不可变对象：元组(tuple)，string，int，float，bool例如：1234567891011#可变对象&amp;gt;&amp;gt;&amp;gt; a = [1, 2, 3]&amp;gt;&amp;gt;&amp;gt; a[1] = 4&amp;gt;&amp;gt;&amp;gt; a[1, 4, 3]#">
+<meta name="twitter:description" content="概念可变对象与不可变对象的区别在于对象本身是否可变。python内置类型中  可变对象：列表(list)，字典(dict)，集合(set) 不可变对象：元组(tuple)，string，int，float，bool">
 
 
 
@@ -395,7 +395,7 @@
 	
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-24T16:43:17+08:00" content="2019-04-24">
+    <time itemprop="dateUpdated" datetime="2019-04-24T21:12:35+08:00" content="2019-04-24">
       2019-04-24
     </time>
   </span>
@@ -471,11 +471,13 @@
       
 
       
-        <a id="more"></a>
-<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>可变对象与不可变对象的区别在于对象本身是否可变。<br>python内置类型中</p>
+        <h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>可变对象与不可变对象的区别在于对象本身是否可变。<br>python内置类型中</p>
 <ul>
 <li>可变对象：列表(list)，字典(dict)，集合(set)</li>
-<li>不可变对象：元组(tuple)，string，int，float，bool<br>例如：<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#可变对象</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">1</span>] = <span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>]</span><br><span class="line"><span class="comment">#不可变对象</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b[<span class="number">1</span>] = <span class="number">4</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">'tuple'</span> object does <span class="keyword">not</span> support item assignment</span><br></pre></td></tr></table></figure>
+<li><p>不可变对象：元组(tuple)，string，int，float，bool</p>
+<a id="more"></a>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#可变对象</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">1</span>] = <span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">[<span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>]</span><br><span class="line"><span class="comment">#不可变对象</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b[<span class="number">1</span>] = <span class="number">4</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">'tuple'</span> object does <span class="keyword">not</span> support item assignment</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>上面的例子直观的说明了<strong>可变对象是可以直接改变的，不可变对象则不可以。</strong></p>
@@ -518,7 +520,7 @@
   <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
   <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
   <p><span>发布时间:</span>2019年04月24日 - 16:04</p>
-  <p><span>最后更新:</span>2019年04月24日 - 16:04</p>
+  <p><span>最后更新:</span>2019年04月24日 - 21:04</p>
   <p><span>原始链接:</span><a href="/articles/e59929ab.html" title="python中的可变对象与不可变对象">https://statusrank.xyz/articles/e59929ab.html</a>
     <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/e59929ab.html" aria-label="复制成功！"></i></span>
   </p>
@@ -616,8 +618,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/articles/afd2cdd9.html" rel="prev" title="python-datastructures">
-                python-datastructures <i class="fa fa-chevron-right"></i>
+              <a href="/articles/1eeb7190.html" rel="prev" title="简单总结下python中的数据结构">
+                简单总结下python中的数据结构 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -633,7 +635,7 @@
   
   </article>
  
-	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/194c9918.html">LeetCode String to Integer (atoi) (正则表达式)</a></li></ul> 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/194c9918.html">LeetCode String to Integer (atoi) (正则表达式)</a></li><li><a href="/articles/1eeb7190.html">简单总结下python中的数据结构</a></li></ul> 
 
 
 

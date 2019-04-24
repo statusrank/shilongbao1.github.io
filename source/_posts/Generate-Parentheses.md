@@ -1,10 +1,14 @@
-﻿---
-title: Generate-Parentheses(Dfs,Dp)
+---
+title: 'Generate-Parentheses(Dfs,Dp)'
 copyright: true
 mathjax: true
-date: 2019-04-22 15:13:15
-tags: [Dp,dfs,卡特兰数]
+tags:
+  - Dp
+  - dfs
+  - 卡特兰数
 categories: LeetCode
+abbrlink: 1574a532
+date: 2019-04-22 15:13:15
 updated:
 ---
 [传送门](https://leetcode.com/problems/generate-parentheses/)

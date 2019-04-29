@@ -103,7 +103,7 @@
 
 
 
-  <meta name="keywords" content="deep learning,">
+  <meta name="keywords" content="思维,">
 
 
 
@@ -114,31 +114,20 @@
 
 
 
-<meta name="description" content="先给出链接  http://www.aboutyun.com/thread-21297-1-1.html https://www.youtube.com/watch?v=T8mGfIy9dWM&amp;amp;list=PLqpH5_OnJdN4dIAEL3ih6ZGIrrbEh3xJL&amp;amp;index=25 上一篇关于RNN的文章最后，我们提到过由于梯度消失和梯度爆炸问题，使得RNN很难处理长距离的">
-<meta name="keywords" content="deep learning">
+<meta name="description" content="传送门 题意假设我们按照字典序来给一个升序排序的列表生成全排列，那么现在给出某一个排列，让你给出它的下一个排列(字典序顺序下的下一个，如果已经是最后一个，给出第一个)要求空间复杂度$O(1)$">
+<meta name="keywords" content="思维">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LSTM和GRU的简单总结">
-<meta property="og:url" content="https://statusrank.xyz/articles/ed6ef9a3.html">
+<meta property="og:title" content="LeetCode 31. Next Permutation(思维)">
+<meta property="og:url" content="https://statusrank.xyz/articles/4a6fe0a2.html">
 <meta property="og:site_name" content="Statusrank&#39;s Blog">
-<meta property="og:description" content="先给出链接  http://www.aboutyun.com/thread-21297-1-1.html https://www.youtube.com/watch?v=T8mGfIy9dWM&amp;amp;list=PLqpH5_OnJdN4dIAEL3ih6ZGIrrbEh3xJL&amp;amp;index=25 上一篇关于RNN的文章最后，我们提到过由于梯度消失和梯度爆炸问题，使得RNN很难处理长距离的">
+<meta property="og:description" content="传送门 题意假设我们按照字典序来给一个升序排序的列表生成全排列，那么现在给出某一个排列，让你给出它的下一个排列(字典序顺序下的下一个，如果已经是最后一个，给出第一个)要求空间复杂度$O(1)$">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/1.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/3.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/4.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/5.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/6.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/7.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/8.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/9.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/10.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/2.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/1.jpg">
-<meta property="og:image" content="https://statusrank.xyz/articles/ed6ef9a3/11.png">
-<meta property="og:updated_time" content="2019-04-29T05:06:13.875Z">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/1.gif">
+<meta property="og:updated_time" content="2019-04-29T13:05:25.581Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LSTM和GRU的简单总结">
-<meta name="twitter:description" content="先给出链接  http://www.aboutyun.com/thread-21297-1-1.html https://www.youtube.com/watch?v=T8mGfIy9dWM&amp;amp;list=PLqpH5_OnJdN4dIAEL3ih6ZGIrrbEh3xJL&amp;amp;index=25 上一篇关于RNN的文章最后，我们提到过由于梯度消失和梯度爆炸问题，使得RNN很难处理长距离的">
-<meta name="twitter:image" content="https://statusrank.xyz/articles/ed6ef9a3/1.png">
+<meta name="twitter:title" content="LeetCode 31. Next Permutation(思维)">
+<meta name="twitter:description" content="传送门 题意假设我们按照字典序来给一个升序排序的列表生成全排列，那么现在给出某一个排列，让你给出它的下一个排列(字典序顺序下的下一个，如果已经是最后一个，给出第一个)要求空间复杂度$O(1)$">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/undefined/1.gif">
 
 
 
@@ -168,12 +157,12 @@
 
 
 
-  <link rel="canonical" href="https://statusrank.xyz/articles/ed6ef9a3.html">
+  <link rel="canonical" href="https://statusrank.xyz/articles/4a6fe0a2.html">
 
 
 
 
-  <title>LSTM和GRU的简单总结 | Statusrank's Blog</title>
+  <title>LeetCode 31. Next Permutation(思维) | Statusrank's Blog</title>
   
 
 
@@ -367,7 +356,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/ed6ef9a3.html">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/4a6fe0a2.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Statusrank">
@@ -384,7 +373,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">LSTM和GRU的简单总结</h1>
+          <h1 class="post-title" itemprop="name headline">LeetCode 31. Next Permutation(思维)</h1>
         
 
         <div class="post-meta">
@@ -396,8 +385,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-28T20:02:29+08:00">
-                2019-04-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-29T20:50:41+08:00">
+                2019-04-29
               </time>
             
 
@@ -408,7 +397,7 @@
 	
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-29T13:06:13+08:00" content="2019-04-29">
+    <time itemprop="dateUpdated" datetime="2019-04-29T21:05:25+08:00" content="2019-04-29">
       2019-04-29
     </time>
   </span>
@@ -426,8 +415,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/深度学习/" itemprop="url" rel="index">
-                    <span itemprop="name">深度学习</span>
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index">
+                    <span itemprop="name">LeetCode</span>
                   </a>
                 </span>
 
@@ -444,8 +433,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/articles/ed6ef9a3.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/articles/ed6ef9a3.html" itemprop="commentCount"></span>
+                <a href="/articles/4a6fe0a2.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/4a6fe0a2.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -453,7 +442,7 @@
 
           
           
-             <span id="/articles/ed6ef9a3.html" class="leancloud_visitors" data-flag-title="LSTM和GRU的简单总结">
+             <span id="/articles/4a6fe0a2.html" class="leancloud_visitors" data-flag-title="LeetCode 31. Next Permutation(思维)">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -484,89 +473,10 @@
       
 
       
-        <p>先给出链接</p>
-<ul>
-<li><a href="http://www.aboutyun.com/thread-21297-1-1.html" target="_blank" rel="noopener">http://www.aboutyun.com/thread-21297-1-1.html</a></li>
-<li><p><a href="https://www.youtube.com/watch?v=T8mGfIy9dWM&amp;list=PLqpH5_OnJdN4dIAEL3ih6ZGIrrbEh3xJL&amp;index=25" target="_blank" rel="noopener">https://www.youtube.com/watch?v=T8mGfIy9dWM&amp;list=PLqpH5_OnJdN4dIAEL3ih6ZGIrrbEh3xJL&amp;index=25</a></p>
-<p><a href="https://statusrank.xyz/articles/5f0e8406.html">上一篇</a>关于RNN的文章最后，我们提到过由于梯度消失和梯度爆炸问题，使得RNN很难处理长距离的依赖。本文我们介绍两种改进后的RNN：LSTM(Long Short Term Memory Network)和Gated Recurrent Unit(GRU)。它们成功的解决了原始RNN的缺陷，成为当前比较流行的RNN，并在许多领域中成功应用。</p>
-<a id="more"></a>
-<h1 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h1><h2 id="LSTM的结构"><a href="#LSTM的结构" class="headerlink" title="LSTM的结构"></a>LSTM的结构</h2><p>LSTM和RNN其实本质上很类似，只是在隐藏层做了“手脚”。原始的RNN的隐藏层只有一个状态，即h，它对短期的输入非常敏感。于是，LSTM就又添加了一个状态c，让它来保存长期的状态。如图:</p>
-<img src="/articles/ed6ef9a3/1.png">
-<p>新增加的状态c，我们称为单元状态(cell state)。我们把上图按照时间维度展开得到：</p>
-<img src="/articles/ed6ef9a3/3.png">
-<p>从图中我们可以看出，在t时刻，LSTM的输入有三个：当前时刻网络的输入值$x_t$，上一时刻LSTM的输出值$h_{t-1}$，上一时刻的单元状态$c_{t-1}$。LSTM的输出有两个：当前时刻输出值$h_t$和当前时刻的单元状态$c_t$。（也可以另加一个输出$y_t$，他是由$h_t$，进行transform+activate function求得）。<br><strong>LSTM的关键，</strong>就是怎样控制长期状态$c$。在这里，LSTM的思路是使用三个控制开关，分别是遗忘门(forget gata),输入门(input gate)和输出门(output gate)。</p>
-<img src="/articles/ed6ef9a3/4.png">
-</li>
-</ul>
-<h2 id="LSTM的计算"><a href="#LSTM的计算" class="headerlink" title="LSTM的计算"></a>LSTM的计算</h2><p>前面我们说到的三个门，其实就是三个全连接层。它的输入是一个向量，输出是一个$(0,1)$之间的实数向量(一般采用sigmoid的激活函数)。假设$W$是门的权重向量,$b$是偏置，那么门可以表示为：</p>
-<script type="math/tex; mode=display">
-g(x) = \sigma(Wx+b)</script><p>门的使用，就是用门的输出向量按元素乘以我们需要控制的那个向量。因为门的输出是$(0,1)$之间的实数向量，那么当门的输出为0时，任何响亮与之相乘都会得到0向量（也就是啥都不能通过）；输出为1时，任何向量都不会有任何改变（也就是啥都能通过）。因为$\sigma$通常使用sigmoid函数，其值域为$(0,1)$,所以这些门始终是<strong>半开半闭</strong>的。</p>
-<h3 id="遗忘门"><a href="#遗忘门" class="headerlink" title="遗忘门"></a>遗忘门</h3><script type="math/tex; mode=display">
-f_t = \sigma(W_f \cdot[h_{t-1},x_t] + b_f) \tag1</script><p>(1)中，$W_f$是遗忘门的权重矩阵,$[h_{t-1},x_t]$表示把两个向量连接成一个更长的向量，$b_f$是遗忘门的偏置，$\sigma$是sigmoid函数。事实上，权重矩阵$W_f$都是两个矩阵拼接而成:一个是$W_{fh}$，它对应着输入项$h_{t-1}$,另一个是$W_{fx}$，它对应着输入项$x_t$。</p>
-<script type="math/tex; mode=display">
-\left[\begin{matrix}
-W_f
-\end{matrix}
-\right]\cdot 
-\left[\begin{matrix}
-h_{t-1} \\
-x_t
-\end{matrix}
-\right] = 
-\left[\begin{matrix}
-W_{fh} & W_{fx}
-\end{matrix}\right]
-\left[\begin{matrix}
-h_{t-1}\\
-x_t
-\end{matrix}\right]=W_{fh}h_{t-1} + W_{fx}x_t</script><p>下图展示了遗忘门的计算：<br><img src="/articles/ed6ef9a3/5.png"></p>
-<h3 id="输入门"><a href="#输入门" class="headerlink" title="输入门"></a>输入门</h3><script type="math/tex; mode=display">
-\bf{i_t} = \sigma(W_i\cdot[h_{t-1},x_t] + b_i) \tag2</script><p>$W_i$和$b_i$分别是输入门的权重和偏置，下图展示了输入门的计算。<br><img src="/articles/ed6ef9a3/6.png"><br>接下来，我们计算用于描述当前输入的单元状态$\hat c_t$,它是根据上一次的输入和本次输入得来:</p>
-<script type="math/tex; mode=display">
-\hat c_t = tanh(W_c\cdot[h_{t-1},x_t] + b_c) \tag3</script><p>下图是$\hat c_t$的计算<br><img src="/articles/ed6ef9a3/7.png"><br><strong>现在我们计算当前时刻的单元状态$c_t$。</strong>它是由上一时刻的单元状态$c_{t-1}$按元素乘以遗忘门$f_t$，再用当前输入的单元状态$\hat c_t$按元素乘以输入门求和得来。</p>
-<script type="math/tex; mode=display">
-c_t = f_t \odot c_{t-1} + \bf{i_t} \odot \hat c_t \tag4</script><p>$\odot$表示按元素乘，下图展示了计算<br><img src="/articles/ed6ef9a3/8.png"><br>这样，我们就把LSTM关于当前的记忆$\hat c_t$和长期的记忆$c_{t-1}$组合在一起，形成了当前的长期记忆$c_t$。由于遗忘门的控制，它可以保存很久之前的信息，由于输入门的控制，它又可以避免当前无关紧要的内容进入记忆。</p>
-<h3 id="输出门"><a href="#输出门" class="headerlink" title="输出门"></a>输出门</h3><p><strong>输出门控制了长期记忆对当前输出的影响。</strong></p>
-<script type="math/tex; mode=display">
-o_t = \sigma(W_o \cdot [h_{t-1},x_t] + b_o) \tag5</script><p>下图表示输入门的计算:<br><img src="/articles/ed6ef9a3/9.png"><br><strong>LSTM的最终输入，是由输出门和单元状态共同决定的:</strong></p>
-<script type="math/tex; mode=display">
-\bf{h}_t = o_t \odot tanh(c_t) \tag6</script><p>下图展示了LSTM完整的计算结果<br><img src="/articles/ed6ef9a3/10.png"></p>
-<h2 id="LSTM另一种直观结构"><a href="#LSTM另一种直观结构" class="headerlink" title="LSTM另一种直观结构"></a>LSTM另一种直观结构</h2><p> 下图以另一种形式直观的展示了LSTM和原始RNN的区别:<br> <img src="/articles/ed6ef9a3/2.png"><br> 长期记忆$c_t$每次的变化很小，而短期记忆$h_t$变化很快。下面我们还是谈一下LSTM中三个门，遗忘门，输入门和输出门。<br>在某个时刻，我们的输入有：当前的外部输入$x_t$,上一时刻的单元状态$c_{t-1}$,以及$h_{t-1}$。那么我们有如下定义:</p>
-<ul>
-<li>当前时刻的即时状态$z = tanh(W\cdot [h_{t-1},x_t])$</li>
-<li>遗忘门: $z^f = \sigma(W^f\cdot [h_{t-1},x_t])$</li>
-<li>输入门: $z^i = \sigma(W^i\cdot [h_{t-1},x_t])$</li>
-<li>输出门:$z^o = \sigma(W^o\cdot [h_{t-1},x_t])$<br><strong>我们知道这四个变量是完全不同的，因为首先激活函数不同，第一个双曲正切，后三个是sigmoid。其次学到的权重矩阵$W$也不同。</strong><br>然后我们就得到了使用这四个状态的LSTM内部结构:<img src="/articles/ed6ef9a3/1.jpg">
-$\odot$是Hadamard Product，也就是操作矩阵中对应的元素相乘，因此要求两个相乘矩阵是同型的。$\oplus$表示矩阵加法。从上图我们也可以看出，$c_t$确实变化很慢，因为它只是上一个时刻的状态$c_{t-1}$乘以一个遗忘门，再外加当前的即时状态乘以输入门。而$h_t$却变化很快，因为它经历了一系列的操作。另外，经验表明(有对应的文献和实验)tanh的激活函数会有更好的效果，如果将其换成别的会容易过拟合或者效果很差。<br>LSTM内部主要有三个阶段：</li>
-</ul>
-<ol>
-<li>忘记阶段。这个阶段主要是对上一个节点传进来的输入进行<strong>选择性</strong>忘记。简单来说就是会 “忘记不重要的，记住重要的”。</li>
-</ol>
-<p>具体来说是通过计算得到的  $z^f$ （f表示forget）来作为忘记门控，来控制上一个状态的  $c^{t-1}$哪些需要留哪些需要忘。</p>
-<ol>
-<li>选择记忆阶段。这个阶段将这个阶段的输入有选择性地进行“记忆”。主要是会对输入$x^t$ 进行选择记忆。哪些重要则着重记录下来，哪些不重要，则少记一些。当前的输入内容由前面计算得到的  $z$ 表示。而选择的门控信号则是由  $z^i$ （i代表information）来进行控制。</li>
-</ol>
-<blockquote>
-<p>将上面两步得到的结果相加，即可得到传输给下一个状态的  $c^t$  。也就是上图中的第一个公式。</p>
-</blockquote>
-<ol>
-<li>输出阶段。这个阶段将决定哪些将会被当成当前状态的输出。主要是通过  $z^0$  来进行控制的。并且还对上一阶段得到的  $c^o$ 进行了放缩（通过一个tanh激活函数进行变化）。</li>
-</ol>
-<p>与普通RNN类似，输出 $y_t$往往最终也是通过  $h_t$变化得到。</p>
-<h2 id="LSTM的训练"><a href="#LSTM的训练" class="headerlink" title="LSTM的训练"></a>LSTM的训练</h2><p>请看<a href="http://www.aboutyun.com/thread-21297-1-1.html" target="_blank" rel="noopener">这篇文章的推导</a>。</p>
-<h1 id="GRU"><a href="#GRU" class="headerlink" title="GRU"></a>GRU</h1><p>LSTM通过三个门来控制传输状态，展现出了不错的结果。但是也因为引入了很多内容，导致参数变多，也使得训练难度加大了很多。相比LSTM，GRU做了很多简化，能够达到相当的效果，并且相比之下更容易进行训练，能够很大程度上提高训练效率，因此很多时候会更倾向于使用GRU。<br><strong>GRU对LSTM做了两大改动：</strong></p>
-<ul>
-<li>将三个门：输入门，遗忘门，输出门变为两个门：更新门(update gate)$z_t$和重置门$r_t$</li>
-<li>将单元状态$c_t$和隐状态$h_t$合并为一个，表示为$h_t$。(也就是说，从外部看,GRU的结构和原始的RNN是一样的，只是内部实现更高级)。<h2 id="GRU的两个门控信号"><a href="#GRU的两个门控信号" class="headerlink" title="GRU的两个门控信号"></a>GRU的两个门控信号</h2><h3 id="reset-gate"><a href="#reset-gate" class="headerlink" title="reset gate"></a>reset gate</h3><script type="math/tex; mode=display">
-r = \sigma(W^r\cdot[h_{t-1},x_t])</script><h3 id="update-gate"><a href="#update-gate" class="headerlink" title="update gate"></a>update gate</h3><script type="math/tex; mode=display">
-z = \sigma(W^z\cdot[h_{t-1},x_t])</script>有了这两个门，下面我们先直接给出GRU的网络结构:<img src="/articles/ed6ef9a3/11.png">
-对于$h_{t-1}$,我们先让其通过重置门来得到”重置”之后的数据${h_{t-1}}’ = h_{t-1} \odot r$。将得到的${h_{t-1}}’$与$x_t$进行拼接之后，乘上一个权重矩阵$W$,再通过激活函数tanh将数据缩放到$(-1,1)$范围内，即得到上图所说的$h’$:<script type="math/tex; mode=display">
-h' = tanh(W\cdot[{h_{t-1}}',x_t])</script>这里的$h’$主要是包含了当前输入的$x_t$数据.有针对性地对$h’$添加到当前的隐藏状态相当于“记忆了当前时刻的状态”。(类似于LSTM的选择记忆阶段)。<br>图2-3中的 $\odot$ 是Hadamard Product，也就是操作矩阵中对应的元素相乘，因此要求两个相乘矩阵是同型的。 $\oplus$则代表进行矩阵加法操作。<br><strong>那么记忆如何更新呢？</strong>(也就是当前时刻的$h^t$怎么得到呢？)<script type="math/tex; mode=display">
-h_t = z \odot h_{t-1} + (1 -z )\odot h'</script>这里的门控门的取值范围和LSTM中的一样，也是$(0,1)$。门控信号越接近$1$，代表“记忆”下来的数据越多；而越接近$0$，代表“遗忘”的越多。<br><strong>GRU相比LSTM简化的主要部分就在于此，</strong>使用了一个update gata 来同时进行遗忘和记忆。</li>
-<li>$z \odot h_{t-1}$: 表示对原本隐藏状态的选择性“遗忘”。这里的$z$就可以想象为LSTM中的遗忘门。</li>
-<li>$(1-z) \dot h’$: 表示对包含当前结点信息的$h’$进行选择性”记忆”。$1-z$可以类比LSTM的输入门</li>
-<li>$h_t$的更新公式和LSTM中$c_t$的更新公式极其相似，$c_t = z^f \odot c_{t-1} + z^i \odot \hat c_t$。<font color="red">只不过这里遗忘$z$和选择$1-z$是联动的。也就是说，对于传递进来的隐信息$h_{t-1}$,我们会用$z$选择性遗忘，被遗忘的多少权重，我们会使用当前输入包含的信息$h’$用权重$1-z$对相应的部分进行弥补，以保持一种”恒定”.</font></li>
-</ul>
+        <p><a href="https://leetcode.com/problems/next-permutation/" target="_blank" rel="noopener">传送门</a></p>
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>假设我们按照字典序来给一个升序排序的列表生成全排列，那么现在给出某一个排列，让你给出它的下一个排列(字典序顺序下的下一个，如果已经是最后一个，给出第一个)<br>要求空间复杂度$O(1)$<br><a id="more"></a></p>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>最最最简单的方法就是，生成所有的全排列然后找出对应的下一个。这样时间复杂度为$O(n!)$，空间复杂度为$O(n)$</p>
+<p>其实我们很容易就能想到，给定一个当前状态的排列，比如”4321”，对于这个降序序列已经是最大字典序的排列了，那么他的下一个就只能是”1234”。<br>再给出另一个例子”3421”，”421”这个降序序列也是最后一个了，那么对于”3”我们应该找谁替换呢？应该找右边降序序列中大于它的最小的那个”4”，这样我们就得到了它的下一个是”4123”。<br>由此，我们可以得到我们的方法了。给定一个当前状态，我们应该从后往前找，找到那个降序序列被破坏的位置，也就是$nums[pos] &gt; nums[pos - 1]$，然后将$pos-1$处的值和右边大于等于它的最小的那个交换，再将右边的升序排序即可。<br><strong>注意到，右边的已经是降序，所以找替换$pos-1$的值，我们可以使用二分</strong>。另外，二者交换后，并不影响我们序列降序的性质，所以我们无需排序，只需直接reverse列表即可。<br><img src="/articles/undefined/1.gif"><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">nextPermutation</span><span class="params">(self, nums)</span>:</span></span><br><span class="line">        pos = len(nums) - <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> pos &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> nums[pos] &gt; nums[pos - <span class="number">1</span>]:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            pos -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> pos == <span class="number">0</span>:</span><br><span class="line">            nums.reverse()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            l,r,mid,ans = pos,len(nums) <span class="number">-1</span>,<span class="number">0</span>,<span class="number">0</span></span><br><span class="line">            <span class="keyword">while</span> l &lt;= r:</span><br><span class="line">                mid = (l + r) // <span class="number">2</span></span><br><span class="line">                <span class="keyword">if</span> nums[mid] &gt; nums[pos - <span class="number">1</span>]:</span><br><span class="line">                    ans = mid</span><br><span class="line">                    l += <span class="number">1</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    r -= <span class="number">1</span></span><br><span class="line">            nums[pos - <span class="number">1</span>],nums[ans] = nums[ans],nums[pos - <span class="number">1</span>]</span><br><span class="line">            nums[pos:] = list(reversed(nums[pos:]))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -592,13 +502,13 @@ h_t = z \odot h_{t-1} + (1 -z )\odot h'</script>这里的门控门的取值范�
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/articles/ed6ef9a3.html">LSTM和GRU的简单总结</a></p>
+  <p><span>本文标题:</span><a href="/articles/4a6fe0a2.html">LeetCode 31. Next Permutation(思维)</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
   <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
-  <p><span>发布时间:</span>2019年04月28日 - 20:04</p>
-  <p><span>最后更新:</span>2019年04月29日 - 13:04</p>
-  <p><span>原始链接:</span><a href="/articles/ed6ef9a3.html" title="LSTM和GRU的简单总结">https://statusrank.xyz/articles/ed6ef9a3.html</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/ed6ef9a3.html" aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2019年04月29日 - 20:04</p>
+  <p><span>最后更新:</span>2019年04月29日 - 21:04</p>
+  <p><span>原始链接:</span><a href="/articles/4a6fe0a2.html" title="LeetCode 31. Next Permutation(思维)">https://statusrank.xyz/articles/4a6fe0a2.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/4a6fe0a2.html" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
 </div>
@@ -658,7 +568,7 @@ h_t = z \odot h_{t-1} + (1 -z )\odot h'</script>这里的门控门的取值范�
       
         <div class="post-tags">
           
-            <a href="/tags/deep-learning/" rel="tag"><i class="fa fa-tag"></i> deep learning</a>
+            <a href="/tags/思维/" rel="tag"><i class="fa fa-tag"></i> 思维</a>
           
         </div>
       
@@ -707,7 +617,7 @@ h_t = z \odot h_{t-1} + (1 -z )\odot h'</script>这里的门控门的取值范�
   
   </article>
  
-	 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/7db58ea8.html">Median of Two Sorted Arrays(二分)</a></li></ul> 
 
 
 
@@ -798,7 +708,7 @@ h_t = z \odot h_{t-1} + (1 -z )\odot h'</script>这里的门控门的取值范�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">53</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -861,7 +771,7 @@ h_t = z \odot h_{t-1} + (1 -z )\odot h'</script>这里的门控门的取值范�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LSTM"><span class="nav-text">LSTM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM的结构"><span class="nav-text">LSTM的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM的计算"><span class="nav-text">LSTM的计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#遗忘门"><span class="nav-text">遗忘门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入门"><span class="nav-text">输入门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出门"><span class="nav-text">输出门</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM另一种直观结构"><span class="nav-text">LSTM另一种直观结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM的训练"><span class="nav-text">LSTM的训练</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GRU"><span class="nav-text">GRU</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GRU的两个门控信号"><span class="nav-text">GRU的两个门控信号</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reset-gate"><span class="nav-text">reset gate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update-gate"><span class="nav-text">update gate</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题意"><span class="nav-text">题意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-text">思路</span></a></li></ol></div>
             
 
           </div>

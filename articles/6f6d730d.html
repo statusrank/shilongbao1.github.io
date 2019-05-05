@@ -128,7 +128,7 @@
 <meta property="og:site_name" content="Statusrank&#39;s Blog">
 <meta property="og:description" content="传送门 题意:给你一个只包含’(‘和’)’的字符，让你找出最长的满足括号匹配条件的子串，返回其长度。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-05T12:20:54.432Z">
+<meta property="og:updated_time" content="2019-05-05T12:24:10.166Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LeetCode 32. Longest Valid Parentheses">
 <meta name="twitter:description" content="传送门 题意:给你一个只包含’(‘和’)’的字符，让你找出最长的满足括号匹配条件的子串，返回其长度。">
@@ -401,7 +401,7 @@
 	
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-05-05T20:20:54+08:00" content="2019-05-05">
+    <time itemprop="dateUpdated" datetime="2019-05-05T20:24:10+08:00" content="2019-05-05">
       2019-05-05
     </time>
   </span>
@@ -484,8 +484,10 @@
 <li>时间复杂度: $O(n^3)$</li>
 <li><p>空间复杂度: 取决于用什么方法来判断该字符串是否满足条件。若用stack则为$O(n)$，若使用两个变量线性判断,空间复杂度为$O(1)$</p>
 <p>代码略。</p>
-<h2 id="Dp"><a href="#Dp" class="headerlink" title="Dp"></a>Dp</h2><p>$dp[i]$表示以$i$结尾的的满足匹配条件的最长子串的长度，我们可以发现满足条件的$i$，一定有$s[i] ==$’）’，否则$dp[i] = 0$。因此，我们可以推导出如下的转移</p>
 </li>
+</ul>
+<h2 id="Dp"><a href="#Dp" class="headerlink" title="Dp"></a>Dp</h2><p>$dp[i]$表示以$i$结尾的的满足匹配条件的最长子串的长度，我们可以发现满足条件的$i$，一定有$s[i] ==$’）’，否则$dp[i] = 0$。因此，我们可以推导出如下的转移</p>
+<ul>
 <li>$s[i] ==$’）’ 并且$s[i - 1] ==$’（’，那么有: $dp[i] = dp[i - 2] + 2$</li>
 <li>$s[i] ==$’）’并且$s[i-1]==$’）’ ，这时候说明有可能是’（（（）））’这种匹配的形式。所以我们还需要判断, 若$s[i - dp[i-1]-1] ==$‘（’，那么有$dp[i] = dp[i-1] + dp[i - dp[i-1] - 2] + 2$</li>
 </ul>

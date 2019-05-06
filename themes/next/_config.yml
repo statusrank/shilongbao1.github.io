@@ -314,14 +314,14 @@ font:
   # Fallback to `global` font settings.
   headings:
     external: true
-    family: Lobster Two
+    family: Georgia
     size: 
 
   # Font settings for posts.
   # Fallback to `global` font settings.
   posts:
     external: true
-    family:
+    family: Georgia
 
   # Font settings for Logo.
   # Fallback to `global` font settings.

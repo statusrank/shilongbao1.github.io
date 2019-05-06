@@ -109,7 +109,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="二分,">
 
 
 
@@ -120,16 +120,18 @@
 
 
 
-<meta name="description" content="退役Acmer努力摆脱四非加成光环的菜鸡">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Statusrank&#39;s Blog">
-<meta property="og:url" content="https://statusrank.xyz/tags/聚类/index.html">
+<meta name="description" content="传送门 题意假设一个按从小到大排序的数组按照某个位置的中心点进行了循环(比如，$[1,2,3,4]$变为$[3,4,1,2]$)。给你一个target，你需要它在这个数组中的index，若无则返回$-1$。要求时间复杂度为$O(\log n)$级别，数组中元素无重复">
+<meta name="keywords" content="二分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode 33. Search in Rotated Sorted Array">
+<meta property="og:url" content="https://statusrank.xyz/articles/7c97f959.html">
 <meta property="og:site_name" content="Statusrank&#39;s Blog">
-<meta property="og:description" content="退役Acmer努力摆脱四非加成光环的菜鸡">
+<meta property="og:description" content="传送门 题意假设一个按从小到大排序的数组按照某个位置的中心点进行了循环(比如，$[1,2,3,4]$变为$[3,4,1,2]$)。给你一个target，你需要它在这个数组中的index，若无则返回$-1$。要求时间复杂度为$O(\log n)$级别，数组中元素无重复">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-06T05:22:38.986Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Statusrank&#39;s Blog">
-<meta name="twitter:description" content="退役Acmer努力摆脱四非加成光环的菜鸡">
+<meta name="twitter:title" content="LeetCode 33. Search in Rotated Sorted Array">
+<meta name="twitter:description" content="传送门 题意假设一个按从小到大排序的数组按照某个位置的中心点进行了循环(比如，$[1,2,3,4]$变为$[3,4,1,2]$)。给你一个target，你需要它在这个数组中的index，若无则返回$-1$。要求时间复杂度为$O(\log n)$级别，数组中元素无重复">
 
 
 
@@ -159,12 +161,12 @@
 
 
 
-  <link rel="canonical" href="https://statusrank.xyz/tags/聚类/">
+  <link rel="canonical" href="https://statusrank.xyz/articles/7c97f959.html">
 
 
 
 
-  <title>标签: 聚类 | Statusrank's Blog</title>
+  <title>LeetCode 33. Search in Rotated Sorted Array | Statusrank's Blog</title>
   
 
 
@@ -203,7 +205,7 @@
     
   
 
-  <div class="container sidebar-position-right ">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -344,52 +346,288 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>聚类<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/7c97f959.html">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/articles/6a624875.html" itemprop="url">
-              
-                <span itemprop="name">K-Means聚类算法</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">LeetCode 33. Search in Rotated Sorted Array</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-01-19T20:22:54+08:00" content="2019-01-19">
-          01-19
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-06T13:09:51+08:00">
+                2019-05-06
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-05-06T13:22:38+08:00" content="2019-05-06">
+      2019-05-06
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/LeetCode/" itemprop="url" rel="index">
+                    <span itemprop="name">LeetCode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/7c97f959.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/7c97f959.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/7c97f959.html" class="leancloud_visitors" data-flag-title="LeetCode 33. Search in Rotated Sorted Array">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank" rel="noopener">传送门</a></p>
+<h1 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h1><p>假设一个按从小到大排序的数组按照某个位置的中心点进行了循环(比如，$[1,2,3,4]$变为$[3,4,1,2]$)。给你一个target，你需要它在这个数组中的index，若无则返回$-1$。<strong>要求时间复杂度为$O(\log n)$级别，数组中元素无重复</strong><br><a id="more"></a></p>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>看到时间复杂度要求为$O(\log n)$，而且数组还是有序的，那么我们首先应该想到的就是二分查找了。但是这个数组又发生了循环，使得新的数组并不是一个完全有序的。所以这里我们难点就是如何在$O(\log n)$时间内找到发生循环的$pivot$,显然这个部分也可以通过<strong>binary search</strong>来解决。<br>$pivot$处一定是有$nums[pivot] &lt; nums[pivot-1]$的，所以我们可以通过二分找到pivot的位置（具体见代码）。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">class Solution:</span></span><br><span class="line"><span class="string">    def search(self, nums, target):</span></span><br><span class="line"><span class="string">        return nums.index(target) if target in nums else -1</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">search</span><span class="params">(self, nums, target)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> nums:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span></span><br><span class="line">        _len = len(nums)</span><br><span class="line">        l,r = <span class="number">0</span>,_len - <span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> l &lt; r:</span><br><span class="line">            mid = (l + r) // <span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> nums[mid] &gt; nums[r]:</span><br><span class="line">                l = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                r = mid</span><br><span class="line">        pivot, l, r, ans = l, <span class="number">0</span>, _len - <span class="number">1</span>, <span class="number">-1</span></span><br><span class="line">        <span class="keyword">while</span> l &lt;= r:</span><br><span class="line">            mid = (l + r) // <span class="number">2</span></span><br><span class="line">            now = nums[(mid + pivot) % _len]</span><br><span class="line">            <span class="keyword">if</span> target == now:</span><br><span class="line">                ans = mid</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">elif</span> target &gt; now:</span><br><span class="line">                l = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                r = mid - <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> (ans + pivot) % _len <span class="keyword">if</span> ans != <span class="number">-1</span> <span class="keyword">else</span> ans</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
 
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/7c97f959.html">LeetCode 33. Search in Rotated Sorted Array</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2019年05月06日 - 13:05</p>
+  <p><span>最后更新:</span>2019年05月06日 - 13:05</p>
+  <p><span>原始链接:</span><a href="/articles/7c97f959.html" title="LeetCode 33. Search in Rotated Sorted Array">https://statusrank.xyz/articles/7c97f959.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/7c97f959.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/二分/" rel="tag"><i class="fa fa-tag"></i> 二分</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/6f6d730d.html" rel="next" title="LeetCode 32. Longest Valid Parentheses">
+                <i class="fa fa-chevron-left"></i> LeetCode 32. Longest Valid Parentheses
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
+ 
+	<h3> 相关文章：</h3><ul class="related-posts"><li><a href="/articles/52563db7.html">LeetCode Longest Common Prefix</a></li><li><a href="/articles/7db58ea8.html">Median of Two Sorted Arrays(二分)</a></li><li><a href="/articles/b0b3e006.html">qduoj 1120 大家一起凑人品(思维+二分上下界)</a></li></ul> 
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -397,6 +635,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -417,8 +662,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -510,6 +764,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#题意"><span class="nav-text">题意</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思路"><span class="nav-text">思路</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -654,6 +924,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -866,6 +1140,23 @@
 
   
   
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
 
   
   

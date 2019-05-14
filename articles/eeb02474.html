@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="true">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Georgia:300,300italic,400,400italic,700,700italic|Georgia:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png?v=5.1.4">
+
+
+
+
+
+
+
+  <meta name="keywords" content="EM,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="EM算法，全称为Expectation Maximum Algorithm，是一个基础算法，是很多机器学习领域算法的基础（如HMM，LDA等）。EM算法是在概率模型中寻找参数最大似然估计或者最大后验估计的算法，其中概率模型依赖于无法观测的隐含变量。它经过两个步骤交替进行计算：  计算期望（E步），基于现有的模型参数（或者随机初始化的模型）对隐含变量的值进行猜测（估计），利用隐含变量现有的估计值，计">
+<meta name="keywords" content="EM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EM(Expectation Maximum) 算法总结">
+<meta property="og:url" content="https://statusrank.xyz/articles/eeb02474.html">
+<meta property="og:site_name" content="Statusrank&#39;s Blog">
+<meta property="og:description" content="EM算法，全称为Expectation Maximum Algorithm，是一个基础算法，是很多机器学习领域算法的基础（如HMM，LDA等）。EM算法是在概率模型中寻找参数最大似然估计或者最大后验估计的算法，其中概率模型依赖于无法观测的隐含变量。它经过两个步骤交替进行计算：  计算期望（E步），基于现有的模型参数（或者随机初始化的模型）对隐含变量的值进行猜测（估计），利用隐含变量现有的估计值，计">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/4.jpg">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/6.jpg">
+<meta property="og:updated_time" content="2019-05-14T15:09:27.429Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EM(Expectation Maximum) 算法总结">
+<meta name="twitter:description" content="EM算法，全称为Expectation Maximum Algorithm，是一个基础算法，是很多机器学习领域算法的基础（如HMM，LDA等）。EM算法是在概率模型中寻找参数最大似然估计或者最大后验估计的算法，其中概率模型依赖于无法观测的隐含变量。它经过两个步骤交替进行计算：  计算期望（E步），基于现有的模型参数（或者随机初始化的模型）对隐含变量的值进行猜测（估计），利用隐含变量现有的估计值，计">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/undefined/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      appId: 'QRGHA1F933',
+      apiKey: '159fa757deb7d0636724933110ae0f0d',
+      indexName: 'dev_NAME',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"输入关键字","hits_empty":"没有找到与 ${query}有关的内容","hits_stats":"${hits}条相关记录,共耗时 ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://statusrank.xyz/articles/eeb02474.html">
+
+
+
+
+  <title>EM(Expectation Maximum) 算法总结 | Statusrank's Blog</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-125051968-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?9d6a7ddabbfd7e0943f928cf28065aaf";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+<script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">﻿<div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+      
+        <span class="site-title">Statusrank's Blog</span>
+            </a>
+    </div>
+      
+        <p class="site-subtitle">佛系搬砖工</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            全部文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-top">
+          <a href="/top/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-signal"></i> <br>
+            
+            热门文章
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/eeb02474.html">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Statusrank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/tou.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Statusrank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">EM(Expectation Maximum) 算法总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-13T20:33:04+08:00">
+                2019-05-13
+              </time>
+            
+
+            
+
+            
+          </span>
+	
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-05-14T23:09:27+08:00" content="2019-05-14">
+      2019-05-14
+    </time>
+  </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/机器学习/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/articles/eeb02474.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/eeb02474.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/articles/eeb02474.html" class="leancloud_visitors" data-flag-title="EM(Expectation Maximum) 算法总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>EM算法，全称为Expectation Maximum Algorithm，是一个基础算法，是很多机器学习领域算法的基础（如HMM，LDA等）。EM算法是在<strong>概率模型中寻找参数最大似然估计或者最大后验估计的算法，其中概率模型依赖于无法观测的隐含变量。</strong><br>它经过两个步骤交替进行计算：</p>
+<ol>
+<li>计算期望（E步），基于现有的模型参数（或者随机初始化的模型）对隐含变量的值进行猜测（估计），利用隐含变量现有的估计值，计算其最大似然的估计值。</li>
+<li>最大化（M步），最大化在E步上求得的最大似然值来计算参数的值。M步上找到的参数估计值被用于下一个E步计算中，这个过程不断交替进行。<a id="more"></a>
+<h1 id="EM解决的问题"><a href="#EM解决的问题" class="headerlink" title="EM解决的问题"></a>EM解决的问题</h1>我们经常会从样本观察数据中，找出样本的模型参数。其中最常用的就是最大似然估计。但是在一些情况下，我们观察得到的数据有未观察到的隐含数据，此时我们未知的有隐含数据和模型参数，因此无法直接使用最大似然估计。<br>EM算法解决这个问题的思路是使用启发式的迭代方法。既然我们无法直接求出模型的参数，那么我们可以先猜想隐含数据——E步，接着基于观察数据和猜测的隐含数据一起来进行最大似然估计，进而求得我们模型分布的参数——M步。由于我们之前的隐藏数据是猜测的，所以此时得到的模型参数并不一定是最好的结果。因此，我们基于当前得到的模型参数来继续猜测隐含数据，然后进行最大似然估计求出模型分布参数。以此类推，不断迭代，直到模型分布参数基本不变化或变化很小，算法收敛停止。<br>一个最直观的EM算法是<a href="https://statusrank.xyz/articles/6a624875.html">K-Means聚类算法</a>。在K-Means聚类时，每个聚类的质心可以看成是隐含数据。我们会假设$K$个初始化质心，即EM算法的E步；然后计算每个样本和$K$个质心之间的距离，并把样本聚类到最近的那个质心类中，即EM算法的M步。重复这个E步和M步质心不在变化为止。<h1 id="EM算法的数学基础"><a href="#EM算法的数学基础" class="headerlink" title="EM算法的数学基础"></a>EM算法的数学基础</h1><h2 id="极大似然估计"><a href="#极大似然估计" class="headerlink" title="极大似然估计"></a>极大似然估计</h2><h3 id="似然函数"><a href="#似然函数" class="headerlink" title="似然函数"></a>似然函数</h3>在数理统计学中，似然函数是一种关于统计模型中参数的函数，表示模型参数中的似然性（某种事件发生的可能性）。显然，极大似然就是最大可能性的意思。<br><strong>多数情况下我们是根据已知条件来推算结果，而最大似然估计是已知结果来寻求使该结果出现的可能性最大的条件，以此作为估计值。</strong>\<br>假定已知某个参数$B$时，推测事件$A$发生的概率为:<script type="math/tex; mode=display">
+P(A|B) = \frac{P(A,B)}{P(B)}</script>由贝叶斯公式，可以得出:<script type="math/tex; mode=display">
+P(B|A) = \frac{P(B)\cdot P(A|B)}{P(A)}</script>一般来说，事件$A$发生的概率与某一未知参数$B$有关，$B$的取值不同，则事件$A$发生的概率$P(A|B)$也不同，当我们在一次试验中事件$A$发生了，则认为此时的$\hat B$值应该是$B$的所有取值中使得$P(A|B)$达到最大的那一个，极大似然估计法就是要选取这样的$\hat B$值作为参数$B$的估计值，使选取的样本在被选的总体中出现的可能性为最大。<br><strong>直观的例子:</strong> 设甲箱子中有$99$个白球，$1$个黑球；乙箱中有$1$个白球，$99$个黑球。现随机取出一箱，再从抽取的一箱中随机取出一球，结果是黑球，这一黑球从乙箱取出的概率比从甲箱取出的概率大的多，这时我们自然更多地相信这个黑球是取自乙箱的。<h3 id="极大似然估计举例"><a href="#极大似然估计举例" class="headerlink" title="极大似然估计举例"></a>极大似然估计举例</h3>假设我们要调查我们学校的男生和女生的身高分布。假设我们在校园里随机找了男女生分别$100$个，共$200$人。我们将他们按性别划分为两组，然后先统计抽样得到的$100$个男生的身高。假设身高都服从正态分布，但是分布的参数均值$\mu$和方差$\sigma^2$我们不知道。这也正是我们所要估计得参数，记为$\theta = [\mu,\sigma^2]^T$。问题相当于已知样本集$X$，求$P(\theta|X)$<br><strong>我们知道样本所服从的概率分布和模型的一些样本，需要求解该模型的参数。</strong>如图：<img src="/articles/undefined/1.png">
+下面我们通过使用最大似然估计来估计出我们模型的参数。<br>设样本集$X = {x_1,x_2,…x_N},N=100，P(x_i|\theta)$为概率密度函数，表示抽到男生$x_i$（身高）的概率。我们一般假设每个样本之间是独立同分布的，所以我同时抽到他们的概率就是他们各自概率的乘积，也就是样本集$X$中各个样本的联合概率:<script type="math/tex; mode=display">
+L(\theta) = L(x_1,x_2,....x_N;\theta) = \prod_{i=1}^N p(x_i|\theta)</script>通常情况下，因为这里的$L(\theta)$是连乘的，所以我们一般取对数。<script type="math/tex; mode=display">
+L(\theta) = \sum_{i = 1}^N \log p(x_i|\theta)</script>似然函数$L(\theta)$反映了在概率密度函数的参数是$\theta$时，得到样本集$X$的概率。我们需要找到这样一个参数$\hat\theta$，使抽到$X$这组样本的概率最大，也就是需要其对应的似然函数$L(\theta)$最大。满足这样条件的$\hat\theta$叫做$\theta$的最大似然估计量，记为：<script type="math/tex; mode=display">
+\hat\theta = \arg \max_\theta L(\theta)</script><strong>极大似然估计步骤</strong>:</li>
+<li>写出似然函数；</li>
+<li>取对数得到对数似然函数并整理</li>
+<li>求导数，令其导数为$0$得到似然方程</li>
+<li>解似然方程，得到的参数即为所求</li>
+</ol>
+<h2 id="Jensen不等式"><a href="#Jensen不等式" class="headerlink" title="Jensen不等式"></a>Jensen不等式</h2><p>设$f$是定义域为实数的函数，如果对于所有的实数$x$，$f(x)$的二次导数大于等于$0$，那么$f$是<strong>凸函数</strong>。当$x$是向量时，如果Hessian矩阵$H$是半正定的（$H&gt;=0$），那么$f$是凸函数。如果$f’’(x) &gt; 0,H&gt;0$，那么是严格的凸函数。</p>
+<p><strong>Jensen不等式</strong>：如果$f$是凸函数，$X$是随机变量，那么有$E[f(X)] &gt;= f(E[X])$，也就是<strong>函数的期望大于等于期望的函数</strong>。特别地，如果$f$是严格的凸函数，那么$E[f(x)] = f(E[x])$当且仅当$P(X = E[X]) = 1$时成立，也就是说$X$是常数。<br>对于<strong>凹函数</strong>，不等号方向反向 $E[f(X)] &lt;= f(E[X])$。<br>如图:<br><img src="/articles/undefined/2.png"><br>图中实现$f$是凸函数，$X$是随机变量，有$0.5$的概率是$a$，有$0.5$的概率是$b$。$X$的期望值就是$a$和$b$的中值了，从上图中我们可以看到$E[f(x)] &gt;= f(E[x])$成立。</p>
+<h1 id="EM算法"><a href="#EM算法" class="headerlink" title="EM算法"></a>EM算法</h1><h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>极大似然估计用一句话概括就是：<strong>知道结果$X$，反推模型参数$\theta$</strong>。<br>对于上面我们举的男女身高的例子，极大似然估计的目标就是根据男女分别$100$个身高样本，来分别估计男女生身高的正态分布的参数$\mu_1,\sigma_1,\mu_2,\sigma_2$。但是极大似然估计面临的概率分布只有一个或者知道结果是通过哪个概率分布实现的，只不过你不知道这个概率分布的参数。现在我们让情况更复杂一些:<br>我们挑选的这$200$人混在一起了，也就是说我们拥有$200$人的身高数据，但是我们不知道每个人是男生还是女生，此时的男女性别就像是一个<strong>隐变量(latent variable)</strong>。</p>
+<p><font color="red">通常来说，我们只有精确的知道了男女生身高的正态分布参数，才能更好的知道每一个人是男生和女生哪个概率更大一些。但是反过来，我们必须知道每个人是男生还是女生才能用最大似然估计尽可能准确地估计男女各自身高的正态分布参数。</font><br>EM算法就是为了解决这种问题而存在的。<br></p>
+<h2 id="EM算法中的隐变量"><a href="#EM算法中的隐变量" class="headerlink" title="EM算法中的隐变量"></a>EM算法中的隐变量</h2><p>一般的用$X$表示观测到的随机变量的数据，$Z$表示隐随机变量的数据（因为我们观测不到结果是从哪个概率分布中得出的，所以将这个叫做隐变量，它一般是离散的）。$X$和$Z$连在一起称为完全数据，单独一个$X$我们称为观测数据。<br>其实我们可以发现，我们所面临的问题其实就是$Z$是未知的，如果隐变量$Z$已知，那么问题就可以用极大似然估计来求解了。因此，EM算法的基本思想就是:</p>
+<ol>
+<li>先给模型参数$\theta$一个随机初始化的初值$\theta_0$</li>
+<li>根据模型参数$\theta$和给定的观测数据，求未观测数据$z$的条件概率分布期望</li>
+<li>利用上一步已经求出的$z$，进行极大似然估计，得到更优的$\theta’$</li>
+<li>不断进行2,3步的迭代，直到收敛</li>
+</ol>
+<h2 id="EM算法的另一个例子-抛硬币"><a href="#EM算法的另一个例子-抛硬币" class="headerlink" title="EM算法的另一个例子-抛硬币"></a>EM算法的另一个例子-抛硬币</h2><img src="/articles/undefined/4.jpg">
+<p>如上图，现在我们抛两枚硬币$A$和$B$，如果知道每次抛的是$A$还是$B$，那么就直接可以估计每种硬币的参数$\theta_A,\theta_B$（正面朝上的概率）。如果我们只观测到$5$轮循环，每轮抛硬币$10$次，而并不知道每轮是抛的哪个硬币（这就是隐变量），那么我们就无法直接估计参数$\theta_A,\theta_B$。这时我们可以使用EM算法，先对参数$\theta_A,\theta_B$进行随机初始化，然后根据模型参数去计算隐变量的条件概率。比如对于第一组数据“HTTTHHTHTH”,为$A$的可能性为：$0.6^5 \times (1-0.6)^5$,为$B$的可能性为：$0.5^5\times0.5^5$，二者进行归一化得出隐变量有$0.45$的概率是硬币$A$，有$0.55$的概率是硬币$B$。得到隐变量$z$后我们可以去进行M步计算极大似然估计求得更好的$\theta’$,..以此类推。</p>
+<h2 id="EM算法的推导"><a href="#EM算法的推导" class="headerlink" title="EM算法的推导"></a>EM算法的推导</h2><p>对$m$个样本观察数据$x=(x^{(1)},x^{(2)},…x^{(m)})$中，找出样本的模型参数$\theta$,最大化模型分布的对数似然函数如下：</p>
+<script type="math/tex; mode=display">
+\theta = arg \max \limits_{\theta}\sum\limits_{i=1}^m logP(x^{(i)};\theta)</script><p>如果我们得到的观察数据有未观察到的隐含数据$z=(z^{(1)},z^{(2)},…z^{(m)})$,此时我们模型的最大化（极大化）模型分布的对数似然函数如下：</p>
+<script type="math/tex; mode=display">
+\theta = arg \max \limits_{\theta}\sum\limits_{i=1}^m logP(x^{(i)};\theta) = arg \max \limits_{\theta}\sum\limits_{i=1}^m log\sum\limits_{z^{(i)}}P(x^{(i)}， z^{(i)};\theta)</script><p>对于参数估计，我们本质上还是想获得一个使siranhanshu最大化的那个参数$\theta$，现在的上式与之前不同的是我们似然函数之中多了一个未知的变量$z$。也就是说我们的目标是找到合适的$\theta$和$z$使得似然函数最大。那我们也许会想，仅仅是多了个未知变量而已，我们也可以分别对$\theta$和$z$求偏导，再令其为$0$,求出对应的解即可。但是，这里我们看到上式包含了“和”的对数，求导之后的形式非常复杂，所以很难求出对应的解析解。因此EM算法采用了一些技巧，让我们接着往下看。</p>
+<script type="math/tex; mode=display">
+\begin{aligned} \sum\limits_{i=1}^m log\sum\limits_{z^{(i)}}P(x^{(i)}， z^{(i)};\theta)   & = \sum\limits_{i=1}^m log\sum\limits_{z^{(i)}}Q_i(z^{(i)})\frac{P(x^{(i)}， z^{(i)};\theta)}{Q_i(z^{(i)})} \\ & \geq  \sum\limits_{i=1}^m \sum\limits_{z^{(i)}}Q_i(z^{(i)})log\frac{P(x^{(i)}， z^{(i)};\theta)}{Q_i(z^{(i)})} \end{aligned}
+\tag{1}</script><p>第一步我们引入了一个未知分布（隐变量$z$的概率分布）$Q_i(z^{(i)})$，其中$\sum_{z^(i)}Q_i(z^{(i)}) = 1$。（这一步其实我们什么都没有做，只是对分子分母进行了缩放）。<br>第二步我们使用的是上面我们提到过的$Jensen$不等式。因为这里$\log$函数是一个凹函数(二次导师为$\frac{-1}{x^2}$)，所以根据Jensen不等式我们有$E[f(x)] \leq f(E[x])$。至此，我们就将“和”的对数变为了对数的“和”，再求导就很容易了。<br>上式中的$\sum\limits_{z^{(i)}}Q_i(z^{(i)})\log\frac{P(x_i,z^{(i)};\theta)}{Q_i(z^{(i)})}$，其实就是函数$\log\frac{P(x_i,z^{(i)};\theta)}{Q_i(z^{(i)})}$关于$Q_i(z^{(i)})$的期望。为什么？回想期望公式中的lazy Statistician规则如下:</p>
+<blockquote>
+<p>设$Y$是随机变量$X$的函数$Y = g(X)$（$g$是连续函数），那么</p>
+<ol>
+<li>$X$是离散型随机变量，它的分布律为$P(X = x_k)  = p_k,k = 1,2,\dots$,<br>$\sum\limits_{k = 1}^{\infty}g(x_k)p_k$绝对收敛，则有$E(Y) = E(g(X)) = \sum\limits_{k<br>= 1}^{\infty}g(x_k)p_k$。</li>
+<li>$X$是连续型随机变量，它的概率密度为$f(x)$,若$\int\limits_{<br>\infty}^{\infty}g(x)f(x)dx$绝对收敛，则有$E(Y) = E(g(X)) = \int\limits_{<br>\infty}^{\infty}g(x)f(x)dx$.</li>
+</ol>
+</blockquote>
+<p>考虑到$E(X) = \sum x\cdot p(x)$，则有$E(f(x)) = \sum f(x)\cdot p(x)$，又因为有$\sum\limits_{z^{(i)}}Q_i(z^{(i)}) = 1$，所以我们可以使用Jensen不等式得到(1)式中的不等式:</p>
+<script type="math/tex; mode=display">
+f\left(E_{Q_i(z^{(i)})}\left[\frac{P(x^{(i)}， z^{(i)};\theta)}{Q_i(z^{(i)})} \right]\right) \geq E_{Q_i(z^{(i)})}\left[f\left(\frac{P(x^{(i)}， z^{(i)};\theta)}{Q_i(z^{(i)})} \right)\right]</script><p>到这里我们就应该很清楚了，但是我们大家可能发现这里是一个<strong>不等号</strong>，而我们是想求得<strong>似然函数的最大值</strong>，那么应该怎么办呢？<br>其实上式(1)相当于对<strong>似然函数求了下界</strong>，因此我们可以通过调整使得下界不断的变大从而似然函数也不断的变大，以逼近真实值。那么什么时候调整好了呢？当不等式等于等式时说明二者已经等价了。如图:<br><br>我们先固定$\theta$,调整$Q(z)$使得下界$J(z,Q)$上升至与$L(\theta)$在此$\theta$处相等（绿色曲线到蓝色曲线），然后固定$Q(z)$,调整$\theta$使当前的下界$J(z,Q)$达到最大值（$\theta_t$到$\theta_{t + 1}$）,然后再固定$\theta_t$，调整$Q(z)$使下界和$L(\theta)$相等，。。。直到收敛到似然函数$L(\theta)$的最大值处$\theta’$。<br><strong>那么等式成立的条件是什么呢？</strong><br>根据Jensen不等式中等式成立的条件$X$为常数，这里等式成立的条件为：</p>
+<script type="math/tex; mode=display">
+\frac{P(x^{(i)}， z^{(i)};\theta)}{Q_i(z^{(i)})} =c, c为常数</script><p>由于$Q_i(z^{(i)})$是一个未知的分布且有$\sum\limits_{z^{(i)}}Q_i(z^{(i)}) =1$,因此我们可以进行一个变换：</p>
+<script type="math/tex; mode=display">
+\sum\limits_{z^{(i)}}P(x^{(i)},z^{(i)};\theta) = \sum\limits_{z^{(i)}}Q_i(z^{(i)})c</script><p>也就是 :</p>
+<script type="math/tex; mode=display">
+\sum\limits_{z^{(i)}}P(x^{(i)},z^{(i)};\theta) = c</script><p>因此我们可以得到:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+Q_i(z^{(i)}) &= \frac{P(x^{(i)},z^{(i)};\theta)}{c}\\
+&= \frac{P(x^{(i)},z^{(i)};\theta)}{\sum\limits_{z^{(i)}}P(x^{(i)},z^{(i)};\theta)}\\
+&=\frac{P(x^{(i)},z^{(i)};\theta)}{P(x^{(i)};\theta)} \\
+&= P(z^{(i)}|x^{(i)};\theta)
+\end{aligned}</script><p><font color="red">至此，我们推出了在固定$\theta$之后，$Q_i(z^{(i)})$如何选择的问题——使下界拉升的$Q_i(z^{(i)})$的计算公式就是条件概率（后验概率）。这一步就是$E$步，固定$\theta$,建立$L(\theta)$的下界，并求得使$L(\theta)$等于下界$J(z,Q)$时等号成立的$Q_i(z^{(i)})$.<br>接下来是$M$步，就是在$E$步求出$Q_i(z^{(i)})$后，固定$Q_i$,调整 $\theta$，去最大化下界$J(z,Q)$，毕竟在固定$Q_i(z^{(i)})$后，下界还可以更大。</font><br>即在$M$步我们需要最大化下式:</p>
+<script type="math/tex; mode=display">
+arg \max \limits_{\theta} \sum\limits_{i=1}^m \sum\limits_{z^{(i)}}Q_i(z^{(i)})log\frac{P(x^{(i)}， z^{(i)};\theta)}{Q_i(z^{(i)})}</script><p>由于$M$步我们固定$Q_i$，所以去掉上式中的常数部分，则我们需要极大化的<strong>对数似然下界</strong>为:</p>
+<script type="math/tex; mode=display">
+arg \max \limits_{\theta} \sum\limits_{i=1}^m \sum\limits_{z^{(i)}}Q_i(z^{(i)})log{P(x^{(i)}, z^{(i)};\theta)}</script><p>至此，我们应该理解了EM算法中E步和M步的具体含义。</p>
+<h1 id="EM算法的流程"><a href="#EM算法的流程" class="headerlink" title="EM算法的流程"></a>EM算法的流程</h1><p>输入：观察数据$x=(x^{(1)},x^{(2)},…x^{(m)})$,联合分布$p(x,z ;\theta)$,条件分布$p(z|x; \theta)$,最大迭代次数$J$。</p>
+<ol>
+<li>随机的初始化模型参数$\theta$为$\theta_0$</li>
+<li>for j from 1 to J开始EM算法迭代：<br> a) E步: 计算联合分布的条件概率期望:<script type="math/tex; mode=display">
+ Q_i(z^{(i)}) = P(z^{(i)}|x^{(i);\theta}) \\
+ L(\theta,\theta^j) = \sum\limits_{i = 1}^m\sum\limits_{z^{(i)}} Q_i(z^{(i)})\log P(x^{(i)},z^{(i)};\theta)</script> b) M步: 固定$Q_i$，极大化$L(\theta,\theta^j)$:<script type="math/tex; mode=display">
+ \theta^{j+1} = arg \max \limits_{\theta}L(\theta, \theta^{j})</script> c) 如果$\theta^{j + 1}$已收敛，则算法结束。否则继续回到步骤a)进行E步迭代。</li>
+</ol>
+<p>输出：模型参数$\theta$</p>
+<h1 id="EM算法收敛性的证明"><a href="#EM算法收敛性的证明" class="headerlink" title="EM算法收敛性的证明"></a>EM算法收敛性的证明</h1><p>关于EM算法收敛性的证明，我们觉得B站上shuhuai008给出的两种方法非常直观<a href="https://www.bilibili.com/video/av31906558/?p=2" target="_blank" rel="noopener">https://www.bilibili.com/video/av31906558/?p=2</a><br><a href="https://www.bilibili.com/video/av31906558/?p=3" target="_blank" rel="noopener">https://www.bilibili.com/video/av31906558/?p=3</a><br>EM算法的流程并不复杂，但是还是有两个问题需要我们思考：</p>
+<ol>
+<li>EM算法能保证收敛吗？</li>
+<li><p>EM算法如果保证收敛，那么保证能收敛到全局最优解吗？</p>
+<p><strong>要证明EM算法的收敛性，我们要证明我们的对数似然函数的值在迭代过程中值在增大。</strong> 即:</p>
+<script type="math/tex; mode=display">
+\sum\limits_{i=1}^m logP(x^{(i)};\theta^{j+1}) \geq \sum\limits_{i=1}^m logP(x^{(i)};\theta^{j})</script><p>也就是说，如果最大似然函数的值一直在增加，那么最终我们会达到最大似然估计得最大值。<br>由于</p>
+<script type="math/tex; mode=display">
+L(\theta, \theta^{j}) = \sum\limits_{i=1}^m\sum\limits_{z^{(i)}}P( z^{(i)}|x^{(i)};\theta^{j}))log{P(x^{(i)}， z^{(i)};\theta)}</script><p>令：</p>
+<script type="math/tex; mode=display">
+H(\theta, \theta^{j}) =  \sum\limits_{i=1}^m\sum\limits_{z^{(i)}}P( z^{(i)}|x^{(i)};\theta^{j}))log{P( z^{(i)}|x^{(i)};\theta)}</script><p>上面两式相减得到：</p>
+<script type="math/tex; mode=display">\sum\limits_{i=1}^m logP(x^{(i)};\theta) = L(\theta, \theta^{j}) - H(\theta, \theta^{j})</script><p>在上式中分别取$\theta$为$\theta^j$和$\theta^{j + 1}$并相减得到：</p>
+<script type="math/tex; mode=display">
+\sum\limits_{i=1}^m logP(x^{(i)};\theta^{j+1})  - \sum\limits_{i=1}^m logP(x^{(i)};\theta^{j}) = [L(\theta^{j+1}, \theta^{j}) - L(\theta^{j}, \theta^{j}) ] -[H(\theta^{j+1}, \theta^{j}) - H(\theta^{j}, \theta^{j}) ]</script><p>要证明EM算法的收敛性，我们只需要证明上式的右边是非负的即可。<br>由于$\theta^{j + 1}$使得$L(\theta, \theta^{j})$极大，因此有:</p>
+<script type="math/tex; mode=display">
+L(\theta^{j+1}, \theta^{j}) - L(\theta^{j}, \theta^{j})  \geq 0</script><p>而对于第二部分，我们有：</p>
+<script type="math/tex; mode=display">
+\begin{aligned} H(\theta^{j+1}, \theta^{j}) - H(\theta^{j}, \theta^{j})  & = \sum\limits_{i=1}^m\sum\limits_{z^{(i)}}P( z^{(i)}|x^{(i)};\theta^{j})log\frac{P( z^{(i)}|x^{(i)};\theta^{j+1})}{P( z^{(i)}|x^{(i)};\theta^j)} \\ & \leq  \sum\limits_{i=1}^mlog(\sum\limits_{z^{(i)}}P( z^{(i)}|x^{(i)};\theta^{j})\frac{P( z^{(i)}|x^{(i)};\theta^{j+1})}{P( z^{(i)}|x^{(i)};\theta^j)}) \\ & = \sum\limits_{i=1}^mlog(\sum\limits_{z^{(i)}}P( z^{(i)}|x^{(i)};\theta^{j+1})) = 0  \end{aligned}</script><p>其中第（4）式用到了Jensen不等式，只不过和第二节的使用相反而已，第（5）式用到了概率分布累积为1的性质。<br>至此，我们得到了:$\sum\limits_{i=1}^m logP(x^{(i)};\theta^{j+1})  - \sum\limits_{i=1}^m logP(x^{(i)};\theta^{j})  \geq 0$，证明了EM算法的收敛性。<br><font color="red">从上面的推导可以看出，EM算法可以保证收敛到一个稳定点，d但是却不能保证收敛到全局极大值点，因此它是<strong>局部最优的算法。</strong></font>当然如果我们的优化目标$L(\theta, \theta^{j})$是凸的，则EM算法可以保证收敛到全局最大值，这点和梯度下降法这样的迭代算法相同。</p>
+<h1 id="EM算法的另一种解释"><a href="#EM算法的另一种解释" class="headerlink" title="EM算法的另一种解释"></a>EM算法的另一种解释</h1><p>如果我们定义：</p>
+<script type="math/tex; mode=display">
+J(Q,\theta) = \sum\limits_i\sum\limits_{z^{(i)}}Q_i(z^{(i)})\log \frac{P(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}</script><p>从前面的推导我们知道$L(\theta) \geq J(Q,\theta)$,EM可以看作是坐标上升法，<strong>E步固定$\theta$，优化$Q$；M步固定$Q$，优化$\theta$。</strong><br>坐标上升法（Coordinate ascent）：</p>
+<img src="/articles/undefined/6.jpg">
+<p>图中的直线式迭代优化的路径，可以看到每一步都会向最优值前进一步，而且前进路线是平行于坐标轴的，因为每一步只优化一个变量。<br>这犹如在x-y坐标系中找一个曲线的极值，然而曲线函数不能直接求导，因此什么梯度下降方法就不适用了。但固定一个变量后，另外一个可以通过求导得到，因此可以使用坐标上升法，一次固定一个变量，对另外的求极值，最后逐步逼近极值。<br>对应到EM上，就是：<strong>E步：固定θ，优化Q；M步：固定Q，优化θ；交替将极值推向最大。   </strong></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1></li>
+</ol>
+<ul>
+<li><a href="https://www.cnblogs.com/huangyc/p/10123780.html" target="_blank" rel="noopener">https://www.cnblogs.com/huangyc/p/10123780.html</a></li>
+<li><a href="https://www.cnblogs.com/pinard/p/6912636.html" target="_blank" rel="noopener">https://www.cnblogs.com/pinard/p/6912636.html</a></li>
+<li><a href="https://blog.csdn.net/v_july_v/article/details/81708386#commentBox" target="_blank" rel="noopener">https://blog.csdn.net/v_july_v/article/details/81708386#commentBox</a></li>
+<li><a href="https://blog.csdn.net/zhihua_oba/article/details/73776553" target="_blank" rel="noopener">https://blog.csdn.net/zhihua_oba/article/details/73776553</a></li>
+<li><a href="http://www.cnblogs.com/jerrylead/archive/2011/04/06/2006936.html" target="_blank" rel="noopener">http://www.cnblogs.com/jerrylead/archive/2011/04/06/2006936.html</a></li>
+<li><a href="https://www.bilibili.com/video/av31906558?p=3" target="_blank" rel="noopener">https://www.bilibili.com/video/av31906558?p=3</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+<div>
+  
+    ﻿<div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+<div>
+    
+      ﻿
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
+  <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
+  <p><span>本文标题:</span><a href="/articles/eeb02474.html">EM(Expectation Maximum) 算法总结</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
+  <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
+  <p><span>发布时间:</span>2019年05月13日 - 20:05</p>
+  <p><span>最后更新:</span>2019年05月14日 - 23:05</p>
+  <p><span>原始链接:</span><a href="/articles/eeb02474.html" title="EM(Expectation Maximum) 算法总结">https://statusrank.xyz/articles/eeb02474.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/eeb02474.html" aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
+</div>
+<script>
+    var clipboard = new Clipboard('.fa-clipboard');
+    clipboard.on('success', $(function(){
+      $(".fa-clipboard").click(function(){
+        swal({
+          title: "",
+          text: '复制成功',
+          html: false,
+          timer: 500,
+          showConfirmButton: false
+        });
+      });
+    }));
+</script>
+
+    
+  </div>
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>万水千山总是情,就给五毛行不行!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/weixin.png" alt="Statusrank 微信">
+        <p>微信</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali.png" alt="Statusrank 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/EM/" rel="tag"><i class="fa fa-tag"></i> EM</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+		<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;看完记得五星好评哦亲&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/articles/ed5ef735.html" rel="next" title="LeetCode 48. Rotate Image">
+                <i class="fa fa-chevron-left"></i> LeetCode 48. Rotate Image
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+ 
+	 
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            博主概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/tou.jpg" alt="Statusrank">
+            
+              <p class="site-author-name" itemprop="name">Statusrank</p>
+              <p class="site-description motion-element" itemprop="description">退役Acmer<br>努力摆脱四非加成光环的菜鸡<br></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/statusrank" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="bao_sl@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://blog.csdn.net/howardemily/" title="原CSDN博客" target="_blank">原CSDN博客</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#EM解决的问题"><span class="nav-text">EM解决的问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法的数学基础"><span class="nav-text">EM算法的数学基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#极大似然估计"><span class="nav-text">极大似然估计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#似然函数"><span class="nav-text">似然函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#极大似然估计举例"><span class="nav-text">极大似然估计举例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Jensen不等式"><span class="nav-text">Jensen不等式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法"><span class="nav-text">EM算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题描述"><span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EM算法中的隐变量"><span class="nav-text">EM算法中的隐变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EM算法的另一个例子-抛硬币"><span class="nav-text">EM算法的另一个例子-抛硬币</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EM算法的推导"><span class="nav-text">EM算法的推导</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法的流程"><span class="nav-text">EM算法的流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法收敛性的证明"><span class="nav-text">EM算法收敛性的证明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法的另一种解释"><span class="nav-text">EM算法的另一种解释</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-text">Reference</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        ﻿<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<center><div class="copyright">&copy; <span itemprop="copyrightYear">2018 - 2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Statusrank</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      次
+    </span>
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </center></div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz',
+        appKey: 'nPH2aXy1ll77oLHYcbJr1xpX',
+        placeholder: 'Just go go',
+        avatar:'/images/tou.jpg',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("QCHnVkYIrh5qoSOSSISETUBC-gzGzoHsz", "nPH2aXy1ll77oLHYcbJr1xpX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 16027,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+<!-- ����鸴�ƹ��� -->
+<script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+<script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+</body>
+<!-- ҳ����С���� --> 
+
+</html>
+<script type="text/javascript" src="/js/src/love.js"></script>

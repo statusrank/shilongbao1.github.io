@@ -109,7 +109,7 @@
 
 
 
-  <meta name="keywords" content="论文,">
+  <meta name="keywords" content="FM,">
 
 
 
@@ -120,35 +120,35 @@
 
 
 
-<meta name="description" content="原文链接open source本文主要对度量分解这篇论文做一个翻译+总结. Abstract被我们熟知的基于矩阵分解(MF)的推荐系统得到了广泛的研究,并已成为最受欢迎的个性化推荐技术之一.然而基于內积的矩阵分解不满足不等式属性(CML中我们提到过的三角不等式),这可能限制了midel的表达并且可能导致次优解.本文中作者提出了度量分解,假定所有的users和items被embedding到了一个低">
-<meta name="keywords" content="论文">
+<meta name="description" content="转载来源，原文链接失效。FM(Factorization Machine)主要是为了解决数据稀疏的情况下，特征怎样组合的问题。此算法的主要作用是可以把所有特征进行高阶组合，减少人工参与特征组合的工作。FM只需要线性时间复杂度，可以应用于大规模机器学习。">
+<meta name="keywords" content="FM">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Metric-Factorization Recommendation beyond Matrix Factorization">
-<meta property="og:url" content="https://statusrank.xyz/articles/49246251.html">
+<meta property="og:title" content="分解机(Factorization Machine，FM)算法总结">
+<meta property="og:url" content="https://statusrank.xyz/articles/1ed9075e.html">
 <meta property="og:site_name" content="Statusrank&#39;s Blog">
-<meta property="og:description" content="原文链接open source本文主要对度量分解这篇论文做一个翻译+总结. Abstract被我们熟知的基于矩阵分解(MF)的推荐系统得到了广泛的研究,并已成为最受欢迎的个性化推荐技术之一.然而基于內积的矩阵分解不满足不等式属性(CML中我们提到过的三角不等式),这可能限制了midel的表达并且可能导致次优解.本文中作者提出了度量分解,假定所有的users和items被embedding到了一个低">
+<meta property="og:description" content="转载来源，原文链接失效。FM(Factorization Machine)主要是为了解决数据稀疏的情况下，特征怎样组合的问题。此算法的主要作用是可以把所有特征进行高阶组合，减少人工参与特征组合的工作。FM只需要线性时间复杂度，可以应用于大规模机器学习。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/3.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/1.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/2.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/4.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/5.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/6.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/7.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/8.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/9.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/10.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/11.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/12.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/13.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/14.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/15.png">
-<meta property="og:image" content="https://statusrank.xyz/articles/49246251/16.png">
-<meta property="og:updated_time" content="2019-01-03T07:28:16.000Z">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/1.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/2.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/3.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/4.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/5.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/6.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/7.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/8.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/9.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/10.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/11.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/12.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/13.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/14.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/15.png">
+<meta property="og:image" content="https://statusrank.xyz/articles/undefined/16.png">
+<meta property="og:updated_time" content="2019-06-05T13:31:07.910Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Metric-Factorization Recommendation beyond Matrix Factorization">
-<meta name="twitter:description" content="原文链接open source本文主要对度量分解这篇论文做一个翻译+总结. Abstract被我们熟知的基于矩阵分解(MF)的推荐系统得到了广泛的研究,并已成为最受欢迎的个性化推荐技术之一.然而基于內积的矩阵分解不满足不等式属性(CML中我们提到过的三角不等式),这可能限制了midel的表达并且可能导致次优解.本文中作者提出了度量分解,假定所有的users和items被embedding到了一个低">
-<meta name="twitter:image" content="https://statusrank.xyz/articles/49246251/3.png">
+<meta name="twitter:title" content="分解机(Factorization Machine，FM)算法总结">
+<meta name="twitter:description" content="转载来源，原文链接失效。FM(Factorization Machine)主要是为了解决数据稀疏的情况下，特征怎样组合的问题。此算法的主要作用是可以把所有特征进行高阶组合，减少人工参与特征组合的工作。FM只需要线性时间复杂度，可以应用于大规模机器学习。">
+<meta name="twitter:image" content="https://statusrank.xyz/articles/undefined/1.png">
 
 
 
@@ -178,12 +178,12 @@
 
 
 
-  <link rel="canonical" href="https://statusrank.xyz/articles/49246251.html">
+  <link rel="canonical" href="https://statusrank.xyz/articles/1ed9075e.html">
 
 
 
 
-  <title>Metric-Factorization Recommendation beyond Matrix Factorization | Statusrank's Blog</title>
+  <title>分解机(Factorization Machine，FM)算法总结 | Statusrank's Blog</title>
   
 
 
@@ -377,7 +377,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/49246251.html">
+    <link itemprop="mainEntityOfPage" href="https://statusrank.xyz/articles/1ed9075e.html">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Statusrank">
@@ -394,7 +394,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Metric-Factorization Recommendation beyond Matrix Factorization</h1>
+          <h1 class="post-title" itemprop="name headline">分解机(Factorization Machine，FM)算法总结</h1>
         
 
         <div class="post-meta">
@@ -406,8 +406,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T16:56:58+08:00">
-                2018-12-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-05T21:06:11+08:00">
+                2019-06-05
               </time>
             
 
@@ -418,8 +418,8 @@
 	
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-01-03T15:28:16+08:00" content="2019-01-03">
-      2019-01-03
+    <time itemprop="dateUpdated" datetime="2019-06-05T21:31:07+08:00" content="2019-06-05">
+      2019-06-05
     </time>
   </span>
 
@@ -454,8 +454,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/articles/49246251.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/articles/49246251.html" itemprop="commentCount"></span>
+                <a href="/articles/1ed9075e.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/articles/1ed9075e.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -463,7 +463,7 @@
 
           
           
-             <span id="/articles/49246251.html" class="leancloud_visitors" data-flag-title="Metric-Factorization Recommendation beyond Matrix Factorization">
+             <span id="/articles/1ed9075e.html" class="leancloud_visitors" data-flag-title="分解机(Factorization Machine，FM)算法总结">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -494,40 +494,17 @@
       
 
       
-        <p><a href="https://arxiv.org/abs/1802.04606" target="_blank" rel="noopener">原文链接</a><br><a href="https://github.com/cheungdaven/metricfactorization" target="_blank" rel="noopener">open source</a><br>本文主要对度量分解这篇论文做一个翻译+总结.</p>
-<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>被我们熟知的基于矩阵分解(MF)的推荐系统得到了广泛的研究,并已成为最受欢迎的个性化推荐技术之一.然而基于內积的矩阵分解不满足不等式属性(CML中我们提到过的三角不等式),这可能限制了midel的表达并且可能导致次优解.<br>本文中作者提出了度量分解,假定所有的users和items被embedding到了一个低维的空间并采用满足不等式属性的欧几里得距离来衡量他们之间的相似性.设计了两种方法,将Metric Fac分别用在了rating predict 以及个性化推荐中.<br><a id="more"></a></p>
-<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>推荐系统RS基于用户的历史交互,例如评分,以前的购买和点击浏览记录,预测用户对item的偏好.主要存在两种类型的推荐任务:rating prediction 和 item ranking.<br>rating prediction主要目标是通过用户显示的评分去估计未评分物品的真实值,从而找到用户可能还对哪些物品感兴趣.<br>在很多场合下因为显示评级的匮乏,通过隐式反馈(purchase,log,click,etc.)的rank-based的RS模型更加可取和实用的用来产生个性化推荐列表去实现我们的推荐目标.</p>
-<h3 id="Metric-Fac"><a href="#Metric-Fac" class="headerlink" title="Metric Fac"></a>Metric Fac</h3><p>度量分解适用于Rating prediction和items ranking.主要原理是使用欧式距离代替MF的点积,从位置和距离的角度来考虑推荐问题.<strong>它将交互矩阵分解为user和item的密集嵌入,并根据他们的估计距离来进行推荐</strong>.<br><strong>主要贡献:</strong><br>1.提出了Metric Factorization,将users和items表示为多维坐标系中的点(嵌入).他们之间的距离通过欧几里得距离来衡量,基于user-item之间的相似性来进行推荐<br>2.提出了两种度量分解的变体来解决两种经典的推荐任务: rating prediction 和 item ranking</p>
-<h3 id="矩阵分解-MF-的局限性"><a href="#矩阵分解-MF-的局限性" class="headerlink" title="矩阵分解(MF)的局限性"></a>矩阵分解(MF)的局限性</h3><p>前面我们说到基于矩阵分解的推荐或者说基于內积的(主要是內积)的推荐,它的表达存在限制,因为他不满足三角不等式(不等式限制),这可能导致我们的模型是次优解.<br>我们知道內积$a\cdot b = |a||b|cos \theta$,也就是它只关注两个向量的大小和角度,也就是说它在大小和角度的方面来考虑两个向量之间的相似性而不是距离.<br>下面我们给出一个例子,假设用户的潜在因子是($P_1,P_2,P_3,P_4$),我们通过计算交互矩阵$R$的Jaccard相似度来衡量用户之间的相似度.<br><img src="/articles/49246251/3.png"><br>假定一开始我们有3个users,$u_1,u_2,u_3$那么基于交互矩阵$R$的用户之间的相似度为:$S_{23} &gt; S_{12} &gt; S_{13}$,然后我们的$u_1,u_2,u_3$潜在因子$P_1,P_2,P_3$位置可以是如上图中间.现在我们拥有了一个新的user $u_4$,并且可以得到如下jaccard相似度$S_{41} &gt; S_{43} &gt; S_{42}$,那么<strong>如果我们让$P_4$和$P_1$相似,那么无论我们怎么定义$P_4$的位置$S_{43} &gt; S_{42}$都无法满足.</strong>然而如果我们将users看成空间中的点,并且让相似的user之间的距离更近(也就是有$D_{23} &lt; D_{12} &lt; D_{13}$和$D_{41} &lt; D_{43} &lt; D_{42}$,D代表距离),我们很容易满足条件.</p>
-<h2 id="Problem-Formulation"><a href="#Problem-Formulation" class="headerlink" title="Problem Formulation"></a>Problem Formulation</h2><p>假设我们有M个users和N个items,rating/interaction 矩阵表示为$R \in  R^{M \times N}$,$u$和$i$ 分别表示user和item.$R_{ui}$表示$u$对$i$的偏好.在大多数情况下关于矩阵R很多我们是未知的,我们推荐系统的目标就是去预测这些未观察到的的偏好得分.<br>矩阵$R$的值可以是显示评分[1-5]也可以是隐式反馈.显示评分可以用来对未知评分进行估计,而隐式反馈则可以用来产生个性化排序的推荐列表(OCCF,Top-N).<br>隐式反馈的定义如下:<br><img src="/articles/49246251/1.png"><br>$u$和$i$之间的交互方式可能有很多,1表示user-item pair $(u,i)$被观察到了,<strong>0 并不一定意味着用户不喜欢item,它也可能意味着用户并没有意识到该item的存在</strong>.<br>如果$R_{ui} = 1$ 我们称之为positive sample,0 为negative sample<br><img src="/articles/49246251/2.png"></p>
-<h3 id="Metric-Factorization"><a href="#Metric-Factorization" class="headerlink" title="Metric Factorization"></a>Metric Factorization</h3><p>为了解决上面所说的MF存在的问题,提出了度量分解.矩阵分解将users和items看成是新空间中的向量,metric fac将users和items看成是低维坐标系中的点并且通过欧几里得距离表示他们之间的关系.度量分解将距离分解为users和items的位置.<br>矩阵分解通过分解表示了user和item之间相似度的交互矩阵来学习users和items的潜在因子.但是学习user和item的位置,我们无法直接利用rating/interaction矩阵$R$,因为距离和相似度是两个相反的概念.对于相似度来说值越大我们说相似度越高,而对于距离值越大代表二者相似度越小,是反的.<strong>因此我们首先将$R$转化为距离矩阵$Y$</strong>,如下:<br><img src="/articles/49246251/4.png"><br>根据上面的等式,更高的相似度距离为0,这很好的满足了我们上述所说的条件.这个转化可以用在显式评分也可以用在隐式反馈上.<br>在欧式空间$R^k$中,我们通过欧式距离来表示两个点之间的距离:<br><img src="/articles/49246251/5.png"><br>在度量分解中我们使用欧几里得距离来测量user-item之间的距离.对于每个user和item,我们分配给他们一个向量$P_u \in R^k$,$Q_i \in R^k$来表示他们在多维空间中的位置.所以有:</p>
-<script type="math/tex; mode=display">
-D(u,i) = ||P_u - Q_i||_2^2</script><p>在真实世界中只有很少的一些距离矩阵项是已知的,<strong>度量学习的目标是给定部分观察到的距离矩阵求学习users和items在低维坐标系中的位置:</strong></p>
-<script type="math/tex; mode=display">
-f(P_u,Q_i|Y)</script><p>对于不同的学习任务(rating prediction,item ranking)$f$是不同的.<br>目前我们可以看的除度量分解和矩阵分解很相似,他们都是从一个大的稀疏的矩阵去学习,但是他们的解释是不同的.<br>下图展示了metric factorization的整个过程:<br><img src="/articles/49246251/6.png"></p>
-<h2 id="基于不同推荐任务的度量分解"><a href="#基于不同推荐任务的度量分解" class="headerlink" title="基于不同推荐任务的度量分解"></a>基于不同推荐任务的度量分解</h2><p>这一部分将对度量分解应用于rating prediction和item ranking进行详细的解释</p>
-<h3 id="Metric-Fac-for-Rating-Prediction"><a href="#Metric-Fac-for-Rating-Prediction" class="headerlink" title="Metric Fac for Rating Prediction"></a>Metric Fac for Rating Prediction</h3><h4 id="Basic-Model"><a href="#Basic-Model" class="headerlink" title="Basic Model"></a>Basic Model</h4><p>假设$S$表示可观察的rating数据的集合,首先我们使用下面的公式将评分矩阵$R$转化为距离矩阵:</p>
-<script type="math/tex; mode=display">
-Y_{ui} = R_{max} - R{ui}</script><p>$R_{max}$表示评分矩阵可能的最大值.<br>我们使用均方损失函数来学习我们的users和items的位置:<br><img src="/articles/49246251/7.png"></p>
-<h4 id="偏差和置信度"><a href="#偏差和置信度" class="headerlink" title="偏差和置信度"></a>偏差和置信度</h4><p>上面的模型只考虑了user和item之间的交互,但是个人的影响对user和item来说也很重要.例如许多item趋向于收到高评分,一些用户倾向于给低评分.这里我们也引入了全局偏差,users偏差和items偏差.因此,user和item之间的距离表示如下:</p>
-<script type="math/tex; mode=display">
-\hat Y= ||P_u - Q_i||_2^2 + b_u + b_i + \mu</script><p>通常，我们可以添加超参数$\tau$来缩放$\mu$，因为平均距离不能总是反映真实的全局偏差.<br>另一个重要的方面是我们需要考虑rating data的可靠性和稳定性.大部分rating prediction算法忽视了ratings的噪声并且将所有的ratings看成真值.并非所有的观察到的ratings都应该有相同的权重,例如一些用户可能会给同一item不同的评分,如果你在不同的时间要求他们去评分的话.有研究表明极端的评分(如1分,5分)比中间的评分(2,3,4分)更可靠.所以我们引入了置信度$c_{ui}$,因此我们的损失函数如下:<br><img src="/articles/49246251/8.png"><br>$c_{ui}$取值如下:</p>
-<script type="math/tex; mode=display">
-c_{ui} = 1 + \alpha \cdot g(R_{ui} - \frac{R_{max}}{2})</script><p>$g(\cdot)$可以是绝对值,平方,甚至是log函数,$\alpha$是一个超参数,来控制置信度的大小.我们保证了极端的评分获得更高的置信度.</p>
-<h4 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h4><h5 id="Norm"><a href="#Norm" class="headerlink" title="Norm"></a>Norm</h5><p>对于users和items偏差(bias)我们使用L2正则化,由于对于users和items的向量使用L2正则化会使得users和items靠近原点,所以这里我们不采用L2正则化改为Norm.</p>
-<script type="math/tex; mode=display">
-||P_u||_2^2 \leq l,||Q_i||_2^2 \leq l</script><h5 id="Dropout"><a href="#Dropout" class="headerlink" title="Dropout"></a>Dropout</h5><p>比较新颖的一个地方,这里将Dropout的思想迁移到users和items坐标的各个维度之间,去减少他们之间的相关性和适应性.所以这里我们也随机丢弃一些坐标维度,然后计算剩余维度之间的距离.<br><img src="/articles/49246251/9.png"></p>
-<h3 id="Metric-Factorization-for-Item-Ranking"><a href="#Metric-Factorization-for-Item-Ranking" class="headerlink" title="Metric Factorization for Item Ranking"></a>Metric Factorization for Item Ranking</h3><p>对于Item Ranking 我们依然需要先将相似度转化为距离.转化公式如下:</p>
-<script type="math/tex; mode=display">
-Y_{ui} = a \cdot (1 - R_{ui}) + z \cdot R_{ui}</script><p>通过上式我们可以得到<br>1.$Y_{ui} = a,R_{ui} = 0$<br>2.$Y_{ui} = z,R_{ui} = 1$<br>$a,z$两个超参数用来控制user和item之间的距离.但是需要注意的是我们设置超参数时必须保证$a &gt;=z$<strong>保证user和未交互的item之间的距离大于交互过的item.</strong>通常设$z= 0$已经足够了.<strong>因为$R_{ui}$要么为0要么为1,所以所有(user,positive item)和(user,negative item)之间的距离是分别相等的,而不是像rating prediction那样距离取决于评分</strong>.<br>为了学习users和items在低维坐标系中的位置我们采用pointwise的方法并最小化如下权重均方损失函数:<br><img src="/articles/49246251/10.png"><br>这里我们考虑了所有的未观察到的交互,并且去掉了bias.<br>$c_{ui}$依然表示的是置信度,定于如下:</p>
-<script type="math/tex; mode=display">
-c_{ui} = 1 + \alpha w_{ui}</script><p>$w_{ui}$可以看成是隐式动作的计数,例如user浏览了item 3次那么$w_{ui} = 3$.因为数据的原因这里w = 0 or 1.$\alpha$和上面的意义相同,<br>关于正则化配置与上面相同.<br>下图展示了整个该方法的过程:<br><img src="/articles/49246251/11.png"><br>可以看到该模型不仅使user和偏好的item更近,也使得不感兴趣的更远.<strong>不像大多数metric learning基础模型,他们强制imposters远离users的领地至少margin的距离,这个方法中的置信度给负items入侵用户的区域提供了可能性,这对推荐任务来说是有利的,因为它可以作为过滤器来选择否定项目进行推荐.</strong>我们模型的另一个重要特征是它可以间接地将共享大量项目的用户聚集在一起。</p>
-<h2 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h2><h3 id="Evalutation-for-rating-prediction"><a href="#Evalutation-for-rating-prediction" class="headerlink" title="Evalutation for rating prediction"></a>Evalutation for rating prediction</h3><h4 id="Dataset"><a href="#Dataset" class="headerlink" title="Dataset"></a>Dataset</h4><p>主要使用了4种数据集:<br><a href="http://fastml.com/goodbooks-10k" target="_blank" rel="noopener">传送门</a><br><img src="/articles/49246251/12.png"><br>这里采用两种评估指标:RMSE(Root Mean Square Error)和MAE(Mean absolute Error)</p>
-<h4 id="Baselines"><a href="#Baselines" class="headerlink" title="Baselines"></a>Baselines</h4><img src="/articles/49246251/13.png">
-<p>结果如下:<br><img src="/articles/49246251/14.png"></p>
-<h3 id="Evaluation-for-Item-Ranking"><a href="#Evaluation-for-Item-Ranking" class="headerlink" title="Evaluation for Item Ranking"></a>Evaluation for Item Ranking</h3><h4 id="Dataset-1"><a href="#Dataset-1" class="headerlink" title="Dataset"></a>Dataset</h4><img src="/articles/49246251/15.png">
-<p>对于Item Ranking 采用了五个评估标准,<a href="https://statusrank.xyz/2018/12/25/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/">Recall,Precision,MAP,MRR,NDCG</a><br><img src="/articles/49246251/16.png"></p>
-<h2 id="模型参数分析"><a href="#模型参数分析" class="headerlink" title="模型参数分析"></a>模型参数分析</h2><p>这一部分主要讨论了维度大小k对两种推荐任务的影响,Clip Value $l$的影响,置信度等级$\alpha$的影响,以及Dropout  rate的影响(这里发现了Dropout对item ranking无太大作用).<br>详细分析见paper.</p>
+        <p><a href="https://www.cnblogs.com/pinard/p/6370127.html" target="_blank" rel="noopener">转载来源</a>，原文链接失效。<br>FM(Factorization Machine)主要是为了解决数据稀疏的情况下，特征怎样组合的问题。此算法的主要作用是可以把所有特征进行高阶组合，减少人工参与特征组合的工作。<strong>FM只需要线性时间复杂度，可以应用于大规模机器学习</strong>。<br><a id="more"></a></p>
+<h2 id="预测任务"><a href="#预测任务" class="headerlink" title="预测任务"></a>预测任务</h2><img src="/articles/undefined/1.png">
+<img src="/articles/undefined/2.png">
+<img src="/articles/undefined/3.png">
+<h2 id="模型方程"><a href="#模型方程" class="headerlink" title="模型方程"></a>模型方程</h2><img src="/articles/undefined/4.png">
+<img src="/articles/undefined/5.png">
+<img src="/articles/undefined/6.png">
+<h2 id="回归和分类"><a href="#回归和分类" class="headerlink" title="回归和分类"></a>回归和分类</h2><img src="/articles/undefined/7.png">
+<h2 id="学习算法"><a href="#学习算法" class="headerlink" title="学习算法"></a>学习算法</h2><img src="/articles/undefined/8.png">
+<p><font color="red">注：上面最后一句话应该是”而$g_{\theta}(x)$则利用$\widehat{y}(x) - \theta h_{\theta}(x)$来计算”</font><br><img src="/articles/undefined/9.png"><br><img src="/articles/undefined/10.png"><br><img src="/articles/undefined/11.png"><br><img src="/articles/undefined/12.png"><br><img src="/articles/undefined/13.png"><br><img src="/articles/undefined/14.png"><br><img src="/articles/undefined/15.png"></p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><img src="/articles/undefined/16.png">
 
       
     </div>
@@ -553,13 +530,13 @@ c_{ui} = 1 + \alpha w_{ui}</script><p>$w_{ui}$可以看成是隐式动作的计�
   <script type="text/javascript" src="http://jslibs.wuxubj.cn/sweetalert_mini/jquery-1.7.1.min.js"></script>
   <script src="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.min.js"></script>
   <link rel="stylesheet" type="text/css" href="http://jslibs.wuxubj.cn/sweetalert_mini/sweetalert.mini.css">
-  <p><span>本文标题:</span><a href="/articles/49246251.html">Metric-Factorization Recommendation beyond Matrix Factorization</a></p>
+  <p><span>本文标题:</span><a href="/articles/1ed9075e.html">分解机(Factorization Machine，FM)算法总结</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Statusrank 的个人博客">Statusrank</a></p>
   <p><span>CSDN博客</span><a href="https://blog.csdn.net/howardemily/">欢迎来访!</a></p>
-  <p><span>发布时间:</span>2018年12月25日 - 16:12</p>
-  <p><span>最后更新:</span>2019年01月03日 - 15:01</p>
-  <p><span>原始链接:</span><a href="/articles/49246251.html" title="Metric-Factorization Recommendation beyond Matrix Factorization">https://statusrank.xyz/articles/49246251.html</a>
-    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/49246251.html" aria-label="复制成功！"></i></span>
+  <p><span>发布时间:</span>2019年06月05日 - 21:06</p>
+  <p><span>最后更新:</span>2019年06月05日 - 21:06</p>
+  <p><span>原始链接:</span><a href="/articles/1ed9075e.html" title="分解机(Factorization Machine，FM)算法总结">https://statusrank.xyz/articles/1ed9075e.html</a>
+    <span class="copy-path" title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://statusrank.xyz/articles/1ed9075e.html" aria-label="复制成功！"></i></span>
   </p>
   <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>
 </div>
@@ -619,7 +596,7 @@ c_{ui} = 1 + \alpha w_{ui}</script><p>$w_{ui}$可以看成是隐式动作的计�
       
         <div class="post-tags">
           
-            <a href="/tags/论文/" rel="tag"><i class="fa fa-tag"></i> 论文</a>
+            <a href="/tags/FM/" rel="tag"><i class="fa fa-tag"></i> FM</a>
           
         </div>
       
@@ -645,8 +622,8 @@ c_{ui} = 1 + \alpha w_{ui}</script><p>$w_{ui}$可以看成是隐式动作的计�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/articles/639f7364.html" rel="next" title="推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)">
-                <i class="fa fa-chevron-left"></i> 推荐系统常用评价指标(recall,MAP,MRR,NDCG,F1,ROC等)
+              <a href="/articles/eeb02474.html" rel="next" title="EM(Expectation Maximum) 算法总结">
+                <i class="fa fa-chevron-left"></i> EM(Expectation Maximum) 算法总结
               </a>
             
           </div>
@@ -654,10 +631,6 @@ c_{ui} = 1 + \alpha w_{ui}</script><p>$w_{ui}$可以看成是隐式动作的计�
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/articles/63484af.html" rel="prev" title="KL Divergence(KL 散度)">
-                KL Divergence(KL 散度) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -826,7 +799,7 @@ c_{ui} = 1 + \alpha w_{ui}</script><p>$w_{ui}$可以看成是隐式动作的计�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Metric-Fac"><span class="nav-text">Metric Fac</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#矩阵分解-MF-的局限性"><span class="nav-text">矩阵分解(MF)的局限性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem-Formulation"><span class="nav-text">Problem Formulation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Metric-Factorization"><span class="nav-text">Metric Factorization</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于不同推荐任务的度量分解"><span class="nav-text">基于不同推荐任务的度量分解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Metric-Fac-for-Rating-Prediction"><span class="nav-text">Metric Fac for Rating Prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Model"><span class="nav-text">Basic Model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#偏差和置信度"><span class="nav-text">偏差和置信度</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则化"><span class="nav-text">正则化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Norm"><span class="nav-text">Norm</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Dropout"><span class="nav-text">Dropout</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Metric-Factorization-for-Item-Ranking"><span class="nav-text">Metric Factorization for Item Ranking</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Experiments"><span class="nav-text">Experiments</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Evalutation-for-rating-prediction"><span class="nav-text">Evalutation for rating prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dataset"><span class="nav-text">Dataset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Baselines"><span class="nav-text">Baselines</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Evaluation-for-Item-Ranking"><span class="nav-text">Evaluation for Item Ranking</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Dataset-1"><span class="nav-text">Dataset</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型参数分析"><span class="nav-text">模型参数分析</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#预测任务"><span class="nav-text">预测任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型方程"><span class="nav-text">模型方程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回归和分类"><span class="nav-text">回归和分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#学习算法"><span class="nav-text">学习算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-text">参考文献</span></a></li></ol></div>
             
 
           </div>

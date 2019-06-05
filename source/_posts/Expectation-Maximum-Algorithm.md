@@ -1,10 +1,11 @@
-﻿---
+---
 title: EM(Expectation Maximum) 算法总结
 copyright: true
 mathjax: true
-date: 2019-05-13 20:33:04
 tags: EM
 categories: 机器学习
+abbrlink: eeb02474
+date: 2019-05-13 20:33:04
 updated:
 ---
 EM算法，全称为Expectation Maximum Algorithm，是一个基础算法，是很多机器学习领域算法的基础（如HMM，LDA等）。EM算法是在**概率模型中寻找参数最大似然估计或者最大后验估计的算法，其中概率模型依赖于无法观测的隐含变量。**
